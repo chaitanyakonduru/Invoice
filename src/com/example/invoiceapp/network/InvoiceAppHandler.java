@@ -6,11 +6,11 @@ import android.os.Message;
 
 import com.example.invoiceapp.utils.Constants;
 
-public class AskZiggyHandler extends Handler{
+public class InvoiceAppHandler extends Handler{
 	
 	private NetworkCallback<Object> callback;
 	private int requestCode;
-	public AskZiggyHandler(int requestCode,NetworkCallback<Object> callback)
+	public InvoiceAppHandler(int requestCode,NetworkCallback<Object> callback)
 	{
 		this.requestCode=requestCode;
 		this.callback=callback;

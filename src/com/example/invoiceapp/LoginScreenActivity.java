@@ -2,7 +2,6 @@ package com.example.invoiceapp;
 
 import java.util.List;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,19 +13,18 @@ import android.widget.Spinner;
 
 import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.models.Driver;
-import com.example.invoiceapp.network.AskZiggyNetworkServiceManager;
+import com.example.invoiceapp.network.DatabaseThread;
+import com.example.invoiceapp.network.InvoiceAppNetworkServiceManager;
 import com.example.invoiceapp.network.JsonResponseParser;
 import com.example.invoiceapp.network.NetworkCallback;
+import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class LoginScreenActivity extends BaseActivity implements
 		OnItemSelectedListener, NetworkCallback<Object> {
 
-	// private static final String[]
-	// DRIVERS_LIST={"Select Driver","Driver1","Driver2","Driver3","Driver4","Driver5"};
 	private Spinner driversListSpinner;
 	private EditText passWordET;
-	private ProgressDialog progressDialog;
 	private List<Driver> driversList;
 	private InvoiceApplication application;
 	private InvoiceAppDatabase database;
@@ -38,32 +36,31 @@ public class LoginScreenActivity extends BaseActivity implements
 		Utilities.setActionBarTitle(this, "Authentication");
 		driversListSpinner = (Spinner) findViewById(R.id.spinner_driver);
 		passWordET = (EditText) findViewById(R.id.et_password);
-		// InvoiceAppDatabase appDatabase=InvoiceAppDatabase.getInstance(this);
 		application = (InvoiceApplication) getApplication();
 		database = application.shareDatabaseInstance();
 		// if(database)
 		if (!database
 				.checkTableNullOrNot(InvoiceAppDatabase.DriverColumns.TABLE_NAME)) {
-			showProgressDialog();
+			Utilities.showProgressDialog(this);
 			makeRequestCall();
+		} else {
+			driversList = database.getAllDrivers();
+			setAdapterToSpinner();
 		}
 
 		driversListSpinner.setOnItemSelectedListener(this);
 	}
 
-	private void showProgressDialog() {
-		if (progressDialog == null) {
-			progressDialog = ProgressDialog.show(this, "", "Please wait",
-					false, true);
-		}
-		progressDialog.show();
+	private void setAdapterToSpinner() {
+		// TODO Auto-generated method stub
+
+		Driver driver = new Driver();
+		driver.setmDriverName("Select Driver");
+		driversList.add(0, driver);
+		driversListSpinner.setAdapter(new ArrayAdapter<Driver>(this,
+				android.R.layout.simple_list_item_1, driversList));
 	}
 
-	private void dismissDialog() {
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
-	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
@@ -106,7 +103,7 @@ public class LoginScreenActivity extends BaseActivity implements
 				if (loginStatus) {
 					respMessage = "Login Success";
 					loginStatus = false;
-					startActivity(new Intent(this, BreadListActivity.class));
+					startActivity(new Intent(this, HomeScreenActivity.class));
 					finish();
 				} else {
 					respMessage = "Login Failure";
@@ -119,38 +116,35 @@ public class LoginScreenActivity extends BaseActivity implements
 	}
 
 	private void makeRequestCall() {
-		AskZiggyNetworkServiceManager askZiggyNetworkServiceManager = AskZiggyNetworkServiceManager
+		InvoiceAppNetworkServiceManager askZiggyNetworkServiceManager = InvoiceAppNetworkServiceManager
 				.getInstance(this);
-		askZiggyNetworkServiceManager.sendUserFeedback(100, this);
+		askZiggyNetworkServiceManager.fetchDriversRequest(Constants.REQ_FETCH_DRIVERS, this);
 	}
 
 	@Override
 	public void onSuccess(int requestCode, Object object) {
 		// TODO Auto-generated method stub
-		dismissDialog();
+		Utilities.dismissProgressDialog();
 		if (object instanceof String) {
 			String response = (String) object;
-			driversList = JsonResponseParser.parseFeedbackResponse(response);
+			driversList = JsonResponseParser.parseDriversResponse(response);
 			if (driversList != null && !driversList.isEmpty()) {
 				insertDriverInDatabase(driversList);
-				Driver driver = new Driver();
-				driver.setmDriverName("Select Driver");
-				driversList.add(0, driver);
-				driversListSpinner.setAdapter(new ArrayAdapter<Driver>(this,
-						android.R.layout.simple_list_item_1, driversList));
+				setAdapterToSpinner();
 			}
 		}
 	}
 
 	private void insertDriverInDatabase(List<Driver> driversList) {
-		for(Driver driver:driversList)
-		{
-			database.insertDriver(driver);
+		DatabaseThread databaseThread=application.shareDatabaseThreadInstance();
+		databaseThread.start();
+		for (Driver driver : driversList) {
+			databaseThread.addJob(driver);
 		}
 	}
 
 	@Override
 	public void onFailure(int requestCode, String errorMessge) {
-		dismissDialog();
+		Utilities.dismissProgressDialog();
 	}
 }

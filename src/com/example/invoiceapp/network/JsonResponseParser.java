@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.Product;
 
 public class JsonResponseParser {
 
@@ -15,8 +16,11 @@ public class JsonResponseParser {
 	private static final String TAG_DRIVER_ID = "driver_id";
 	private static final String TAG_DRIVER_NAME = "driver_name";
 	private static final String TAG_DRIVER_PASSWORD = "password";
+	private static final String TAG_PRODUCTS_LIST= "products_list";
+	private static final String TAG_PRODUCT_ID="product_id";
+	private static final String TAG_PRODUCT_NAME="product_name";
 
-	public static List<Driver> parseFeedbackResponse(String string) {
+	public static List<Driver> parseDriversResponse(String string) {
 		List<Driver> driversList = null;
 		try {
 			JSONObject jsonObject = new JSONObject(string);
@@ -45,6 +49,33 @@ public class JsonResponseParser {
 			e.printStackTrace();
 		}
 		return driversList;
+
+	}
+	
+	public static List<Product> parseProductsResponse(String string) {
+		List<Product> productsList = null;
+		try {
+			JSONObject jsonObject = new JSONObject(string);
+			if (jsonObject.has(TAG_PRODUCTS_LIST)) {
+				productsList = new ArrayList<Product>();
+				JSONArray jsonArray = jsonObject.getJSONArray(TAG_PRODUCTS_LIST);
+				if (jsonArray != null) {
+					Product product= null;
+					for (int i = 0; i < jsonArray.length(); i++) {
+						product=new Product();
+						JSONObject productObject = (JSONObject) jsonArray.get(i);
+						product.setProductId(productObject.has(TAG_PRODUCT_ID)?productObject.getString(TAG_PRODUCT_ID):null);
+						product.setProductName(productObject.has(TAG_PRODUCT_NAME)?productObject.getString(TAG_PRODUCT_NAME):null);
+						productsList.add(product);
+					}
+				}
+
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return productsList;
 
 	}
 }

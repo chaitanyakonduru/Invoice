@@ -1,0 +1,41 @@
+{
+    "Route": [
+        {
+            "route_id": "1",
+            "route_name": "K.P.H.B",
+            "customers": [
+                {
+                    "customer_id": "1",
+                    "customer_name": "RS Bakers",
+                    "customer_address": "R.S. Brothers opp",
+                    "landmark": "behind bus stop",
+                    "latitude": "17.4368",
+                    "longitude": "78.4439",
+                    "phone_no": "040238564",
+                    "orders": [
+                        {
+                            "OrderID": "1",
+                            "OrderDate": "29/09/2013",
+                            "OrderTotalAmoount": "10,000",
+                            "OrderProducts": [
+                                {
+                                    
+                                    "OrderID": "1",
+                                    "product_id": "1",
+                                    "quantity_ordered": "12",
+                                    "price": "140"
+                                },
+                                {
+                                    "OrderID": "1",
+                                    "product_id": "2",
+                                    "quantity_ordered": "160",
+                                    "price": "12"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

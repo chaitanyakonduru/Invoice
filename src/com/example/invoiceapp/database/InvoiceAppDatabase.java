@@ -1,5 +1,8 @@
 package com.example.invoiceapp.database;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -86,7 +89,7 @@ public class InvoiceAppDatabase {
 				+ "customer_phone text,customer_city text);";
 	}
 	
-	private static class OrderColumns implements BaseColumns
+	public static class OrderColumns implements BaseColumns
 	{
 		public static final String TABLE_NAME="Orders";
 		public static final String ORDER_ID="order_id";
@@ -99,7 +102,7 @@ public class InvoiceAppDatabase {
 				+ "order_date text,order_amount text);";
 	}
 	
-	private static class ProductColumns implements BaseColumns
+	public static class ProductColumns implements BaseColumns
 	{
 		public static final String TABLE_NAME="Products";
 		public static final String PRODUCT_ID="product_id";
@@ -328,6 +331,7 @@ public class InvoiceAppDatabase {
 		contentValues.put(ProductColumns.PRODUCT_ID, product.getProductId());
 		contentValues.put(ProductColumns.PRODUCT_NAME, product.getProductName());
 		contentValues.put(ProductColumns.PRODUCT_PRICE, product.getmPrice());
+		contentValues.put(ProductColumns.ORDERED_QUANTITY,product.getmQuantityOrdered());
 		
 		if(isUpdate)
 		{
@@ -409,5 +413,44 @@ public class InvoiceAppDatabase {
 			cursor = null;
 		}
 		return false;
+	}
+	
+	public List<Driver> getAllDrivers()
+	{
+		List<Driver> driverList=null;
+		Driver driver=null;
+		SQLiteDatabase database=databaseHelper.getReadableDatabase();
+		Cursor cursor=database.query(DriverColumns.TABLE_NAME, null, null, null, null, null, null);
+		if(cursor!=null && cursor.getCount()>0)
+		{
+			driverList=new ArrayList<Driver>();
+			while (cursor.moveToNext()) {
+				driver=new Driver();
+				driver.setmDriverId(cursor.getString(cursor.getColumnIndex(DriverColumns.DRIVER_ID)));
+				driver.setmDriverName(cursor.getString(cursor.getColumnIndex(DriverColumns.DRIVER_NAME)));
+				driver.setmDriverPassword(cursor.getString(cursor.getColumnIndex(DriverColumns.DRIVER_PASSWORD)));
+				driverList.add(driver);
+			}
+		}
+		return driverList;
+	}
+	
+	public List<Product> getAllProducts()
+	{
+		List<Product> productsList=null;
+		Product product=null;
+		SQLiteDatabase database=databaseHelper.getReadableDatabase();
+		Cursor cursor=database.query(ProductColumns.TABLE_NAME, null, null, null, null, null, null);
+		if(cursor!=null && cursor.getCount()>0)
+		{
+			productsList=new ArrayList<Product>();
+			while (cursor.moveToNext()) {
+				product=new Product();
+				product.setProductId(cursor.getString(cursor.getColumnIndex(ProductColumns.PRODUCT_ID)));
+				product.setProductName(cursor.getString(cursor.getColumnIndex(ProductColumns.PRODUCT_NAME)));
+				productsList.add(product);
+			}
+		}
+		return productsList;
 	}
 }

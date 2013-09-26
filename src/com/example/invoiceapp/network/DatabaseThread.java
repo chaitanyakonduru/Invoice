@@ -1,0 +1,127 @@
+package com.example.invoiceapp.network;
+
+import java.util.PriorityQueue;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.example.invoiceapp.InvoiceApplication;
+import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.Product;
+
+public class DatabaseThread extends Thread {
+	private InvoiceApplication app;
+
+	private static final String TAG = DatabaseThread.class.getSimpleName();
+	private PriorityQueue<Object> jobQueue1;
+
+	private boolean pause;
+	private onDatabaseUpdateCompletion databaseUpdateCompletion;
+
+	public DatabaseThread(Context context) {
+		Log.v(TAG, "tag");
+		// jobQueue1 = new ArrayDeque<Object>();
+		jobQueue1 = new PriorityQueue<Object>();
+		app = (InvoiceApplication) context.getApplicationContext();
+	}
+
+	public DatabaseThread(Context context,
+			onDatabaseUpdateCompletion databaseUpdateCompletion) {
+		Log.v(TAG, "tag");
+		jobQueue1 = new PriorityQueue<Object>();
+		app = (InvoiceApplication) context.getApplicationContext();
+
+		this.databaseUpdateCompletion = databaseUpdateCompletion;
+	}
+
+	@Override
+	public void run() {
+		while (!isInterrupted()) {
+			synchronized (this) {
+				while (!isInterrupted()
+						&& (this.jobQueue1.isEmpty() || this.pause)) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						interrupt();
+					}
+				}
+			}
+
+			if (interrupted()) {
+				Log.v(TAG, "interrupted");
+				return;
+			}
+
+			Object object = null;
+
+			try {
+				object = jobQueue1.poll();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				Log.v(TAG, "poll  " + ex.getMessage());
+			}
+
+			if (object != null) {
+				if (object instanceof Driver) {
+					Driver driver = (Driver) object;
+					app.shareDatabaseInstance().insertDriver(driver);
+				}
+				else if(object instanceof Product)
+				{
+					Product product=(Product) object;
+					app.shareDatabaseInstance().insertProduct(product);
+				}
+
+			}
+
+			if (jobQueue1.isEmpty()) {
+				if (databaseUpdateCompletion != null)
+					databaseUpdateCompletion.databaseCompleted();
+			}
+
+			if (isInterrupted()) {
+				Log.v(TAG, "MovingBack");
+				break;
+			}
+		}
+
+		Log.v(TAG, "InRunWait " + isInterrupted());
+		if (this.jobQueue1 != null) {
+			Log.v(TAG, "clear ");
+			this.jobQueue1.clear();
+			this.jobQueue1 = null;
+		}
+	}
+
+	public synchronized void addJob(Object object) {
+		if (jobQueue1 != null && object != null) {
+			boolean isEmpty = jobQueue1.isEmpty();
+			jobQueue1.offer(object);
+			if (isEmpty) {
+				Log.v(TAG, "empty");
+				notify();
+			}
+		}
+	}
+
+	public void clearJobs() {
+		if (jobQueue1 != null) {
+			jobQueue1.clear();
+		}
+	}
+
+	public synchronized void pause() {
+		this.pause = true;
+	}
+
+	public synchronized void unPause() {
+		this.pause = false;
+		notify();
+	}
+
+	public static interface onDatabaseUpdateCompletion {
+		public void databaseCompleted();
+
+	}
+}

@@ -6,5 +6,8 @@ public class Constants {
 	public static final int PREVIEW_BREAD_LIST=101;
 	public static final int SUCCESS=1000;
 	public static final int FAILURE=1001;
+	public static final int REQ_FETCH_DRIVERS=2000;
+	public static final int REQ_FETCH_PRODUCTS=2001;
+	
 	
 }

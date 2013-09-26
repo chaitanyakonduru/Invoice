@@ -19,7 +19,7 @@ import com.example.invoiceapp.utils.Constants;
 
 public final class HttpRestConn implements Runnable {
 	private static AndroidHttpClient androidHttpClient = null;
-	private AskZiggyHandler askZiggyhandler;
+	private InvoiceAppHandler askZiggyhandler;
 	private static final String TAG = HttpRestConn.class.getSimpleName();
 	private static final int CONNECTION_TIMEOUT_INTERVAL=20*1000;
 	private static final int TIMEOUT_INTERVAL=20*1000;
@@ -40,7 +40,7 @@ public final class HttpRestConn implements Runnable {
 		return out.toString();
 	}
 
-	public HttpRestConn(String urlString, AskZiggyHandler handler) {
+	public HttpRestConn(String urlString, InvoiceAppHandler handler) {
 		this.url=urlString;
 		this.askZiggyhandler=handler;
 	}

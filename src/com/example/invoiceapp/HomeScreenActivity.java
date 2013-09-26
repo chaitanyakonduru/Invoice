@@ -1,10 +1,13 @@
 package com.example.invoiceapp;
 
-import com.example.invoiceapp.utils.Utilities;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.example.invoiceapp.utils.Utilities;
 
 public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 	
@@ -24,9 +27,36 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 	}
 
 	@Override
-	public void onClick(View arg0) {
-		// TODO Auto-generated method stub
-		
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		case R.id.home_btn_customers:
+			loadCustomers();
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private void loadCustomers() {
+		Intent intent=null;
+		 if(isPickedProducts())
+		 {
+			 intent=new Intent(this,CustomerListActivity.class);
+		 }
+		 else
+		 {
+			 intent=new Intent(this,BreadListActivity.class);
+		 }
+		 startActivity(intent);
+	}
+	
+	private boolean isPickedProducts()
+	{
+		 SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		  return appPreferences.getBoolean(getString(R.string.is_pickup_products), false);
+	       
 	}
 
 }

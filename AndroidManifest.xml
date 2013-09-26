@@ -27,6 +27,7 @@
         <activity android:name="OrderConfirmationActivity" android:theme="@style/Theme.Example"></activity>
         <activity android:name="CustomerListActivity" android:theme="@style/Theme.Example"></activity>
         <activity android:name="CustomerActivity" android:theme="@style/Theme.Example"></activity>
+        <activity android:name="HomeScreenActivity" android:theme="@style/Theme.Example"></activity>
     </application>
 
 </manifest>

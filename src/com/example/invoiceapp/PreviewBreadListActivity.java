@@ -10,16 +10,17 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.invoiceapp.adapters.CustomBreadItemAdapter;
-import com.example.invoiceapp.models.Bread;
+import com.example.invoiceapp.models.Product;
+import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class PreviewBreadListActivity extends BaseActivity {
 
-//	private static final String TAG = PreviewBreadListActivity.class
-//			.getSimpleName();
-	private List<Bread> breadList = null;
+	private List<Product> breadList = null;
 	private ListView listView;
+	private InvoiceApplication application;
+	private DatabaseThread databaseThread;
 	public static final String EXTRA_BREAD_LIST = "breadlist";
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -29,7 +30,9 @@ public class PreviewBreadListActivity extends BaseActivity {
 
 		listView = new ListView(this);
 		setContentView(listView);
-		Utilities.setActionBarTitle(this,"Ordered Items");
+		Utilities.setActionBarTitle(this, "Ordered Items");
+		application = (InvoiceApplication) getApplication();
+		databaseThread = application.shareDatabaseThreadInstance();
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_BREAD_LIST)) {
 
@@ -42,7 +45,6 @@ public class PreviewBreadListActivity extends BaseActivity {
 		}
 	}
 
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -54,8 +56,6 @@ public class PreviewBreadListActivity extends BaseActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -63,7 +63,8 @@ public class PreviewBreadListActivity extends BaseActivity {
 			finish();
 			break;
 		case Menu.FIRST + 1:
-			startActivity(new Intent(this,OrderConfirmationActivity.class));
+			updateQuantityInfoIntoDatabase();
+			startActivity(new Intent(this, OrderConfirmationActivity.class));
 			break;
 		case android.R.id.home:
 			finish();
@@ -73,5 +74,13 @@ public class PreviewBreadListActivity extends BaseActivity {
 		return true;
 	}
 
-	
+	private void updateQuantityInfoIntoDatabase() {
+		if (!databaseThread.isAlive()) {
+			databaseThread.start();
+		}
+		for (Product product : breadList) {
+			databaseThread.addJob(product);
+		}
+	}
+
 }

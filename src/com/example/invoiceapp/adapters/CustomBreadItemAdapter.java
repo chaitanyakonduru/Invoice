@@ -13,30 +13,31 @@ import android.widget.TextView;
 
 import com.example.invoiceapp.R;
 import com.example.invoiceapp.models.Bread;
+import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.utils.Constants;
 
-public class CustomBreadItemAdapter extends ArrayAdapter<Bread> {
+public class CustomBreadItemAdapter extends ArrayAdapter<Product> {
 
 	private Context mContext;
-	private List<Bread> breadList;
+	private List<Product> productsList;
 	private int isFrom;
 	
 	public CustomBreadItemAdapter(Context context, int resource,int from,
-			List<Bread> objects) {
+			List<Product> objects) {
 		super(context, resource, objects);
 		this.mContext=context;
-		this.breadList=objects;
+		this.productsList=objects;
 		this.isFrom=from;
 		}
 	
 	@Override
 	public int getCount() {
-		return breadList.size();
+		return productsList.size();
 	}
 	
 	@Override
-	public Bread getItem(int position) {
-		return breadList.get(position);
+	public Product getItem(int position) {
+		return productsList.get(position);
 	}
 	
 	@Override
@@ -66,10 +67,10 @@ public class CustomBreadItemAdapter extends ArrayAdapter<Bread> {
 			holder.quantityET.setVisibility(View.GONE);
 			holder.quantityTV.setVisibility(View.VISIBLE);
 		}
-		final Bread bread=getItem(position);
-		holder.breadItemNameTV.setText(bread.getItemName());
-		holder.quantityET.setText(bread.getQuantitiy());
-		holder.quantityTV.setText(bread.getQuantitiy());
+		final Product product=getItem(position);
+		holder.breadItemNameTV.setText(product.getProductName());
+		holder.quantityET.setText(product.getmQuantityOrdered());
+		holder.quantityTV.setText(product.getmQuantityOrdered());
 		holder.quantityET.setOnFocusChangeListener(new OnFocusChangeListener() {
 			
 			@Override
@@ -78,7 +79,7 @@ public class CustomBreadItemAdapter extends ArrayAdapter<Bread> {
 				if(!arg1)
 				{
 					EditText editText=(EditText) arg0;
-					bread.setQuantitiy(editText.getText().toString());
+					product.setmQuantityOrdered(editText.getText().toString());
 				}
 			}
 		});

@@ -27,6 +27,7 @@ public class OrderConfirmationActivity  extends BaseActivity{
 		String respMessage;
 		if(!Utilities.checkIfNull(confirmationPassword.getText().toString().trim()))
 		{
+			
 			respMessage="Ordered Success";
 			saveAuthentication();
 			Intent intent=new Intent(this,CustomerListActivity.class);
@@ -44,7 +45,7 @@ public class OrderConfirmationActivity  extends BaseActivity{
 		 
 		        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		        SharedPreferences.Editor editor = appPreferences.edit();
-		        editor.putBoolean(getResources().getString(R.string.is_pickup_products), true);
+		        editor.putBoolean(getString(R.string.is_pickup_products), true);
 		        editor.commit();
 	}
 
