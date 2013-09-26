@@ -10,7 +10,7 @@ public class Order extends Priority  {
 	private String mOrderId;
 	private String mOrderDate;
 	private String mOrderTotalAmt;
-	private List<Product> mProductsList;
+	private List<OrderProduct> mOrderedProductsList;
 	public int get_id() {
 		return _id;
 	}
@@ -35,11 +35,11 @@ public class Order extends Priority  {
 	public void setmOrderTotalAmt(String mOrderTotalAmt) {
 		this.mOrderTotalAmt = mOrderTotalAmt;
 	}
-	public List<Product> getmProductsList() {
-		return mProductsList;
+	public List<OrderProduct> getmOrderedProductsList() {
+		return mOrderedProductsList;
 	}
-	public void setmProductsList(List<Product> mProductsList) {
-		this.mProductsList = mProductsList;
+	public void setmOrderedProductsList(List<OrderProduct> mOrderedProductsList) {
+		this.mOrderedProductsList = mOrderedProductsList;
 	}
 	
 

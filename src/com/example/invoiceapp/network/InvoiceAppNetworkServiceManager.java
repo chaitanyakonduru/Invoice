@@ -29,7 +29,9 @@ public class InvoiceAppNetworkServiceManager {
 	public Future fetchDriversRequest(int requestCode,NetworkCallback<Object> callback)
 	{
 		String driversUrl="drivers.json";
-		final String UrlString =String.format(BASE_URL)+driversUrl;
+		final String UrlString ="http://s3.amazonaws.com/mobilezop/441/document.json";
+//		String driversUrl="drivers.json";
+//		final String UrlString =String.format(BASE_URL)+driversUrl;
 		
 		Log.v(TAG, "Request Url:" + UrlString);
 		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,callback);

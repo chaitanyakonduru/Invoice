@@ -7,8 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.Order;
+import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
+import com.example.invoiceapp.models.RouteInfo;
 
 public class JsonResponseParser {
 
@@ -78,4 +82,116 @@ public class JsonResponseParser {
 		return productsList;
 
 	}
+	
+	public static RouteInfo parseDriverRouteInfoResponse(String response)
+	{
+		RouteInfo routeInfo=null;
+		List<Customer> customersList=null;
+		Customer customer=null;
+		List<Order> ordersList=null;
+		Order order=null;
+		List<OrderProduct> orderProductsList=null;
+		OrderProduct orderProduct=null;
+		try {
+			JSONObject jsonObject=new JSONObject(response);
+			
+			if(jsonObject.has("Route"))
+			{
+				routeInfo=new RouteInfo();
+				JSONArray routeArray=jsonObject.getJSONArray("Route");
+				if(routeArray!=null && routeArray.length()>0)
+				{
+					routeInfo=new RouteInfo();
+					JSONObject routeObject=routeArray.getJSONObject(0);
+					routeInfo.setmRouteId(routeObject.has("route_id")?routeObject.getString("route_id"):null);
+					routeInfo.setmRouteName(routeObject.has("route_name")?routeObject.getString("route_name"):null);
+					
+					if(routeObject.has("customers"))
+					{
+						JSONArray customersArrayObject=routeObject.getJSONArray("customers");
+						if(customersArrayObject!=null && customersArrayObject.length()>0)
+						{
+							customersList=new ArrayList<Customer>();
+							for(int i=0;i<customersArrayObject.length();i++)
+							{
+								customer=new Customer();
+								JSONObject custmerObject=customersArrayObject.getJSONObject(i);
+								customer.setmCustomerId(custmerObject.has("customer_id")?custmerObject.getString("customer_id"):null);
+								customer.setmCustomerAddress(custmerObject.has("customer_address")?custmerObject.getString("customer_address"):null);
+								customer.setmCustomerCity(custmerObject.has("")?custmerObject.getString(""):null);
+								customer.setmCustomerName(custmerObject.has("customer_name")?custmerObject.getString("customer_name"):null);
+								customer.setmLandmark(custmerObject.has("landmark")?custmerObject.getString("landmark"):null);
+								customer.setmLatitude(custmerObject.has("latitude")?custmerObject.getString("latitude"):null);
+								customer.setmLongitude(custmerObject.has("longitude")?custmerObject.getString("longitude"):null);
+								customer.setmPhoneNo(custmerObject.has("phone_no")?custmerObject.getString("phone_no"):null);
+								
+								if(custmerObject.has("orders"))
+								{
+									JSONArray ordersArray=custmerObject.getJSONArray("orders");
+									if(ordersArray!=null && ordersArray.length()>0)
+									{
+										ordersList=new ArrayList<Order>();
+										
+										for(int j=0;j<ordersArray.length();j++)
+										{
+											order=new Order();
+											JSONObject orderObject=ordersArray.getJSONObject(j);
+											order.setmOrderId(orderObject.has("OrderID")?orderObject.getString("OrderID"):null);
+											order.setmOrderDate(orderObject.has("OrderDate")?orderObject.getString("OrderDate"):null);
+											order.setmOrderTotalAmt(orderObject.has("OrderTotalAmoount")?orderObject.getString("OrderTotalAmoount"):null);
+											
+											if(orderObject.has("OrderProducts"))
+											{
+												JSONArray orderProductArray=orderObject.getJSONArray("OrderProducts");
+												if(orderProductArray!=null && orderProductArray.length()>0)
+												{
+													orderProductsList=new ArrayList<OrderProduct>();
+													for(int k=0;k<orderProductArray.length();k++)
+													{
+														orderProduct=new OrderProduct();
+														JSONObject orderProductObject=orderProductArray.getJSONObject(k);
+														orderProduct.setmOrderId(orderProductObject.has("OrderID")?orderProductObject.getString("OrderID"):null);
+														orderProduct.setmOrderProductId(orderProductObject.has("product_id")?orderProductObject.getString("product_id"):""+(k+1));
+														orderProduct.setmOrderQty(orderProductObject.has("quantity_ordered")?orderProductObject.getString("quantity_ordered"):null);
+														orderProduct.setmProductId(orderProductObject.has("product_id")?orderProductObject.getString("product_id"):null);
+														orderProduct.setmProductPrice(orderProductObject.has("price")?orderProductObject.getString("price"):null);
+														orderProductsList.add(orderProduct);
+													}
+												}
+												order.setmOrderedProductsList(orderProductsList);
+											}
+											ordersList.add(order);
+										}
+										customer.setOrdersList(ordersList);
+									}
+								}
+								
+							}
+							customersList.add(customer);
+						}
+						routeInfo.setCustomesList(customersList);
+					}
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return routeInfo;
+	}
+	
+	
 }

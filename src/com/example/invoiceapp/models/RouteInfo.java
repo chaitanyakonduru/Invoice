@@ -1,14 +1,22 @@
 package com.example.invoiceapp.models;
 
+import java.util.List;
+
 public class RouteInfo {
 
 	private int _id;
 	private String mRouteId;
 	private String mRouteName;
 	private String mRouteCode;
+	private List<Customer> customesList;
 	
 	
-	
+	public List<Customer> getCustomesList() {
+		return customesList;
+	}
+	public void setCustomesList(List<Customer> customesList) {
+		this.customesList = customesList;
+	}
 	public String getmRouteCode() {
 		return mRouteCode;
 	}

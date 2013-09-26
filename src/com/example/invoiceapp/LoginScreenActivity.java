@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 
 import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.RouteInfo;
 import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.network.InvoiceAppNetworkServiceManager;
 import com.example.invoiceapp.network.JsonResponseParser;
@@ -23,6 +25,7 @@ import com.example.invoiceapp.utils.Utilities;
 public class LoginScreenActivity extends BaseActivity implements
 		OnItemSelectedListener, NetworkCallback<Object> {
 
+	private static final String TAG = null;
 	private Spinner driversListSpinner;
 	private EditText passWordET;
 	private List<Driver> driversList;
@@ -127,10 +130,19 @@ public class LoginScreenActivity extends BaseActivity implements
 		Utilities.dismissProgressDialog();
 		if (object instanceof String) {
 			String response = (String) object;
-			driversList = JsonResponseParser.parseDriversResponse(response);
+			/*driversList = JsonResponseParser.parseDriversResponse(response);
 			if (driversList != null && !driversList.isEmpty()) {
 				insertDriverInDatabase(driversList);
 				setAdapterToSpinner();
+			}*/
+			RouteInfo routeInfo=JsonResponseParser.parseDriverRouteInfoResponse(response);
+			if(routeInfo!=null)
+			{
+				Log.v(TAG, "Customers "+routeInfo.getmRouteName());
+				if(routeInfo.getCustomesList()!=null && !routeInfo.getCustomesList().isEmpty())
+				{
+					Log.v(TAG, "Customers List Size:"+routeInfo.getCustomesList().size());
+				}
 			}
 		}
 	}
