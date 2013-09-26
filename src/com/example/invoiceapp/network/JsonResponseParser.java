@@ -157,8 +157,8 @@ public class JsonResponseParser {
 														orderProduct.setmProductPrice(orderProductObject.has("price")?orderProductObject.getString("price"):null);
 														orderProductsList.add(orderProduct);
 													}
+													order.setmOrderedProductsList(orderProductsList);
 												}
-												order.setmOrderedProductsList(orderProductsList);
 											}
 											ordersList.add(order);
 										}
@@ -166,24 +166,13 @@ public class JsonResponseParser {
 									}
 								}
 								
+								customersList.add(customer);
 							}
-							customersList.add(customer);
 						}
 						routeInfo.setCustomesList(customersList);
 					}
 				}
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 			
 		} catch (JSONException e) {
