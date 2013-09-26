@@ -5,27 +5,28 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="13"
         android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" android:name="InvoiceApplication">
         <activity
             android:name="com.example.invoiceapp.LoginScreenActivity"
-            android:label="@string/app_name" ><intent-filter>
+            android:label="@string/app_name" android:theme="@style/Theme.Example" android:windowSoftInputMode="adjustUnspecified|adjustResize"><intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BreadListActivity"></activity>
-        <activity android:name="PreviewBreadListActivity"></activity>
-        <activity android:name="OrderConfirmationActivity"></activity>
-        <activity android:name="CustomerListActivity"></activity>
-        <activity android:name="CustomerActivity"></activity>
+        <activity android:name="BreadListActivity" android:theme="@style/Theme.Example"></activity>
+        <activity android:name="PreviewBreadListActivity" android:theme="@style/Theme.Example"></activity>
+        <activity android:name="OrderConfirmationActivity" android:theme="@style/Theme.Example"></activity>
+        <activity android:name="CustomerListActivity" android:theme="@style/Theme.Example"></activity>
+        <activity android:name="CustomerActivity" android:theme="@style/Theme.Example"></activity>
     </application>
 
 </manifest>

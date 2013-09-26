@@ -4,5 +4,7 @@ public class Constants {
 
 	public static final int BREAD_LIST=100;
 	public static final int PREVIEW_BREAD_LIST=101;
+	public static final int SUCCESS=1000;
+	public static final int FAILURE=1001;
 	
 }

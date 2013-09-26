@@ -65,6 +65,8 @@ public class PreviewBreadListActivity extends BaseActivity {
 		case Menu.FIRST + 1:
 			startActivity(new Intent(this,OrderConfirmationActivity.class));
 			break;
+		case android.R.id.home:
+			finish();
 		default:
 			break;
 		}

@@ -62,7 +62,8 @@ public class BreadListActivity extends BaseActivity {
 		case Menu.FIRST:
 			filterItems();
 			break;
-
+		case android.R.id.home:
+			finish();
 		default:
 			break;
 		}

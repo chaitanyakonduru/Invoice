@@ -27,7 +27,7 @@ public class CustomerListActivity extends BaseActivity implements OnItemClickLis
 		generateCustomersList();
 		if(!customersList.isEmpty())
 		{
-		listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,customersList));
+		listView.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item,customersList));
 		}
 		
 	}
