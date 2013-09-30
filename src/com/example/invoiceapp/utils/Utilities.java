@@ -32,11 +32,18 @@ public class Utilities {
 	
 	public static void showProgressDialog(Context context)
 	{
+		try
+		{
 		if(progressDialog==null)
 		{
 		progressDialog=ProgressDialog.show(context, "", "Please wait..",false,false);
 		}
 		progressDialog.show();
+		}
+		catch(Exception e)
+		{
+			
+		}
 	}
 	public static void dismissProgressDialog()
 	{

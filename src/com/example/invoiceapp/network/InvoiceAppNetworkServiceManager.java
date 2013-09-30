@@ -1,6 +1,5 @@
 package com.example.invoiceapp.network;
 
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,29 +24,41 @@ public class InvoiceAppNetworkServiceManager {
 		executorService = Executors.newSingleThreadExecutor();
 	}
 
+	public Future fetchDriversRequest(int requestCode,
+			NetworkCallback<Object> callback) {
 
-	public Future fetchDriversRequest(int requestCode,NetworkCallback<Object> callback)
-	{
-		String driversUrl="drivers.json";
-		final String UrlString ="http://s3.amazonaws.com/mobilezop/441/documentt.json";
-//		String driversUrl="drivers.json";
-//		final String UrlString =String.format(BASE_URL)+driversUrl;
-		
+		String driversUrl = "drivers.json";
+		final String UrlString = String.format(BASE_URL) + driversUrl;
+
 		Log.v(TAG, "Request Url:" + UrlString);
-		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,callback);
+		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
+				callback);
 		return executorService.submit(new HttpRestConn(UrlString, handler));
-			
+
 	}
-	
-	public Future fetchProductsRequest(int requestCode,NetworkCallback<Object> callback)
-	{
-		String driversUrl="products_list.json";
-		final String UrlString =String.format(BASE_URL)+driversUrl;
-		
+
+	public Future fetchProductsRequest(int requestCode,
+			NetworkCallback<Object> callback) {
+		String driversUrl = "products_list.json";
+		final String UrlString = String.format(BASE_URL) + driversUrl;
+
 		Log.v(TAG, "Request Url:" + UrlString);
-		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,callback);
+		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
+				callback);
 		return executorService.submit(new HttpRestConn(UrlString, handler));
-			
+
+	}
+
+	public Future fetchDriversRouteInfoRequest(int requestCode,
+			NetworkCallback<Object> callback) {
+		// String driversUrl="drivers.json";
+		final String UrlString = BASE_URL + "ravi/routeinfo_list.json";
+
+		Log.v(TAG, "Request Url:" + UrlString);
+		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
+				callback);
+		return executorService.submit(new HttpRestConn(UrlString, handler));
+
 	}
 
 }

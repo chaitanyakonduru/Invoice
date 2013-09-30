@@ -33,7 +33,9 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 		case R.id.home_btn_customers:
 			loadCustomers();
 			break;
-
+		case R.id.home_btn_route:
+			startActivity(new Intent(this,RoutesActivity.class));
+			break;
 		default:
 			break;
 		}

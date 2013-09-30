@@ -8,6 +8,10 @@ public class Constants {
 	public static final int FAILURE=1001;
 	public static final int REQ_FETCH_DRIVERS=2000;
 	public static final int REQ_FETCH_PRODUCTS=2001;
+	public static final int REQ_FETCH_ROUTES=2002;
 	
-	
+	public static final int DB_REQ_FETCH_CUSTOMERS=500;
+	public static final int DB_REQ_CHECK_TABLE_NULL_NOT=501;
+	public static final int DB_REQ_FETCH_DRIVERS=502;
+	public static final int DB_REQ_FETCH_PRODUCTS=503;
 }

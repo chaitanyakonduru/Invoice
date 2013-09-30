@@ -1,7 +1,7 @@
 package com.example.invoiceapp.models;
 
 
-public class Driver {
+public class Driver extends Priority{
 
 	private String mDriverId;
 	private String mDriverName;

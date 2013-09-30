@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -12,9 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.invoiceapp.database.DatabaseQueryManager;
+import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.models.Driver;
-import com.example.invoiceapp.models.RouteInfo;
 import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.network.InvoiceAppNetworkServiceManager;
 import com.example.invoiceapp.network.JsonResponseParser;
@@ -23,14 +23,14 @@ import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class LoginScreenActivity extends BaseActivity implements
-		OnItemSelectedListener, NetworkCallback<Object> {
+		OnItemSelectedListener, NetworkCallback<Object>,
+		DbQueryCallback<Object> {
 
-	private static final String TAG = null;
 	private Spinner driversListSpinner;
 	private EditText passWordET;
 	private List<Driver> driversList;
 	private InvoiceApplication application;
-	private InvoiceAppDatabase database;
+	private DatabaseQueryManager databaseQueryManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +40,15 @@ public class LoginScreenActivity extends BaseActivity implements
 		driversListSpinner = (Spinner) findViewById(R.id.spinner_driver);
 		passWordET = (EditText) findViewById(R.id.et_password);
 		application = (InvoiceApplication) getApplication();
-		database = application.shareDatabaseInstance();
-		// if(database)
-		if (!database
-				.checkTableNullOrNot(InvoiceAppDatabase.DriverColumns.TABLE_NAME)) {
-			Utilities.showProgressDialog(this);
-			makeRequestCall();
-		} else {
-			driversList = database.getAllDrivers();
-			setAdapterToSpinner();
-		}
+		databaseQueryManager = DatabaseQueryManager.getInstance(this);
+		databaseQueryManager.checkTableNullOrNot(
+				Constants.DB_REQ_CHECK_TABLE_NULL_NOT,
+				InvoiceAppDatabase.DriverColumns.TABLE_NAME, this);
 
 		driversListSpinner.setOnItemSelectedListener(this);
 	}
 
-	private void setAdapterToSpinner() {
+	private void setAdapterToSpinner(List<Driver> driversList) {
 		// TODO Auto-generated method stub
 
 		Driver driver = new Driver();
@@ -63,7 +57,6 @@ public class LoginScreenActivity extends BaseActivity implements
 		driversListSpinner.setAdapter(new ArrayAdapter<Driver>(this,
 				android.R.layout.simple_list_item_1, driversList));
 	}
-
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
@@ -106,6 +99,7 @@ public class LoginScreenActivity extends BaseActivity implements
 				if (loginStatus) {
 					respMessage = "Login Success";
 					loginStatus = false;
+					application.setmDriverId(driver.getmDriverId());
 					startActivity(new Intent(this, HomeScreenActivity.class));
 					finish();
 				} else {
@@ -121,7 +115,8 @@ public class LoginScreenActivity extends BaseActivity implements
 	private void makeRequestCall() {
 		InvoiceAppNetworkServiceManager askZiggyNetworkServiceManager = InvoiceAppNetworkServiceManager
 				.getInstance(this);
-		askZiggyNetworkServiceManager.fetchDriversRequest(Constants.REQ_FETCH_DRIVERS, this);
+		askZiggyNetworkServiceManager.fetchDriversRequest(
+				Constants.REQ_FETCH_DRIVERS, this);
 	}
 
 	@Override
@@ -130,25 +125,18 @@ public class LoginScreenActivity extends BaseActivity implements
 		Utilities.dismissProgressDialog();
 		if (object instanceof String) {
 			String response = (String) object;
-			/*driversList = JsonResponseParser.parseDriversResponse(response);
+			driversList = JsonResponseParser.parseDriversResponse(response);
 			if (driversList != null && !driversList.isEmpty()) {
 				insertDriverInDatabase(driversList);
-				setAdapterToSpinner();
-			}*/
-			RouteInfo routeInfo=JsonResponseParser.parseDriverRouteInfoResponse(response);
-			if(routeInfo!=null)
-			{
-				Log.v(TAG, "Customers "+routeInfo.getmRouteName());
-				if(routeInfo.getCustomesList()!=null && !routeInfo.getCustomesList().isEmpty())
-				{
-					Log.v(TAG, "Customers List Size:"+routeInfo.getCustomesList().size());
-				}
+				setAdapterToSpinner(driversList);
 			}
+
 		}
 	}
 
 	private void insertDriverInDatabase(List<Driver> driversList) {
-		DatabaseThread databaseThread=application.shareDatabaseThreadInstance();
+		DatabaseThread databaseThread = application
+				.shareDatabaseThreadInstance();
 		databaseThread.start();
 		for (Driver driver : driversList) {
 			databaseThread.addJob(driver);
@@ -158,5 +146,34 @@ public class LoginScreenActivity extends BaseActivity implements
 	@Override
 	public void onFailure(int requestCode, String errorMessge) {
 		Utilities.dismissProgressDialog();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onQueryCompleted(int requestCode, Object object) {
+		switch (requestCode) {
+		case Constants.DB_REQ_CHECK_TABLE_NULL_NOT:
+
+			if (object != null && object instanceof Boolean) {
+				boolean status = (Boolean) object;
+				if (status) {
+					databaseQueryManager.getAllDrivers(
+							Constants.DB_REQ_FETCH_DRIVERS, this);
+				} else {
+					Utilities.showProgressDialog(this);
+					makeRequestCall();
+				}
+			}
+			break;
+		case Constants.DB_REQ_FETCH_DRIVERS:
+			if (object != null && object instanceof List) {
+				driversList = ((List<Driver>) object);
+				setAdapterToSpinner(driversList);
+
+			}
+		default:
+			break;
+		}
+
 	}
 }

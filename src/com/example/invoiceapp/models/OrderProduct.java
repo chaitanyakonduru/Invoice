@@ -1,6 +1,6 @@
 package com.example.invoiceapp.models;
 
-public class OrderProduct {
+public class OrderProduct extends Priority {
 	
 	private int _id;
 	private String mOrderProductId;

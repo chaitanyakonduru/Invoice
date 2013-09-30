@@ -16,6 +16,7 @@ import com.example.invoiceapp.fragments.CustomerDetailsFragment;
 import com.example.invoiceapp.fragments.InvoiceFragment;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.fragments.RemindersFragment;
+import com.example.invoiceapp.models.Customer;
 
 public class CustomerActivity extends FragmentActivity implements TabListener {
 
@@ -24,6 +25,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	private Fragment customerDetailsFragment;
 	private Fragment invoiceFragment;
 	private RemindersFragment reminderFragment;
+	private Customer customer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +33,19 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		setContentView(R.layout.layout_customer);
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_CUSTOMER)) {
-			String customerName = bundle.getString(EXTRA_CUSTOMER);
-			
+			customer = (Customer) bundle.get(EXTRA_CUSTOMER);
+
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 					| ActionBar.DISPLAY_HOME_AS_UP
 					| ActionBar.DISPLAY_SHOW_HOME);
-			 View customView=LayoutInflater.from(this).inflate(R.layout.layout_custom_actionbar, null);
-			  actionBar.setCustomView(customView);
-			  
+			View customView = LayoutInflater.from(this).inflate(
+					R.layout.layout_custom_actionbar, null);
+			actionBar.setCustomView(customView);
+
 			TextView textView = (TextView) actionBar.getCustomView()
 					.findViewById(R.id.actionbar_custom_title);
-			textView.setText(customerName);
+			textView.setText(customer.getmCustomerName());
 			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			actionBar.addTab(actionBar.newTab().setText("Orders")
 					.setTabListener(this).setTag("orders"));
@@ -53,48 +56,45 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 			actionBar.addTab(actionBar.newTab().setText("Reminders")
 					.setTabListener(this).setTag("reminders"));
 		}
-		
-		 
+
 	}
 
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
-		
+
 	}
 
 	@Override
 	public void onTabSelected(Tab arg0, FragmentTransaction fragmentTransaction) {
 		switch (arg0.getPosition()) {
 		case 0:
-			if(ordersFragment==null)
-			{
-				ordersFragment=OrdersFragment.newInstance();
+			if (ordersFragment == null) {
+				ordersFragment = OrdersFragment.newInstance(customer);
 			}
-			
-			 fragmentTransaction.replace(R.id.container, ordersFragment);
+
+			fragmentTransaction.replace(R.id.container, ordersFragment);
 			break;
 		case 1:
-			
-			if(customerDetailsFragment==null)
-			{
-				customerDetailsFragment=CustomerDetailsFragment.newInstance();
+
+			if (customerDetailsFragment == null) {
+				customerDetailsFragment = CustomerDetailsFragment
+						.newInstance(customer);
 			}
-			 fragmentTransaction.replace(R.id.container, customerDetailsFragment);
-			 break;
+			fragmentTransaction
+					.replace(R.id.container, customerDetailsFragment);
+			break;
 		case 2:
-			if(invoiceFragment==null)
-			{
-				invoiceFragment=InvoiceFragment.newInstance();
+			if (invoiceFragment == null) {
+				invoiceFragment = InvoiceFragment.newInstance();
 			}
-			 fragmentTransaction.replace(R.id.container, invoiceFragment);
+			fragmentTransaction.replace(R.id.container, invoiceFragment);
 			break;
 		case 3:
-			if(reminderFragment==null)
-			{
-				reminderFragment=RemindersFragment.newInstance();
+			if (reminderFragment == null) {
+				reminderFragment = RemindersFragment.newInstance();
 			}
-			 fragmentTransaction.replace(R.id.container, reminderFragment);
-			 break;
+			fragmentTransaction.replace(R.id.container, reminderFragment);
+			break;
 		default:
 			break;
 		}
@@ -102,17 +102,15 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 
 	@Override
 	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
-		
+
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if(item.getItemId()==android.R.id.home)
-		{
+		if (item.getItemId() == android.R.id.home) {
 			finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	
 }

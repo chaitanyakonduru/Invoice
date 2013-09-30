@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.invoiceapp.adapters.CustomBreadItemAdapter;
+import com.example.invoiceapp.database.DatabaseQueryManager;
+import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.network.DatabaseThread;
@@ -22,34 +25,29 @@ import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class BreadListActivity extends BaseActivity implements
-		NetworkCallback<Object> {
+		NetworkCallback<Object>, DbQueryCallback<Object> {
 
 	private ListView listView;
 	private InvoiceAppNetworkServiceManager appNetworkServiceManager;
 	private List<Product> productsList;
 	private InvoiceApplication application;
-	private InvoiceAppDatabase database;
+	private DatabaseQueryManager databaseQueryManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		listView = new ListView(this);
+		listView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		setContentView(listView);
 		Utilities.setActionBarTitle(this, "Select Products");
 		application = (InvoiceApplication) getApplication();
-		database = application.shareDatabaseInstance();
 		appNetworkServiceManager = InvoiceAppNetworkServiceManager
 				.getInstance(this);
-		if (!database
-				.checkTableNullOrNot(InvoiceAppDatabase.ProductColumns.TABLE_NAME)) {
-			Utilities.showProgressDialog(this);
-			appNetworkServiceManager.fetchProductsRequest(
-					Constants.REQ_FETCH_PRODUCTS, this);
-		} else {
-			productsList = database.getAllProducts();
-			bindProductstoListView(productsList);
-		}
+		databaseQueryManager = DatabaseQueryManager.getInstance(this);
+		databaseQueryManager.checkTableNullOrNot(
+				Constants.DB_REQ_CHECK_TABLE_NULL_NOT,
+				InvoiceAppDatabase.ProductColumns.TABLE_NAME, this);
 	}
 
 	@Override
@@ -125,7 +123,9 @@ public class BreadListActivity extends BaseActivity implements
 	private void insertProductIntoDatabase() {
 		DatabaseThread databaseThread = application
 				.shareDatabaseThreadInstance();
-		databaseThread.start();
+		if (!databaseThread.isAlive()) {
+			databaseThread.start();
+		}
 		for (Product product : productsList) {
 			databaseThread.addJob(product);
 		}
@@ -136,4 +136,33 @@ public class BreadListActivity extends BaseActivity implements
 		Utilities.dismissProgressDialog();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onQueryCompleted(int requestCode, Object object) {
+		switch (requestCode) {
+
+		case Constants.DB_REQ_CHECK_TABLE_NULL_NOT:
+
+			if (object != null && object instanceof Boolean) {
+				boolean status = (Boolean) object;
+				if (status) {
+					databaseQueryManager.getAllProducts(
+							Constants.DB_REQ_FETCH_PRODUCTS, this);
+				} else {
+					Utilities.showProgressDialog(this);
+					appNetworkServiceManager.fetchProductsRequest(
+							Constants.REQ_FETCH_PRODUCTS, this);
+				}
+			}
+			break;
+		case Constants.DB_REQ_FETCH_PRODUCTS:
+			if (object != null && object instanceof List) {
+				productsList = ((List<Product>) object);
+				;
+				bindProductstoListView(productsList);
+			}
+			break;
+		}
+
+	}
 }
