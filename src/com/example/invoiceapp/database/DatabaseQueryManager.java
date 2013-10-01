@@ -75,6 +75,19 @@ public class DatabaseQueryManager {
 		});
 		 
 	 }
+	 
+	 public void getOrderedProducts(final int reqCode,final String mCustomerId,final DbQueryCallback<Object> callback)
+	 {
+		 final DatabaseHandler databaseHandler=new DatabaseHandler(reqCode, callback);
+		 executorService.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				database.getOrderedProducts(mCustomerId,databaseHandler);
+			}
+		});
+		 
+	 }
 	
 
 }

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
@@ -38,12 +39,14 @@ public class CustomerListActivity extends BaseActivity implements
 	private ListView listView;
 	private List<Customer> customersList;
 	private DatabaseQueryManager databaseQueryManager;
+	private ProgressBar progressBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		listView = new ListView(this);
-		setContentView(listView);
+		setContentView(R.layout.layout_customes);
+		progressBar = (ProgressBar) findViewById(R.id.customer_list_progressbar);
+		listView = (ListView) findViewById(R.id.listview);
 		listView.setOnItemClickListener(this);
 		Utilities.setActionBarTitle(this, "Customers List");
 		invoiceApplication = (InvoiceApplication) getApplication();
@@ -73,6 +76,10 @@ public class CustomerListActivity extends BaseActivity implements
 
 	@Override
 	public void onSuccess(int requestCode, Object object) {
+		if (progressBar != null && progressBar.isShown()) {
+			progressBar.setVisibility(View.GONE);
+			listView.setVisibility(View.VISIBLE);
+		}
 		if (requestCode == Constants.REQ_FETCH_ROUTES) {
 			if (object instanceof String) {
 				RouteInfo routeInfo = JsonResponseParser
@@ -114,7 +121,10 @@ public class CustomerListActivity extends BaseActivity implements
 
 	@Override
 	public void onFailure(int requestCode, String errorMessge) {
-
+		if (progressBar != null && progressBar.isShown()) {
+			progressBar.setVisibility(View.GONE);
+			listView.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override

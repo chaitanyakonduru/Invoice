@@ -14,4 +14,5 @@ public class Constants {
 	public static final int DB_REQ_CHECK_TABLE_NULL_NOT=501;
 	public static final int DB_REQ_FETCH_DRIVERS=502;
 	public static final int DB_REQ_FETCH_PRODUCTS=503;
+	public static final int DB_REQ_FETCH_ORDERED_PRODUCTS=504;
 }

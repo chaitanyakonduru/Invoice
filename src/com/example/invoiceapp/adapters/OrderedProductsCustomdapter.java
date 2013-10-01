@@ -3,9 +3,10 @@ package com.example.invoiceapp.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -70,24 +71,27 @@ public class OrderedProductsCustomdapter extends ArrayAdapter<PurchaseProducts> 
 		holder.orderedquantityTV.setText(product.getmOrderQty());
 		holder.qtyPurchasedET.setVisibility(View.VISIBLE);
 		holder.returnItemQtyET.setVisibility(View.VISIBLE);
-		holder.qtyPurchasedET
-				.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-					@Override
-					public void onFocusChange(View arg0, boolean arg1) {
+		holder.qtyPurchasedET.addTextChangedListener(new TextWatcher() {
 
-						if (!arg1) {
-							EditText editText = (EditText) arg0;
-							if (editText.getId() == R.id.purchased_qty_et) {
-								product.setQtyPurchased(editText.getText()
-										.toString());
-							} else {
-								product.setQtyReturned(editText.getText()
-										.toString());
-							}
-						}
-					}
-				});
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				product.setQtyPurchased(s.toString());
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				product.setQtyPurchased(s.toString());
+			}
+		});
+
 		return convertView;
 	}
 

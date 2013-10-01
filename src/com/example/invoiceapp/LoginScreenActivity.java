@@ -39,6 +39,7 @@ public class LoginScreenActivity extends BaseActivity implements
 		Utilities.setActionBarTitle(this, "Authentication");
 		driversListSpinner = (Spinner) findViewById(R.id.spinner_driver);
 		passWordET = (EditText) findViewById(R.id.et_password);
+		passWordET.setText("123456");
 		application = (InvoiceApplication) getApplication();
 		databaseQueryManager = DatabaseQueryManager.getInstance(this);
 		databaseQueryManager.checkTableNullOrNot(
@@ -56,6 +57,7 @@ public class LoginScreenActivity extends BaseActivity implements
 		driversList.add(0, driver);
 		driversListSpinner.setAdapter(new ArrayAdapter<Driver>(this,
 				android.R.layout.simple_list_item_1, driversList));
+		driversListSpinner.setSelection(1);
 	}
 
 	@Override

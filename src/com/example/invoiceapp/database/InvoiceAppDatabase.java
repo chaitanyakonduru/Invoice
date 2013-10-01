@@ -395,21 +395,21 @@ public class InvoiceAppDatabase {
 		return index;
 	}
 
-	public void checkTableNullOrNot(String tableName,DatabaseHandler handler) {
+	public void checkTableNullOrNot(String tableName, DatabaseHandler handler) {
 		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
-		boolean resultStatus=false;
+		boolean resultStatus = false;
 		Cursor cursor = sqLiteDatabase.rawQuery("SELECT count(*) FROM "
 				+ tableName, null);
 
 		if (null != cursor && cursor.moveToNext()) {
 			int count = cursor.getInt(0);
 			if (count >= 1) {
-				resultStatus=true;
+				resultStatus = true;
 			}
 			cursor.close();
 			cursor = null;
 		}
-		Message.obtain(handler,Constants.SUCCESS,resultStatus).sendToTarget();
+		Message.obtain(handler, Constants.SUCCESS, resultStatus).sendToTarget();
 	}
 
 	public void getAllDrivers(DatabaseHandler handler) {
@@ -431,7 +431,7 @@ public class InvoiceAppDatabase {
 				driverList.add(driver);
 			}
 		}
-		Message.obtain(handler,Constants.SUCCESS ,driverList).sendToTarget();
+		Message.obtain(handler, Constants.SUCCESS, driverList).sendToTarget();
 	}
 
 	public void getAllProducts(DatabaseHandler databaseHandler) {
@@ -451,10 +451,11 @@ public class InvoiceAppDatabase {
 				productsList.add(product);
 			}
 		}
-		Message.obtain(databaseHandler,Constants.SUCCESS ,productsList).sendToTarget();
+		Message.obtain(databaseHandler, Constants.SUCCESS, productsList)
+				.sendToTarget();
 	}
 
-	public void getAllCustomers(String driverId,DatabaseHandler handler) {
+	public void getAllCustomers(String driverId, DatabaseHandler handler) {
 		List<Customer> customersList = null;
 		Customer customer = null;
 		SQLiteDatabase database = databaseHelper.getReadableDatabase();
@@ -486,20 +487,24 @@ public class InvoiceAppDatabase {
 				customersList.add(customer);
 			}
 		}
-		Message.obtain(handler, Constants.SUCCESS, customersList).sendToTarget();
+		Message.obtain(handler, Constants.SUCCESS, customersList)
+				.sendToTarget();
 	}
 
-	public List<PurchaseProducts> getOrderedProducts(String customerId) {
-		List<PurchaseProducts> purchaseProductsList=null;
+	public void getOrderedProducts(String customerId,
+			DatabaseHandler databaseHandler) {
+		List<PurchaseProducts> purchaseProductsList = null;
 		PurchaseProducts purchaseProducts;
 		SQLiteDatabase database = databaseHelper.getReadableDatabase();
-		String query=null;
-		query="select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="+customerId+") group by o.order_product_id";
+		String query = null;
+		query = "select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
+				+ customerId + ") group by o.order_product_id";
+		// query="select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p LEFT OUTER JOIN  OrderProducts o on p.product_id=o.order_product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="+customerId+") group by o.order_product_id";
 		Cursor cursor = database.rawQuery(query, null);
 		if (cursor != null && cursor.getCount() > 0) {
-			purchaseProductsList=new ArrayList<PurchaseProducts>();
+			purchaseProductsList = new ArrayList<PurchaseProducts>();
 			while (cursor.moveToNext()) {
-				purchaseProducts=new PurchaseProducts();
+				purchaseProducts = new PurchaseProducts();
 				purchaseProducts.setmOrderQty(cursor.getString(cursor
 						.getColumnIndex(OrderProductColumns.QUANTITY_ORDERED)));
 				purchaseProducts.setProductId(cursor.getString(cursor
@@ -509,15 +514,19 @@ public class InvoiceAppDatabase {
 				purchaseProducts.setProductPrice(cursor.getString(cursor
 						.getColumnIndex(OrderProductColumns.PRODUCT_PRICE)));
 				purchaseProductsList.add(purchaseProducts);
-				Log.v(TAG, "Result:"+cursor.getString(cursor
-						.getColumnIndex(ProductColumns.PRODUCT_NAME)));
-				Log.v(TAG, "Result:"+cursor.getString(cursor
-						.getColumnIndex(OrderProductColumns.QUANTITY_ORDERED)));
+				Log.v(TAG,
+						"Result:"
+								+ cursor.getString(cursor
+										.getColumnIndex(ProductColumns.PRODUCT_NAME)));
+				Log.v(TAG,
+						"Result:"
+								+ cursor.getString(cursor
+										.getColumnIndex(OrderProductColumns.QUANTITY_ORDERED)));
 			}
 		} else {
 			Log.v(TAG, "Cursor NUll");
 		}
-		return purchaseProductsList;
-
+		Message.obtain(databaseHandler, Constants.SUCCESS, purchaseProductsList)
+				.sendToTarget();
 	}
 }
