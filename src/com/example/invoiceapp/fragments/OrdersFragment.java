@@ -24,7 +24,7 @@ import com.example.invoiceapp.adapters.OrderedProductsCustomdapter;
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.models.Customer;
-import com.example.invoiceapp.models.PurchaseProducts;
+import com.example.invoiceapp.models.SelectedProducts;
 import com.example.invoiceapp.utils.Constants;
 
 public class OrdersFragment extends Fragment implements DbQueryCallback<Object> {
@@ -34,7 +34,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 	private static Customer customer = null;
 	private ListView listview;
 	private DatabaseQueryManager databaseQueryManager;
-	private List<PurchaseProducts> orderedProductsList;
+	private List<SelectedProducts> orderedProductsList;
 
 	public OrdersFragment() {
 
@@ -85,8 +85,8 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 
 	private void purchaseItems() {
 
-		ArrayList<PurchaseProducts> selectedProducts = new ArrayList<PurchaseProducts>();
-		for (PurchaseProducts purchaseProducts : orderedProductsList) {
+		ArrayList<SelectedProducts> selectedProducts = new ArrayList<SelectedProducts>();
+		for (SelectedProducts purchaseProducts : orderedProductsList) {
 			if (purchaseProducts != null
 					&& purchaseProducts.getQtyPurchased() != null && !purchaseProducts.getQtyPurchased().equalsIgnoreCase("null")) {
 
@@ -131,7 +131,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 		switch (requestCode) {
 		case Constants.DB_REQ_FETCH_ORDERED_PRODUCTS:
 			if (object != null && object instanceof List) {
-				orderedProductsList = ((List<PurchaseProducts>) object);
+				orderedProductsList = ((List<SelectedProducts>) object);
 				if (orderedProductsList != null
 						&& !orderedProductsList.isEmpty()) {
 					listview.setAdapter(new OrderedProductsCustomdapter(

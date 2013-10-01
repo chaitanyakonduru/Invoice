@@ -10,16 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.invoiceapp.R;
-import com.example.invoiceapp.models.PurchaseProducts;
+import com.example.invoiceapp.models.SelectedProducts;
 
 public class PurchasedProductsCustomdapter extends
-		ArrayAdapter<PurchaseProducts> {
+		ArrayAdapter<SelectedProducts> {
 
 	private Context mContext;
-	private List<PurchaseProducts> productsList;
+	private List<SelectedProducts> productsList;
 
 	public PurchasedProductsCustomdapter(Context context, int resource,
-			List<PurchaseProducts> objects) {
+			List<SelectedProducts> objects) {
 		super(context, resource, objects);
 		this.mContext = context;
 		this.productsList = objects;
@@ -31,7 +31,7 @@ public class PurchasedProductsCustomdapter extends
 	}
 
 	@Override
-	public PurchaseProducts getItem(int position) {
+	public SelectedProducts getItem(int position) {
 		return productsList.get(position);
 	}
 
@@ -54,7 +54,7 @@ public class PurchasedProductsCustomdapter extends
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final PurchaseProducts product = getItem(position);
+		final SelectedProducts product = getItem(position);
 		holder.breadItemNameTV.setText(product.getProductName());
 		holder.purchasedQtyTV.setText(product.getQtyPurchased());
 		int price = (Integer.parseInt(product.getQtyPurchased()) * Integer

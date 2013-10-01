@@ -14,27 +14,31 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.invoiceapp.adapters.PurchasedProductsCustomdapter;
-import com.example.invoiceapp.models.PurchaseProducts;
+import com.example.invoiceapp.models.SelectedProducts;
+import com.example.invoiceapp.network.DatabaseThread;
 
 public class PurchaseActivity extends BaseActivity {
 
 	private ListView listView;
-	private List<PurchaseProducts> purchasedProducts;
+	private List<SelectedProducts> purchasedProducts;
 	private TextView totalView;
 	private int totalPrice;
 	public static final String EXTRA_PURCHASE_ITEMS = "purchaseitems";
-
+	public DatabaseThread databaseThread;
+	public InvoiceApplication application;
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customes);
+		application=(InvoiceApplication) getApplication();
+		databaseThread=application.shareDatabaseThreadInstance();
 		listView = (ListView) findViewById(R.id.listview);
 		totalView = (TextView) findViewById(R.id.total_price_view);
 		;
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_PURCHASE_ITEMS)) {
-			purchasedProducts = ((List<PurchaseProducts>) bundle
+			purchasedProducts = ((List<SelectedProducts>) bundle
 					.get(EXTRA_PURCHASE_ITEMS));
 
 			if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
@@ -56,7 +60,7 @@ public class PurchaseActivity extends BaseActivity {
 	private void setTotaltoView() {
 
 		totalPrice = 0;
-		for (PurchaseProducts purchaseProducts : purchasedProducts) {
+		for (SelectedProducts purchaseProducts : purchasedProducts) {
 			totalPrice += (Integer.parseInt(purchaseProducts.getProductPrice()) * Integer
 					.parseInt(purchaseProducts.getQtyPurchased()));
 		}
@@ -90,7 +94,11 @@ public class PurchaseActivity extends BaseActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-
+				if(!databaseThread.isAlive())
+				{
+					databaseThread.start();
+				}
+				
 			}
 		});
 

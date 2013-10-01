@@ -6,7 +6,7 @@ import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PurchaseProducts extends Priority implements Parcelable {
+public class SelectedProducts extends Priority implements Parcelable {
 
 	private String productId;
 	private String productName;
@@ -80,7 +80,7 @@ public class PurchaseProducts extends Priority implements Parcelable {
 		dest.writeStringList(stringList);
 	}
 
-	public PurchaseProducts(Parcel parcel) {
+	public SelectedProducts(Parcel parcel) {
 		List<String> stringList = new ArrayList<String>();
 		parcel.readStringList(stringList);
 		this.mOrderQty = stringList.get(0);
@@ -92,20 +92,20 @@ public class PurchaseProducts extends Priority implements Parcelable {
 
 	}
 
-	public static final Creator<PurchaseProducts> CREATOR = new Creator<PurchaseProducts>() {
+	public static final Creator<SelectedProducts> CREATOR = new Creator<SelectedProducts>() {
 
 		@Override
-		public PurchaseProducts[] newArray(int size) {
-			return new PurchaseProducts[size];
+		public SelectedProducts[] newArray(int size) {
+			return new SelectedProducts[size];
 		}
 
 		@Override
-		public PurchaseProducts createFromParcel(Parcel source) {
-			return new PurchaseProducts(source);
+		public SelectedProducts createFromParcel(Parcel source) {
+			return new SelectedProducts(source);
 		}
 	};
 
-	public PurchaseProducts() {
+	public SelectedProducts() {
 
 	}
 }

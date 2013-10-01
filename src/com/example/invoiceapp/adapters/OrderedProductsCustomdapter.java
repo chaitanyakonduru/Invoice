@@ -13,15 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.invoiceapp.R;
-import com.example.invoiceapp.models.PurchaseProducts;
+import com.example.invoiceapp.models.SelectedProducts;
 
-public class OrderedProductsCustomdapter extends ArrayAdapter<PurchaseProducts> {
+public class OrderedProductsCustomdapter extends ArrayAdapter<SelectedProducts> {
 
 	private Context mContext;
-	private List<PurchaseProducts> productsList;
+	private List<SelectedProducts> productsList;
 
 	public OrderedProductsCustomdapter(Context context, int resource,
-			List<PurchaseProducts> objects) {
+			List<SelectedProducts> objects) {
 		super(context, resource, objects);
 		this.mContext = context;
 		this.productsList = objects;
@@ -33,7 +33,7 @@ public class OrderedProductsCustomdapter extends ArrayAdapter<PurchaseProducts> 
 	}
 
 	@Override
-	public PurchaseProducts getItem(int position) {
+	public SelectedProducts getItem(int position) {
 		return productsList.get(position);
 	}
 
@@ -66,7 +66,7 @@ public class OrderedProductsCustomdapter extends ArrayAdapter<PurchaseProducts> 
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final PurchaseProducts product = getItem(position);
+		final SelectedProducts product = getItem(position);
 		holder.breadItemNameTV.setText(product.getProductName());
 		holder.orderedquantityTV.setText(product.getmOrderQty());
 		holder.qtyPurchasedET.setVisibility(View.VISIBLE);

@@ -15,10 +15,12 @@ import android.util.Log;
 
 import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
-import com.example.invoiceapp.models.PurchaseProducts;
+import com.example.invoiceapp.models.PurchasedProduct;
+import com.example.invoiceapp.models.SelectedProducts;
 import com.example.invoiceapp.models.RouteInfo;
 import com.example.invoiceapp.utils.Constants;
 
@@ -57,6 +59,8 @@ public class InvoiceAppDatabase {
 			db.execSQL(RouteColumns.DATABASE_CREATE);
 			db.execSQL(DriverColumns.DATABASE_CREATE);
 			db.execSQL(OrderProductColumns.DATABASE_CREATE);
+			db.execSQL(InvoiceColumns.DATABASE_CREATE);
+			db.execSQL(PurchasedProductColumns.DATABASE_CREATE);
 		}
 
 		@Override
@@ -67,7 +71,10 @@ public class InvoiceAppDatabase {
 			db.execSQL("Drop table if exists " + RouteColumns.TABLE_NAME);
 			db.execSQL("Drop table if exists " + DriverColumns.TABLE_NAME);
 			db.execSQL("Drop table if exists " + OrderProductColumns.TABLE_NAME);
+			db.execSQL("Drop table if exists " + InvoiceColumns.TABLE_NAME);
+			db.execSQL("Drop table if exists " + PurchasedProductColumns.TABLE_NAME);
 		}
+		
 
 	}
 
@@ -131,6 +138,43 @@ public class InvoiceAppDatabase {
 				+ "driver_password text," + "driver_code text);";
 	}
 
+	public static class InvoiceColumns implements BaseColumns {
+		public static final String TABLE_NAME = "Invoices";
+		public static final String invoice_id = "invoice_id";
+		public static final String purchased_date = "purchased_date";
+		public static final String customer_id = "customer_id";
+		public static final String paid = "paid";
+		public static final String payment_mode= "payment_mode";
+		public static final String total_amt = "totalAmount";
+		public static final String dues= "dues";
+
+		private static final String DATABASE_CREATE = "create table Invoices(_id integer primary key autoincrement,"
+				+ "invoice_id integer,"
+				+ "purchased_date text,"
+				+ "customer_id text,"
+				+ "paid int,"
+				+ "payment_mode text,"
+				+ "totalAmount int,"
+				+ "dues int);";
+	}
+	
+	private static class PurchasedProductColumns implements BaseColumns {
+		public static final String TABLE_NAME = "PurchasedProducts";
+		public static final String PURCHASE_PRODUCT_ID = "purchase_productid";
+		public static final String INVOICE_ID = "invoice_id";
+		public static final String PRODUCT_ID = "product_id";
+		public static final String QUANTITY_PURCHASED = "quantity_purchased";
+		public static final String PRODUCT_COST = "product_cost";
+
+		private static final String DATABASE_CREATE = "create table PurchasedProducts(_id integer primary key autoincrement,"
+				+ "purchase_productid integer,"
+				+ "invoice_id integer,"
+				+ "product_id text,"
+				+ "quantity_purchased text,"
+				+ "product_cost text);";
+	}
+
+	
 	private static class RouteColumns implements BaseColumns {
 		public static final String TABLE_NAME = "Routes";
 		public static final String ROUTE_ID = "route_id";
@@ -341,6 +385,84 @@ public class InvoiceAppDatabase {
 		}
 
 	}
+	
+	public boolean insertInvoice(Invoice invoice) {
+		boolean isUpdate = false;
+		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+		Cursor cursor = sqLiteDatabase.rawQuery(
+				"SELECT count(*) FROM Invoices WHERE product_id = ?",
+				new String[] { invoice.getInvoiceId() });
+
+		if (null != cursor && cursor.moveToNext()) {
+			int count = cursor.getInt(0);
+			if (count >= 1) {
+				isUpdate = true;
+			}
+			cursor.close();
+			cursor = null;
+		}
+
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(InvoiceColumns.invoice_id, invoice.getInvoiceId());
+		contentValues.put(InvoiceColumns.dues, invoice.getDues());
+		contentValues.put(InvoiceColumns.paid, invoice.isPaid()?1:0);
+		contentValues.put(InvoiceColumns.payment_mode, invoice.getPaymentMode());
+		contentValues.put(InvoiceColumns.purchased_date, invoice.getPurchased_date());
+		contentValues.put(InvoiceColumns.total_amt, invoice.getTotalAmount());
+		contentValues.put(InvoiceColumns.customer_id, invoice.getCustomerId());
+		
+
+		if (isUpdate) {
+			return sqLiteDatabase.update(InvoiceColumns.TABLE_NAME,
+					contentValues, InvoiceColumns.invoice_id+ "=?",
+					new String[] { invoice.getInvoiceId() }) > 0 ? true : false;
+		} else {
+			return sqLiteDatabase.insert(InvoiceColumns.TABLE_NAME, null,
+					contentValues) > 0 ? true : false;
+		}
+
+	}
+	
+	
+	public boolean insertPurchasedProduct(PurchasedProduct purchasedProduct) {
+		boolean isUpdate = false;
+		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+		Cursor cursor = sqLiteDatabase
+				.rawQuery(
+						"SELECT count(*) FROM PurchasedProducts WHERE purchase_productid = ?",
+						new String[] { purchasedProduct.getInvoice_prodcutid() });
+
+		if (null != cursor && cursor.moveToNext()) {
+			int count = cursor.getInt(0);
+			if (count >= 1) {
+				isUpdate = true;
+			}
+			cursor.close();
+			cursor = null;
+		}
+
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(PurchasedProductColumns.PURCHASE_PRODUCT_ID,
+				purchasedProduct.getInvoice_prodcutid());
+		contentValues.put(PurchasedProductColumns.INVOICE_ID,
+				purchasedProduct.getInvoiceId());
+		contentValues.put(PurchasedProductColumns.PRODUCT_COST,
+				purchasedProduct.getProductCost());
+		contentValues.put(PurchasedProductColumns.PRODUCT_ID,
+				purchasedProduct.getProduct_id());
+		contentValues.put(PurchasedProductColumns.QUANTITY_PURCHASED,
+				purchasedProduct.getProductQuantity());
+		if (isUpdate) {
+			return sqLiteDatabase.update(PurchasedProductColumns.TABLE_NAME,
+					contentValues, PurchasedProductColumns.PURCHASE_PRODUCT_ID + "=?",
+					new String[] {purchasedProduct.getInvoice_prodcutid() }) > 0 ? true
+					: false;
+		} else {
+			return sqLiteDatabase.insert(PurchasedProductColumns.TABLE_NAME, null,
+					contentValues) > 0 ? true : false;
+		}
+
+	}
 
 	public boolean insertOrderProduct(OrderProduct orderProduct) {
 		boolean isUpdate = false;
@@ -493,8 +615,8 @@ public class InvoiceAppDatabase {
 
 	public void getOrderedProducts(String customerId,
 			DatabaseHandler databaseHandler) {
-		List<PurchaseProducts> purchaseProductsList = null;
-		PurchaseProducts purchaseProducts;
+		List<SelectedProducts> purchaseProductsList = null;
+		SelectedProducts purchaseProducts;
 		SQLiteDatabase database = databaseHelper.getReadableDatabase();
 		String query = null;
 		query = "select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
@@ -502,9 +624,9 @@ public class InvoiceAppDatabase {
 		// query="select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p LEFT OUTER JOIN  OrderProducts o on p.product_id=o.order_product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="+customerId+") group by o.order_product_id";
 		Cursor cursor = database.rawQuery(query, null);
 		if (cursor != null && cursor.getCount() > 0) {
-			purchaseProductsList = new ArrayList<PurchaseProducts>();
+			purchaseProductsList = new ArrayList<SelectedProducts>();
 			while (cursor.moveToNext()) {
-				purchaseProducts = new PurchaseProducts();
+				purchaseProducts = new SelectedProducts();
 				purchaseProducts.setmOrderQty(cursor.getString(cursor
 						.getColumnIndex(OrderProductColumns.QUANTITY_ORDERED)));
 				purchaseProducts.setProductId(cursor.getString(cursor
