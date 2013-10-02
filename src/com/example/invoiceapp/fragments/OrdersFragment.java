@@ -8,7 +8,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,12 +23,13 @@ import com.example.invoiceapp.adapters.OrderedProductsCustomdapter;
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.models.Customer;
+import com.example.invoiceapp.models.PurchasedProduct;
 import com.example.invoiceapp.models.SelectedProducts;
 import com.example.invoiceapp.utils.Constants;
 
 public class OrdersFragment extends Fragment implements DbQueryCallback<Object> {
 
-	private static final String TAG = null;
+	public  static final String CUSTOMER_NAME = "customer_name";
 	private static OrdersFragment orderFragment;
 	private static Customer customer = null;
 	private ListView listview;
@@ -85,21 +85,25 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 
 	private void purchaseItems() {
 
-		ArrayList<SelectedProducts> selectedProducts = new ArrayList<SelectedProducts>();
-		for (SelectedProducts purchaseProducts : orderedProductsList) {
-			if (purchaseProducts != null
-					&& purchaseProducts.getQtyPurchased() != null && !purchaseProducts.getQtyPurchased().equalsIgnoreCase("null")) {
-
-				selectedProducts.add(purchaseProducts);
-				Log.v(TAG, "Name:" + purchaseProducts.getProductName()
-						+ ":Qty:" + purchaseProducts.getQtyPurchased());
+		ArrayList<PurchasedProduct> purchasedProducts = new ArrayList<PurchasedProduct>();
+		PurchasedProduct purchasedProduct=null;
+		for (SelectedProducts selectedProduct : orderedProductsList) {
+			if (selectedProduct != null
+					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")) {
+				purchasedProduct=new PurchasedProduct();
+				purchasedProduct.setProduct_id(selectedProduct.getProductId());
+				purchasedProduct.setProductCost(String.valueOf(Integer.parseInt(selectedProduct.getQtyPurchased())*Integer.parseInt(selectedProduct.getProductPrice())));
+				purchasedProduct.setProductQuantity(selectedProduct.getQtyPurchased());
+				purchasedProduct.setmProductName(selectedProduct.getProductName());
+				purchasedProducts.add(purchasedProduct);
 			}
 		}
 
-		if (selectedProducts != null && !selectedProducts.isEmpty()) {
+		if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
 			Intent intent = new Intent(getActivity(), PurchaseActivity.class);
 			intent.putParcelableArrayListExtra(
-					PurchaseActivity.EXTRA_PURCHASE_ITEMS, selectedProducts);
+					PurchaseActivity.EXTRA_PURCHASE_ITEMS, purchasedProducts);
+			intent.putExtra(CUSTOMER_NAME, customer.getmCustomerId());
 			startActivity(intent);
 		}
 

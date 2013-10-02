@@ -10,16 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.invoiceapp.R;
-import com.example.invoiceapp.models.SelectedProducts;
+import com.example.invoiceapp.models.PurchasedProduct;
 
 public class PurchasedProductsCustomdapter extends
-		ArrayAdapter<SelectedProducts> {
+		ArrayAdapter<PurchasedProduct> {
 
 	private Context mContext;
-	private List<SelectedProducts> productsList;
+	private List<PurchasedProduct> productsList;
 
 	public PurchasedProductsCustomdapter(Context context, int resource,
-			List<SelectedProducts> objects) {
+			List<PurchasedProduct> objects) {
 		super(context, resource, objects);
 		this.mContext = context;
 		this.productsList = objects;
@@ -31,7 +31,7 @@ public class PurchasedProductsCustomdapter extends
 	}
 
 	@Override
-	public SelectedProducts getItem(int position) {
+	public PurchasedProduct getItem(int position) {
 		return productsList.get(position);
 	}
 
@@ -54,12 +54,10 @@ public class PurchasedProductsCustomdapter extends
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final SelectedProducts product = getItem(position);
-		holder.breadItemNameTV.setText(product.getProductName());
-		holder.purchasedQtyTV.setText(product.getQtyPurchased());
-		int price = (Integer.parseInt(product.getQtyPurchased()) * Integer
-				.parseInt(product.getProductPrice()));
-		holder.priceTV.setText(String.valueOf(price));
+		final PurchasedProduct product = getItem(position);
+		holder.breadItemNameTV.setText(product.getmProductName());
+		holder.purchasedQtyTV.setText(product.getProductQuantity());
+		holder.priceTV.setText(product.getProductCost());
 
 		return convertView;
 	}

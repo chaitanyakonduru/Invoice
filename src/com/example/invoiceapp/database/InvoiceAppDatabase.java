@@ -390,7 +390,7 @@ public class InvoiceAppDatabase {
 		boolean isUpdate = false;
 		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
 		Cursor cursor = sqLiteDatabase.rawQuery(
-				"SELECT count(*) FROM Invoices WHERE product_id = ?",
+				"SELECT count(*) FROM Invoices WHERE invoice_id = ?",
 				new String[] { invoice.getInvoiceId() });
 
 		if (null != cursor && cursor.moveToNext()) {
@@ -435,7 +435,7 @@ public class InvoiceAppDatabase {
 		if (null != cursor && cursor.moveToNext()) {
 			int count = cursor.getInt(0);
 			if (count >= 1) {
-				isUpdate = true;
+//				isUpdate = true;
 			}
 			cursor.close();
 			cursor = null;

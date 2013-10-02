@@ -1,6 +1,6 @@
 package com.example.invoiceapp.models;
 
-public class Invoice {
+public class Invoice extends Priority{
 
 	private int id;
 	private String invoiceId;

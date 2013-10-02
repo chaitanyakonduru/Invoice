@@ -51,7 +51,6 @@ public class InvoiceAppNetworkServiceManager {
 
 	public Future fetchDriversRouteInfoRequest(int requestCode,
 			NetworkCallback<Object> callback) {
-		// String driversUrl="drivers.json";
 		final String UrlString = BASE_URL + "ravi/routeinfo_list.json";
 
 		Log.v(TAG, "Request Url:" + UrlString);

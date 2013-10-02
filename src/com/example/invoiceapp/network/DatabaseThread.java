@@ -8,9 +8,11 @@ import android.util.Log;
 import com.example.invoiceapp.InvoiceApplication;
 import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
+import com.example.invoiceapp.models.PurchasedProduct;
 
 public class DatabaseThread extends Thread {
 	private InvoiceApplication app;
@@ -88,6 +90,16 @@ public class DatabaseThread extends Thread {
 				else if(object instanceof OrderProduct) {
 					OrderProduct orderProduct=(OrderProduct) object;
 					app.shareDatabaseInstance().insertOrderProduct(orderProduct);
+				}
+				else if(object instanceof Invoice)
+				{
+					Invoice invoice=(Invoice) object;
+					app.shareDatabaseInstance().insertInvoice(invoice);
+				}
+				else if(object instanceof PurchasedProduct)
+				{
+					PurchasedProduct product=(PurchasedProduct) object;
+					app.shareDatabaseInstance().insertPurchasedProduct(product);
 				}
 
 			}
