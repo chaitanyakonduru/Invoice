@@ -36,7 +36,10 @@ public class PlotLocationMapHelper {
 		mapView.onCreate(savedInstanceState);
 		mapView.onResume();
 		GoogleMap mMap=setUpMapIfNeeded(mapView);
+		if(mMap!=null)
+		{
 		addMarkersToMap(mMap,customer);
+		}
 	}
 	
 	private GoogleMap setUpMapIfNeeded(MapView mapView) {
