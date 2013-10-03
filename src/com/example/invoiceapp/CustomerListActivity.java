@@ -4,8 +4,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -129,23 +127,11 @@ public class CustomerListActivity extends BaseActivity implements
 
 	@Override
 	public void databaseCompleted() {
-		Message.obtain(handler, 100).sendToTarget();
+		Utilities.showToastMessage(CustomerListActivity.this,
+				"Update Database Completed!!!");
+		loadCustomers();
 
 	}
-
-	Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if (msg.what == 100) {
-				Utilities.showToastMessage(CustomerListActivity.this,
-						"Update Database Completed!!!");
-				loadCustomers();
-			}
-		}
-
-	};
 
 	protected void loadCustomers() {
 		databaseQueryManager.getCustomers(mDriverId,

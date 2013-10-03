@@ -3,6 +3,8 @@ package com.example.invoiceapp.network;
 import java.util.PriorityQueue;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.example.invoiceapp.InvoiceApplication;
@@ -25,7 +27,6 @@ public class DatabaseThread extends Thread {
 
 	public DatabaseThread(Context context) {
 		Log.v(TAG, "tag");
-		// jobQueue1 = new ArrayDeque<Object>();
 		jobQueue1 = new PriorityQueue<Object>();
 		app = (InvoiceApplication) context.getApplicationContext();
 	}
@@ -35,7 +36,6 @@ public class DatabaseThread extends Thread {
 		Log.v(TAG, "tag");
 		jobQueue1 = new PriorityQueue<Object>();
 		app = (InvoiceApplication) context.getApplicationContext();
-
 		this.databaseUpdateCompletion = databaseUpdateCompletion;
 	}
 
@@ -71,42 +71,33 @@ public class DatabaseThread extends Thread {
 				if (object instanceof Driver) {
 					Driver driver = (Driver) object;
 					app.shareDatabaseInstance().insertDriver(driver);
-				}
-				else if(object instanceof Product)
-				{
-					Product product=(Product) object;
+				} else if (object instanceof Product) {
+					Product product = (Product) object;
 					app.shareDatabaseInstance().insertProduct(product);
-				}
-				else if(object instanceof Customer)
-				{
-					Customer customer=(Customer) object;
+				} else if (object instanceof Customer) {
+					Customer customer = (Customer) object;
 					app.shareDatabaseInstance().insertCustomer(customer);
-				}
-				else if(object instanceof Order)
-				{
-					Order order=(Order)object;
+				} else if (object instanceof Order) {
+					Order order = (Order) object;
 					app.shareDatabaseInstance().insertOrder(order);
-				}
-				else if(object instanceof OrderProduct) {
-					OrderProduct orderProduct=(OrderProduct) object;
-					app.shareDatabaseInstance().insertOrderProduct(orderProduct);
-				}
-				else if(object instanceof Invoice)
-				{
-					Invoice invoice=(Invoice) object;
+				} else if (object instanceof OrderProduct) {
+					OrderProduct orderProduct = (OrderProduct) object;
+					app.shareDatabaseInstance()
+							.insertOrderProduct(orderProduct);
+				} else if (object instanceof Invoice) {
+					Invoice invoice = (Invoice) object;
 					app.shareDatabaseInstance().insertInvoice(invoice);
-				}
-				else if(object instanceof PurchasedProduct)
-				{
-					PurchasedProduct product=(PurchasedProduct) object;
+				} else if (object instanceof PurchasedProduct) {
+					PurchasedProduct product = (PurchasedProduct) object;
 					app.shareDatabaseInstance().insertPurchasedProduct(product);
 				}
 
 			}
 
 			if (jobQueue1.isEmpty()) {
-				if (databaseUpdateCompletion != null)
-					databaseUpdateCompletion.databaseCompleted();
+				if (databaseUpdateCompletion != null) {
+					Message.obtain(handler, 100).sendToTarget();
+				}
 			}
 
 			if (isInterrupted()) {
@@ -153,4 +144,16 @@ public class DatabaseThread extends Thread {
 		public void databaseCompleted();
 
 	}
+
+	Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if (msg.what == 100) {
+				databaseUpdateCompletion.databaseCompleted();
+			}
+		}
+
+	};
 }

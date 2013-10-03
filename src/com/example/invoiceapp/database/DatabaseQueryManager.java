@@ -2,6 +2,7 @@ package com.example.invoiceapp.database;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.content.Context;
 
@@ -84,6 +85,28 @@ public class DatabaseQueryManager {
 			@Override
 			public void run() {
 				database.getOrderedProducts(mCustomerId,databaseHandler);
+			}
+		});
+		 
+	 }
+	 
+	 public Future getInvoices(final int reqCode,final String mCustomerId,final DbQueryCallback<Object> callback)
+	 {
+		 final DatabaseHandler databaseHandler=new DatabaseHandler(reqCode, callback);
+		 executorService.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+			}
+		});
+		 
+		 return executorService.submit(new Runnable() {
+			
+			@Override
+			public void run() {
+				database.getInvoices(mCustomerId,databaseHandler);
+				
 			}
 		});
 		 

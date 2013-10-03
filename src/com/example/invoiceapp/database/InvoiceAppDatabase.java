@@ -651,4 +651,28 @@ public class InvoiceAppDatabase {
 		Message.obtain(databaseHandler, Constants.SUCCESS, purchaseProductsList)
 				.sendToTarget();
 	}
+	
+	public void getInvoices(String customerId,DatabaseHandler databaseHandler)
+	{
+		List<String> invoicesList=null;
+		final SQLiteDatabase database = databaseHelper.getReadableDatabase();
+		
+		Cursor cursor =database.query(InvoiceColumns.TABLE_NAME,new String[]{InvoiceColumns.invoice_id} , InvoiceColumns.customer_id+"=?", new String[]{customerId}, null, null, null);
+		if(cursor!=null && cursor.getCount()>0)
+		{
+			invoicesList=new ArrayList<String>();
+			while (cursor.moveToNext()) {
+				String string=cursor.getString(cursor.getColumnIndex(InvoiceColumns.invoice_id));
+				invoicesList.add(string);
+				
+			}
+		}
+		else
+		{
+			
+		}
+		Message.obtain(databaseHandler, Constants.SUCCESS, invoicesList)
+		.sendToTarget();
+		
+	}
 }

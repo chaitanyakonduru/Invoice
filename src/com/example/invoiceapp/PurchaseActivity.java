@@ -7,8 +7,6 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -186,20 +184,10 @@ public class PurchaseActivity extends BaseActivity implements
 
 	@Override
 	public void databaseCompleted() {
-		Message.obtain(handler, 100).sendToTarget();
+		Utilities.showToastMessage(PurchaseActivity.this,
+				"Saved Successfully");
+		finish();
 	}
 
-	Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if (msg.what == 100) {
-				Utilities.showToastMessage(PurchaseActivity.this,
-						"Saved Successfully");
-			}
-		}
-
-	};
 
 }

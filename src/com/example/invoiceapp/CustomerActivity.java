@@ -26,6 +26,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	private Fragment invoiceFragment;
 	private RemindersFragment reminderFragment;
 	private Customer customer;
+	public String mCustomerId = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_CUSTOMER)) {
 			customer = (Customer) bundle.get(EXTRA_CUSTOMER);
-
+			mCustomerId = customer.getmCustomerId();
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 					| ActionBar.DISPLAY_HOME_AS_UP
@@ -111,6 +112,10 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 			finish();
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public String getCustomerId() {
+		return mCustomerId;
 	}
 
 }
