@@ -24,7 +24,6 @@ public class CustomerDetailsFragment extends Fragment {
 	private com.example.invoiceapp.fragments.PlotLocationMapHelper helper;
 
 	public CustomerDetailsFragment() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public static CustomerDetailsFragment newInstance(Customer customer) {
