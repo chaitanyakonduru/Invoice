@@ -222,44 +222,48 @@ containing a value of this type.
         public static final int fastscroll_thumb_holo=0x7f020039;
         public static final int fastscroll_thumb_pressed_holo=0x7f02003a;
         public static final int ic_launcher=0x7f02003b;
-        public static final int item_background_holo_light=0x7f02003c;
-        public static final int list_activated_holo=0x7f02003d;
-        public static final int list_focused_example=0x7f02003e;
-        public static final int list_focused_holo=0x7f02003f;
-        public static final int list_longpressed_holo=0x7f020040;
-        public static final int list_pressed_holo_light=0x7f020041;
-        public static final int list_selector_background_transition_holo_light=0x7f020042;
-        public static final int list_selector_disabled_holo_light=0x7f020043;
-        public static final int list_selector_holo_light=0x7f020044;
-        public static final int menu_dropdown_panel_example=0x7f020045;
-        public static final int pressed_background_example=0x7f020046;
-        public static final int progress_bg_example=0x7f020047;
-        public static final int progress_horizontal_example=0x7f020048;
-        public static final int progress_primary_example=0x7f020049;
-        public static final int progress_secondary_example=0x7f02004a;
-        public static final int selectable_background_example=0x7f02004b;
-        public static final int spinner_ab_default_example=0x7f02004c;
-        public static final int spinner_ab_disabled_example=0x7f02004d;
-        public static final int spinner_ab_focused_example=0x7f02004e;
-        public static final int spinner_ab_pressed_example=0x7f02004f;
-        public static final int spinner_background_ab_example=0x7f020050;
-        public static final int spinner_background_holo_light=0x7f020051;
-        public static final int spinner_default_holo_light=0x7f020052;
-        public static final int spinner_disabled_holo_light=0x7f020053;
-        public static final int spinner_focused_holo_light=0x7f020054;
-        public static final int spinner_pressed_holo_light=0x7f020055;
-        public static final int tab_indicator_ab_example=0x7f020056;
-        public static final int tab_selected_example=0x7f020057;
-        public static final int tab_selected_focused_example=0x7f020058;
-        public static final int tab_selected_pressed_example=0x7f020059;
-        public static final int tab_unselected_example=0x7f02005a;
-        public static final int tab_unselected_focused_example=0x7f02005b;
-        public static final int tab_unselected_pressed_example=0x7f02005c;
-        public static final int textfield_activated_holo_light=0x7f02005d;
-        public static final int textfield_default_holo_light=0x7f02005e;
-        public static final int textfield_disabled_focused_holo_light=0x7f02005f;
-        public static final int textfield_disabled_holo_light=0x7f020060;
-        public static final int textfield_focused_holo_light=0x7f020061;
+        public static final int ic_plusone_medium_off_client=0x7f02003c;
+        public static final int ic_plusone_small_off_client=0x7f02003d;
+        public static final int ic_plusone_standard_off_client=0x7f02003e;
+        public static final int ic_plusone_tall_off_client=0x7f02003f;
+        public static final int item_background_holo_light=0x7f020040;
+        public static final int list_activated_holo=0x7f020041;
+        public static final int list_focused_example=0x7f020042;
+        public static final int list_focused_holo=0x7f020043;
+        public static final int list_longpressed_holo=0x7f020044;
+        public static final int list_pressed_holo_light=0x7f020045;
+        public static final int list_selector_background_transition_holo_light=0x7f020046;
+        public static final int list_selector_disabled_holo_light=0x7f020047;
+        public static final int list_selector_holo_light=0x7f020048;
+        public static final int menu_dropdown_panel_example=0x7f020049;
+        public static final int pressed_background_example=0x7f02004a;
+        public static final int progress_bg_example=0x7f02004b;
+        public static final int progress_horizontal_example=0x7f02004c;
+        public static final int progress_primary_example=0x7f02004d;
+        public static final int progress_secondary_example=0x7f02004e;
+        public static final int selectable_background_example=0x7f02004f;
+        public static final int spinner_ab_default_example=0x7f020050;
+        public static final int spinner_ab_disabled_example=0x7f020051;
+        public static final int spinner_ab_focused_example=0x7f020052;
+        public static final int spinner_ab_pressed_example=0x7f020053;
+        public static final int spinner_background_ab_example=0x7f020054;
+        public static final int spinner_background_holo_light=0x7f020055;
+        public static final int spinner_default_holo_light=0x7f020056;
+        public static final int spinner_disabled_holo_light=0x7f020057;
+        public static final int spinner_focused_holo_light=0x7f020058;
+        public static final int spinner_pressed_holo_light=0x7f020059;
+        public static final int tab_indicator_ab_example=0x7f02005a;
+        public static final int tab_selected_example=0x7f02005b;
+        public static final int tab_selected_focused_example=0x7f02005c;
+        public static final int tab_selected_pressed_example=0x7f02005d;
+        public static final int tab_unselected_example=0x7f02005e;
+        public static final int tab_unselected_focused_example=0x7f02005f;
+        public static final int tab_unselected_pressed_example=0x7f020060;
+        public static final int textfield_activated_holo_light=0x7f020061;
+        public static final int textfield_default_holo_light=0x7f020062;
+        public static final int textfield_disabled_focused_holo_light=0x7f020063;
+        public static final int textfield_disabled_holo_light=0x7f020064;
+        public static final int textfield_focused_holo_light=0x7f020065;
     }
     public static final class id {
         public static final int action_settings=0x7f05002e;
@@ -332,18 +336,32 @@ containing a value of this type.
         public static final int login_screen=0x7f0a0000;
     }
     public static final class string {
-        public static final int action_settings=0x7f060016;
-        public static final int app_name=0x7f060015;
-        /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
+        public static final int action_settings=0x7f06001a;
+        public static final int app_name=0x7f060019;
+        /**   Title for notification shown when GooglePlayServices needs to be
+        enabled for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_availability_notification_title=0x7f06000f;
+        public static final int auth_client_needs_enabling_title=0x7f060014;
+        /**   Title for notification shown when GooglePlayServices needs to be
+        installed for a application to work. [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_needs_installation_title=0x7f060015;
+        /**   Title for notification shown when GooglePlayServices needs to be
+        udpated for a application to work. [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_needs_update_title=0x7f060016;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int auth_client_play_services_err_notification_msg=0x7f060010;
+        public static final int auth_client_play_services_err_notification_msg=0x7f060017;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int auth_client_requested_by_msg=0x7f060011;
-        public static final int balance_sheet=0x7f060022;
+        public static final int auth_client_requested_by_msg=0x7f060018;
+        /**   Title for notification shown when a bad version of GooglePlayServices
+        has been installed and needs correction for an application to work.
+        [CHAR LIMIT=70] 
+         */
+        public static final int auth_client_using_bad_version_title=0x7f060013;
+        public static final int balance_sheet=0x7f060026;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -372,19 +390,31 @@ containing a value of this type.
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_install_title=0x7f060000;
+        /**  Message in confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=NONE] 
+         */
+        public static final int common_google_play_services_invalid_account_text=0x7f06000c;
+        /**  Title of confirmation dialog informing the user that they provided an invalid account. [CHAR LIMIT=40] 
+         */
+        public static final int common_google_play_services_invalid_account_title=0x7f06000b;
+        /**  Message in confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=NONE] 
+         */
+        public static final int common_google_play_services_network_error_text=0x7f06000a;
+        /**  Title of confirmation dialog informing the user that a network error occurred. [CHAR LIMIT=40] 
+         */
+        public static final int common_google_play_services_network_error_title=0x7f060009;
         /**  Message in confirmation dialog informing user there is an unknown issue in Google Play
         services [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unknown_issue=0x7f060009;
+        public static final int common_google_play_services_unknown_issue=0x7f06000d;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
-        public static final int common_google_play_services_unsupported_text=0x7f06000b;
+        public static final int common_google_play_services_unsupported_text=0x7f06000f;
         /**  Title of confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_unsupported_title=0x7f06000a;
+        public static final int common_google_play_services_unsupported_title=0x7f06000e;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f06000c;
+        public static final int common_google_play_services_update_button=0x7f060010;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
@@ -395,32 +425,21 @@ containing a value of this type.
         public static final int common_google_play_services_update_title=0x7f060007;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f06000d;
+        public static final int common_signin_button_text=0x7f060011;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f06000e;
-        public static final int customers=0x7f06001f;
-        public static final int hello_world=0x7f060017;
-        public static final int invoice_app=0x7f06001e;
-        public static final int is_pickup_products=0x7f060018;
-        /**  Location client code resources (prefix with location_client) 
-
-        Begin strings for location.reporting
-    
-
-        Some InactiveReason names.  See more in OneUp/package/location/res/values/strings.xml
-    
-         */
-        public static final int location_client_ulr_inactive_age_under_13=0x7f060012;
-        public static final int location_client_ulr_inactive_age_unknown=0x7f060013;
-        public static final int location_client_ulr_inactive_unknown_restriction=0x7f060014;
-        public static final int login_information=0x7f06001b;
-        public static final int manager_password=0x7f06001d;
-        public static final int password=0x7f06001a;
-        public static final int pending_invoices=0x7f060021;
-        public static final int route=0x7f060020;
-        public static final int select_driver=0x7f060019;
-        public static final int submit=0x7f06001c;
+        public static final int common_signin_button_text_long=0x7f060012;
+        public static final int customers=0x7f060023;
+        public static final int hello_world=0x7f06001b;
+        public static final int invoice_app=0x7f060022;
+        public static final int is_pickup_products=0x7f06001c;
+        public static final int login_information=0x7f06001f;
+        public static final int manager_password=0x7f060021;
+        public static final int password=0x7f06001e;
+        public static final int pending_invoices=0x7f060025;
+        public static final int route=0x7f060024;
+        public static final int select_driver=0x7f06001d;
+        public static final int submit=0x7f060020;
     }
     public static final class style {
         public static final int ActionBar_Solid_Example=0x7f090007;
@@ -523,7 +542,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:cameraBearing
+          @attr name com.example.invoiceapp:cameraBearing
         */
         public static final int MapAttrs_cameraBearing = 1;
         /**
@@ -537,7 +556,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:cameraTargetLat
+          @attr name com.example.invoiceapp:cameraTargetLat
         */
         public static final int MapAttrs_cameraTargetLat = 2;
         /**
@@ -551,7 +570,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:cameraTargetLng
+          @attr name com.example.invoiceapp:cameraTargetLng
         */
         public static final int MapAttrs_cameraTargetLng = 3;
         /**
@@ -565,7 +584,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:cameraTilt
+          @attr name com.example.invoiceapp:cameraTilt
         */
         public static final int MapAttrs_cameraTilt = 4;
         /**
@@ -579,7 +598,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:cameraZoom
+          @attr name com.example.invoiceapp:cameraZoom
         */
         public static final int MapAttrs_cameraZoom = 5;
         /**
@@ -599,7 +618,7 @@ containing a value of this type.
 <tr><td><code>terrain</code></td><td>3</td><td></td></tr>
 <tr><td><code>hybrid</code></td><td>4</td><td></td></tr>
 </table>
-          @attr name android:mapType
+          @attr name com.example.invoiceapp:mapType
         */
         public static final int MapAttrs_mapType = 0;
         /**
@@ -613,7 +632,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiCompass
+          @attr name com.example.invoiceapp:uiCompass
         */
         public static final int MapAttrs_uiCompass = 6;
         /**
@@ -627,7 +646,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiRotateGestures
+          @attr name com.example.invoiceapp:uiRotateGestures
         */
         public static final int MapAttrs_uiRotateGestures = 7;
         /**
@@ -641,7 +660,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiScrollGestures
+          @attr name com.example.invoiceapp:uiScrollGestures
         */
         public static final int MapAttrs_uiScrollGestures = 8;
         /**
@@ -655,7 +674,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiTiltGestures
+          @attr name com.example.invoiceapp:uiTiltGestures
         */
         public static final int MapAttrs_uiTiltGestures = 9;
         /**
@@ -669,7 +688,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiZoomControls
+          @attr name com.example.invoiceapp:uiZoomControls
         */
         public static final int MapAttrs_uiZoomControls = 10;
         /**
@@ -683,7 +702,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:uiZoomGestures
+          @attr name com.example.invoiceapp:uiZoomGestures
         */
         public static final int MapAttrs_uiZoomGestures = 11;
         /**
@@ -697,7 +716,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:useViewLifecycle
+          @attr name com.example.invoiceapp:useViewLifecycle
         */
         public static final int MapAttrs_useViewLifecycle = 12;
         /**
@@ -711,7 +730,7 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name android:zOrderOnTop
+          @attr name com.example.invoiceapp:zOrderOnTop
         */
         public static final int MapAttrs_zOrderOnTop = 13;
     };
