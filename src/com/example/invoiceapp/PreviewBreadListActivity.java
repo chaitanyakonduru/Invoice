@@ -27,7 +27,7 @@ public class PreviewBreadListActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Utilities.registerReceiver(this);
 		listView = new ListView(this);
 		setContentView(listView);
 		Utilities.setActionBarTitle(this, "Ordered Items");
@@ -81,6 +81,12 @@ public class PreviewBreadListActivity extends BaseActivity {
 		for (Product product : breadList) {
 			databaseThread.addJob(product);
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Utilities.unregisterReceiver(this);
 	}
 
 }

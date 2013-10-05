@@ -36,7 +36,7 @@ public class BreadListActivity extends BaseActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Utilities.registerReceiver(this);
 		listView = new ListView(this);
 		listView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		setContentView(listView);
@@ -48,6 +48,12 @@ public class BreadListActivity extends BaseActivity implements
 		databaseQueryManager.checkTableNullOrNot(
 				Constants.DB_REQ_CHECK_TABLE_NULL_NOT,
 				InvoiceAppDatabase.ProductColumns.TABLE_NAME, this);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Utilities.unregisterReceiver(this);
 	}
 
 	@Override

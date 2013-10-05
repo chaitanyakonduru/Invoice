@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +25,7 @@ import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.PurchasedProduct;
 import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.network.DatabaseThread.onDatabaseUpdateCompletion;
+import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class PurchaseActivity extends BaseActivity implements
@@ -43,6 +45,7 @@ public class PurchaseActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customes);
+	
 		application = (InvoiceApplication) getApplication();
 		databaseThread = new DatabaseThread(this, this);
 		listView = (ListView) findViewById(R.id.listview);
@@ -113,7 +116,6 @@ public class PurchaseActivity extends BaseActivity implements
 
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
-				// TODO Auto-generated method stub
 				switch (arg0.getCheckedRadioButtonId()) {
 				case R.id.payment_rb_yes:
 					duesEditView.setText("");
@@ -133,7 +135,6 @@ public class PurchaseActivity extends BaseActivity implements
 
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
-				// TODO Auto-generated method stub
 				switch (arg0.getCheckedRadioButtonId()) {
 				case R.id.payment_mode_rb_cheque:
 					invoice.setPaymentMode("Cheque");
@@ -175,8 +176,6 @@ public class PurchaseActivity extends BaseActivity implements
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
-				
 			}
 		});
 		builder.create().show();
@@ -186,6 +185,8 @@ public class PurchaseActivity extends BaseActivity implements
 	public void databaseCompleted() {
 		Utilities.showToastMessage(PurchaseActivity.this,
 				"Saved Successfully");
+		Intent intent=new Intent(Constants.CUSTOM_ACTION_INTENT);
+		sendBroadcast(intent);
 		finish();
 	}
 

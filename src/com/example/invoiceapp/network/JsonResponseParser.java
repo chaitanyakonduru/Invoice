@@ -28,6 +28,7 @@ public class JsonResponseParser {
 		List<Driver> driversList = null;
 		try {
 			JSONObject jsonObject = new JSONObject(string);
+			
 			if (jsonObject.has(TAG_MESSAGE)) {
 				driversList = new ArrayList<Driver>();
 				JSONArray jsonArray = jsonObject.getJSONArray(TAG_MESSAGE);

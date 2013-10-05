@@ -17,6 +17,7 @@ import com.example.invoiceapp.fragments.InvoiceFragment;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.fragments.RemindersFragment;
 import com.example.invoiceapp.models.Customer;
+import com.example.invoiceapp.utils.Utilities;
 
 public class CustomerActivity extends FragmentActivity implements TabListener {
 
@@ -27,11 +28,13 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	private RemindersFragment reminderFragment;
 	private Customer customer;
 	public String mCustomerId = null;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customer);
+		Utilities.registerReceiver(this);
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_CUSTOMER)) {
 			customer = (Customer) bundle.get(EXTRA_CUSTOMER);
@@ -63,6 +66,12 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
 
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Utilities.unregisterReceiver(this);
 	}
 
 	@Override
@@ -117,5 +126,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	public String getCustomerId() {
 		return mCustomerId;
 	}
+	
+
 
 }

@@ -16,4 +16,7 @@ public class Constants {
 	public static final int DB_REQ_FETCH_PRODUCTS=503;
 	public static final int DB_REQ_FETCH_ORDERED_PRODUCTS=504;
 	public static final int DB_REQ_FETCH_INVOICES=505;
+	
+	public static final String CUSTOM_ACTION_INTENT="com.example.invoiceapp.FINISH_ACTIVITY_SERVICE";
+	
 }

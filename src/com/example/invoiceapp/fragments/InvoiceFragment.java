@@ -11,6 +11,7 @@ import com.example.invoiceapp.CustomerActivity;
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.utils.Constants;
+import com.example.invoiceapp.utils.Utilities;
 
 public class InvoiceFragment extends ListFragment implements
 		DbQueryCallback<Object> {
@@ -61,9 +62,13 @@ public class InvoiceFragment extends ListFragment implements
 					setListAdapter(new ArrayAdapter<String>(getActivity(),
 							android.R.layout.simple_list_item_1, invoiceList));
 				}
-				setListShown(true);
+				
 			}
-
+			else
+			{
+				Utilities.showToastMessage(getActivity(), "No Invoices");
+			}
+			setListShown(true);
 			break;
 
 		default:

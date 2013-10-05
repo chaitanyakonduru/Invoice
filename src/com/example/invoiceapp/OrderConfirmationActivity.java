@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class OrderConfirmationActivity  extends BaseActivity{
@@ -16,10 +17,18 @@ public class OrderConfirmationActivity  extends BaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Utilities.registerReceiver(this);
 		setContentView(R.layout.layout_confirmation_order);
 		Utilities.setActionBarTitle(this, "Confirmation Page");
 		confirmationPassword=(EditText) findViewById(R.id.et_password);
 			
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		Utilities.unregisterReceiver(this);
 	}
 	
 	public void onAuthenticating(View v)
@@ -27,11 +36,14 @@ public class OrderConfirmationActivity  extends BaseActivity{
 		String respMessage;
 		if(!Utilities.checkIfNull(confirmationPassword.getText().toString().trim()))
 		{
-			
-			respMessage="Ordered Success";
-			saveAuthentication();
 			Intent intent=new Intent(this,CustomerListActivity.class);
 			startActivity(intent);
+			respMessage="Ordered Success";
+			saveAuthentication();
+			Intent inten=new Intent(Constants.CUSTOM_ACTION_INTENT);
+			sendBroadcast(inten);
+			
+			
 		}
 		else
 		{

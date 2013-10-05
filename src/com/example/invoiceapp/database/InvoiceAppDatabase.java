@@ -682,6 +682,6 @@ public class InvoiceAppDatabase {
 		String query = "Select  p.product_name,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id="
 				+ invoiceId + " group by PP._id";
 		Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-
+		
 	}
 }
