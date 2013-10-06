@@ -95,7 +95,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 			break;
 		case 2:
 			if (invoiceFragment == null) {
-				invoiceFragment = InvoiceFragment.newInstance();
+				invoiceFragment = InvoiceFragment.newInstance(customer);
 			}
 			fragmentTransaction.replace(R.id.container, invoiceFragment);
 			break;

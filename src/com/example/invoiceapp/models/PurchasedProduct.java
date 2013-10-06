@@ -23,7 +23,6 @@ public class PurchasedProduct extends Priority implements Parcelable{
 	}
 
 	
-	
 	public int getId() {
 		return id;
 	}

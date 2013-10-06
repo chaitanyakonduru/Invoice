@@ -86,6 +86,7 @@ public class PreviewBreadListActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
 		Utilities.unregisterReceiver(this);
 	}
 

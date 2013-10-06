@@ -266,7 +266,7 @@ containing a value of this type.
         public static final int textfield_focused_holo_light=0x7f020065;
     }
     public static final class id {
-        public static final int action_settings=0x7f05002e;
+        public static final int action_settings=0x7f050033;
         public static final int actionbar_custom_title=0x7f05000b;
         public static final int container=0x7f05000c;
         public static final int cust_details_cust_address=0x7f05000e;
@@ -275,34 +275,39 @@ containing a value of this type.
         public static final int cust_details_cust_name=0x7f05000d;
         public static final int cust_details_cust_phone=0x7f050011;
         public static final int customer_list_progressbar=0x7f050016;
-        public static final int due_payments=0x7f050023;
+        public static final int due_payments=0x7f050025;
+        public static final int empty_view=0x7f05001c;
         public static final int et_password=0x7f05000a;
-        public static final int et_qunatity=0x7f050025;
+        public static final int et_qunatity=0x7f05002a;
         public static final int home_btn_balancesheet=0x7f05001a;
         public static final int home_btn_customers=0x7f050017;
         public static final int home_btn_invoice=0x7f050019;
         public static final int home_btn_route=0x7f050018;
         public static final int hybrid=0x7f050004;
+        public static final int list_item_custom_invoiceid=0x7f050026;
+        public static final int list_item_custom_paid=0x7f050027;
+        public static final int list_item_custom_total_amount=0x7f050028;
         public static final int listview=0x7f050014;
-        public static final int map=0x7f05001b;
+        public static final int map=0x7f05001d;
         public static final int map1=0x7f050012;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int ordered_product_name=0x7f050027;
-        public static final int ordered_qty=0x7f050028;
-        public static final int payment_mode_linear_layout=0x7f05001f;
-        public static final int payment_mode_radio_group=0x7f050020;
-        public static final int payment_mode_rb_cash=0x7f050022;
-        public static final int payment_mode_rb_cheque=0x7f050021;
-        public static final int payment_rb_no=0x7f05001e;
-        public static final int payment_rb_yes=0x7f05001d;
-        public static final int payment_status_radio_group=0x7f05001c;
+        public static final int ordered_product_name=0x7f05002c;
+        public static final int ordered_qty=0x7f05002d;
+        public static final int payment_mode_linear_layout=0x7f050021;
+        public static final int payment_mode_radio_group=0x7f050022;
+        public static final int payment_mode_rb_cash=0x7f050024;
+        public static final int payment_mode_rb_cheque=0x7f050023;
+        public static final int payment_rb_no=0x7f050020;
+        public static final int payment_rb_yes=0x7f05001f;
+        public static final int payment_status_radio_group=0x7f05001e;
+        public static final int progressbar=0x7f05001b;
         public static final int purchased_orders_list_item_header_view=0x7f050013;
-        public static final int purchased_price_tv=0x7f05002d;
-        public static final int purchased_qty_et=0x7f05002a;
-        public static final int purchased_qty_tv=0x7f050029;
-        public static final int returned_qty_et=0x7f05002c;
-        public static final int returned_qty_tv=0x7f05002b;
+        public static final int purchased_price_tv=0x7f050032;
+        public static final int purchased_qty_et=0x7f05002f;
+        public static final int purchased_qty_tv=0x7f05002e;
+        public static final int returned_qty_et=0x7f050031;
+        public static final int returned_qty_tv=0x7f050030;
         public static final int satellite=0x7f050002;
         public static final int spinner_driver=0x7f050008;
         public static final int tableLayout1=0x7f050005;
@@ -311,8 +316,8 @@ containing a value of this type.
         public static final int textView1=0x7f050007;
         public static final int total_price_view=0x7f050015;
         public static final int tr_password=0x7f050009;
-        public static final int tv_bread_item_name=0x7f050024;
-        public static final int tv_qunatity=0x7f050026;
+        public static final int tv_bread_item_name=0x7f050029;
+        public static final int tv_qunatity=0x7f05002b;
     }
     public static final class layout {
         public static final int activity_layout_invoice=0x7f030000;
@@ -323,14 +328,16 @@ containing a value of this type.
         public static final int layout_customer_details=0x7f030005;
         public static final int layout_customes=0x7f030006;
         public static final int layout_home=0x7f030007;
-        public static final int layout_mapview=0x7f030008;
-        public static final int layout_orders=0x7f030009;
-        public static final int layout_payment_dialog=0x7f03000a;
-        public static final int layout_reminders=0x7f03000b;
-        public static final int list_item=0x7f03000c;
-        public static final int list_item_bread=0x7f03000d;
-        public static final int purchase_orders_custom_adapter=0x7f03000e;
-        public static final int purchased_custom_list_item=0x7f03000f;
+        public static final int layout_invoices=0x7f030008;
+        public static final int layout_mapview=0x7f030009;
+        public static final int layout_orders=0x7f03000a;
+        public static final int layout_payment_dialog=0x7f03000b;
+        public static final int layout_reminders=0x7f03000c;
+        public static final int list_innvoice_custom_item=0x7f03000d;
+        public static final int list_item=0x7f03000e;
+        public static final int list_item_bread=0x7f03000f;
+        public static final int purchase_orders_custom_adapter=0x7f030010;
+        public static final int purchased_custom_list_item=0x7f030011;
     }
     public static final class menu {
         public static final int login_screen=0x7f0a0000;

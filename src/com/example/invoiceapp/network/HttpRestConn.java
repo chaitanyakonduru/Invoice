@@ -21,8 +21,8 @@ public final class HttpRestConn implements Runnable {
 	private static AndroidHttpClient androidHttpClient = null;
 	private InvoiceAppHandler askZiggyhandler;
 	private static final String TAG = HttpRestConn.class.getSimpleName();
-	private static final int CONNECTION_TIMEOUT_INTERVAL=20*1000;
-	private static final int TIMEOUT_INTERVAL=20*1000;
+	private static final int CONNECTION_TIMEOUT_INTERVAL=30*1000;
+	private static final int TIMEOUT_INTERVAL=30*1000;
 	private String url;
 	
 

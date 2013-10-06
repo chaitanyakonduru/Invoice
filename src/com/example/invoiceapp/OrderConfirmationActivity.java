@@ -17,7 +17,6 @@ public class OrderConfirmationActivity  extends BaseActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Utilities.registerReceiver(this);
 		setContentView(R.layout.layout_confirmation_order);
 		Utilities.setActionBarTitle(this, "Confirmation Page");
 		confirmationPassword=(EditText) findViewById(R.id.et_password);
@@ -28,7 +27,6 @@ public class OrderConfirmationActivity  extends BaseActivity{
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		Utilities.unregisterReceiver(this);
 	}
 	
 	public void onAuthenticating(View v)
@@ -42,8 +40,7 @@ public class OrderConfirmationActivity  extends BaseActivity{
 			saveAuthentication();
 			Intent inten=new Intent(Constants.CUSTOM_ACTION_INTENT);
 			sendBroadcast(inten);
-			
-			
+			finish();
 		}
 		else
 		{

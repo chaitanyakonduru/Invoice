@@ -652,20 +652,25 @@ public class InvoiceAppDatabase {
 	}
 
 	public void getInvoices(String customerId, DatabaseHandler databaseHandler) {
-		List<String> invoicesList = null;
+		List<Invoice> invoicesList = null;
 		final SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-		Cursor cursor = database.query(InvoiceColumns.TABLE_NAME,
-				new String[] { InvoiceColumns.invoice_id },
-				InvoiceColumns.customer_id + "=?", new String[] { customerId },
-				null, null, null);
+		Cursor cursor = database.query(InvoiceColumns.TABLE_NAME, new String[] {
+				InvoiceColumns.invoice_id, InvoiceColumns.paid,
+				InvoiceColumns.total_amt }, InvoiceColumns.customer_id + "=?",
+				new String[] { customerId }, null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
-			invoicesList = new ArrayList<String>();
+			invoicesList = new ArrayList<Invoice>();
 			while (cursor.moveToNext()) {
-				String string = cursor.getString(cursor
-						.getColumnIndex(InvoiceColumns.invoice_id));
-				invoicesList.add(string);
-
+				Invoice invoice = new Invoice();
+				invoice.setInvoiceId(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.invoice_id)));
+				invoice.setPaid(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.paid)) > 0 ? true
+						: false);
+				invoice.setTotalAmount(String.valueOf(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.total_amt))));
+				invoicesList.add(invoice);
 			}
 		} else {
 
@@ -677,11 +682,38 @@ public class InvoiceAppDatabase {
 
 	public void getInvoiceDetails(String invoiceId,
 			DatabaseHandler databaseHandler) {
+		List<PurchasedProduct> purchasedProducts = null;
+		PurchasedProduct product;
 		final SQLiteDatabase sqLiteDatabase = databaseHelper
 				.getReadableDatabase();
-		String query = "Select  p.product_name,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id="
-				+ invoiceId + " group by PP._id";
-		Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-		
+		String query = "Select  pp.purchase_productid,i.invoice_id,p.product_name,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id=?"
+				 + " group by PP._id";
+		Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{invoiceId});
+		if (cursor != null && cursor.getCount() > 0) {
+			Log.v(TAG, "Cursor Not Null");
+			purchasedProducts = new ArrayList<PurchasedProduct>();
+			while (cursor.moveToNext()) {
+				product = new PurchasedProduct();
+				product.setInvoice_prodcutid(cursor.getString(cursor
+						.getColumnIndex(PurchasedProductColumns.PURCHASE_PRODUCT_ID)));
+				product.setInvoiceId(cursor.getString(cursor
+						.getColumnIndex(PurchasedProductColumns.INVOICE_ID)));
+				product.setmProductName(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.PRODUCT_NAME)));
+				product.setProductCost(cursor.getString(cursor
+						.getColumnIndex(PurchasedProductColumns.PRODUCT_COST)));
+				product.setProductQuantity(cursor.getString(cursor
+						.getColumnIndex(PurchasedProductColumns.QUANTITY_PURCHASED)));
+				purchasedProducts.add(product);
+				Log.v(TAG, ""+purchasedProducts.size());
+			}
+
+		}
+		else
+		{
+			Log.v(TAG, "Cursor is Null");
+		}
+		Message.obtain(databaseHandler, Constants.SUCCESS, purchasedProducts).sendToTarget();
 	}
+
 }

@@ -55,7 +55,6 @@ public class Utilities {
 	}
 
 	
-	
 	public static void registerReceiver(Context context)
 	{
 		IntentFilter filter=new IntentFilter(Constants.CUSTOM_ACTION_INTENT);

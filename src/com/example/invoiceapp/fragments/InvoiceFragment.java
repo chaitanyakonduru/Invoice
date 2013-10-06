@@ -1,31 +1,52 @@
 package com.example.invoiceapp.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.invoiceapp.CustomerActivity;
+import com.example.invoiceapp.PurchaseActivity;
+import com.example.invoiceapp.R;
+import com.example.invoiceapp.adapters.InvoiceCustomAdapter;
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
+import com.example.invoiceapp.models.Customer;
+import com.example.invoiceapp.models.Invoice;
+import com.example.invoiceapp.models.PurchasedProduct;
 import com.example.invoiceapp.utils.Constants;
-import com.example.invoiceapp.utils.Utilities;
 
-public class InvoiceFragment extends ListFragment implements
-		DbQueryCallback<Object> {
+public class InvoiceFragment extends Fragment implements
+		DbQueryCallback<Object>, OnItemClickListener {
 
 	private static InvoiceFragment invoiceFragment;
 	private DatabaseQueryManager databaseQueryManager;
 	private CustomerActivity activity;
-
+	private ListView listView;
+	private TextView emptyView;
+	private ProgressBar progressBar;
+	private Future future;
+	private List<Invoice> invoiceList;
+	private static Customer customer;
 	public InvoiceFragment() {
 
 	}
 
-	public static InvoiceFragment newInstance() {
+	public static InvoiceFragment newInstance(Customer customer) {
 
+		InvoiceFragment.customer=customer;;
 		invoiceFragment = new InvoiceFragment();
 		return invoiceFragment;
 	}
@@ -44,9 +65,23 @@ public class InvoiceFragment extends ListFragment implements
 	}
 
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.layout_invoices, null);
+		listView = (ListView) view.findViewById(R.id.listview);
+		listView.setOnItemClickListener(this);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+		return view;
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		databaseQueryManager.getInvoices(Constants.DB_REQ_FETCH_INVOICES,
+		listView.setVisibility(View.GONE);
+		progressBar.setVisibility(View.VISIBLE);
+		emptyView.setVisibility(View.GONE);
+		future=databaseQueryManager.getInvoices(Constants.DB_REQ_FETCH_INVOICES,
 				this.activity.getCustomerId(), this);
 	}
 
@@ -56,24 +91,40 @@ public class InvoiceFragment extends ListFragment implements
 
 		switch (requestCode) {
 		case Constants.DB_REQ_FETCH_INVOICES:
-			if (object != null && object instanceof List) {
-				List<String> invoiceList = ((List<String>) object);
+			if (object != null && object instanceof List && !future.isCancelled()) {
+				listView.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+				progressBar.setVisibility(View.GONE);
+				invoiceList = ((List<Invoice>) object);
 				if (invoiceList != null && !invoiceList.isEmpty()) {
-					setListAdapter(new ArrayAdapter<String>(getActivity(),
-							android.R.layout.simple_list_item_1, invoiceList));
+					listView.setAdapter(new InvoiceCustomAdapter(getActivity(),
+							-1, invoiceList));
 				}
-				
+			} else {
+				emptyView.setText("No Invoices");
+				emptyView.setVisibility(View.VISIBLE);
+				progressBar.setVisibility(View.GONE);
+				listView.setVisibility(View.GONE);
 			}
-			else
-			{
-				Utilities.showToastMessage(getActivity(), "No Invoices");
-			}
-			setListShown(true);
 			break;
-
+		case Constants.DB_REQ_FETCH_INVOICES_DETAILS:
+			if(object!=null && object instanceof List)
+			{
+				List<PurchasedProduct> purchasedProducts=(List<PurchasedProduct>) object;
+				Intent intent=new Intent(getActivity(),PurchaseActivity.class);
+				intent.putParcelableArrayListExtra(PurchaseActivity.EXTRA_PURCHASE_ITEMS, (ArrayList)purchasedProducts);
+				intent.putExtra(OrdersFragment.CUSTOMER_NAME, customer.getmCustomerId());
+				startActivity(intent);
+			}
+			break;
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		databaseQueryManager.getInvoiceDetails(Constants.DB_REQ_FETCH_INVOICES_DETAILS, invoiceList.get(arg2).getInvoiceId(), this);
 	}
 
 }
