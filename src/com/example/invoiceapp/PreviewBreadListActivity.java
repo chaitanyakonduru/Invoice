@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.example.invoiceapp.adapters.CustomBreadItemAdapter;
 import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.utils.Constants;
+import com.example.invoiceapp.utils.FinishActivityReceiver;
 import com.example.invoiceapp.utils.Utilities;
 
 public class PreviewBreadListActivity extends BaseActivity {
@@ -21,13 +23,14 @@ public class PreviewBreadListActivity extends BaseActivity {
 	private ListView listView;
 	private InvoiceApplication application;
 	private DatabaseThread databaseThread;
+	private FinishActivityReceiver activityReceiver;
 	public static final String EXTRA_BREAD_LIST = "breadlist";
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Utilities.registerReceiver(this);
+	registerReceiver();
 		listView = new ListView(this);
 		setContentView(listView);
 		Utilities.setActionBarTitle(this, "Ordered Items");
@@ -82,12 +85,25 @@ public class PreviewBreadListActivity extends BaseActivity {
 			databaseThread.addJob(product);
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
-		Utilities.unregisterReceiver(this);
+
+		unregisterReceiver();
+	}
+
+	public void registerReceiver() {
+		IntentFilter filter = new IntentFilter(Constants.CUSTOM_ACTION_INTENT);
+		activityReceiver = new FinishActivityReceiver(this);
+		registerReceiver(activityReceiver, filter);
+	}
+
+	public void unregisterReceiver() {
+		if (activityReceiver != null) {
+			unregisterReceiver(activityReceiver);
+			activityReceiver = null;
+		}
 	}
 
 }

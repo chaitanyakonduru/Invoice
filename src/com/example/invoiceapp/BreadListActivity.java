@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import com.example.invoiceapp.network.InvoiceAppNetworkServiceManager;
 import com.example.invoiceapp.network.JsonResponseParser;
 import com.example.invoiceapp.network.NetworkCallback;
 import com.example.invoiceapp.utils.Constants;
+import com.example.invoiceapp.utils.FinishActivityReceiver;
 import com.example.invoiceapp.utils.Utilities;
 
 public class BreadListActivity extends BaseActivity implements
@@ -32,14 +34,17 @@ public class BreadListActivity extends BaseActivity implements
 	private List<Product> productsList;
 	private InvoiceApplication application;
 	private DatabaseQueryManager databaseQueryManager;
+	private FinishActivityReceiver activityReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Utilities.registerReceiver(this);
+		
 		listView = new ListView(this);
 		listView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		setContentView(listView);
+		
+		registerReceiver();
 		Utilities.setActionBarTitle(this, "Select Products");
 		application = (InvoiceApplication) getApplication();
 		appNetworkServiceManager = InvoiceAppNetworkServiceManager
@@ -53,7 +58,7 @@ public class BreadListActivity extends BaseActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Utilities.unregisterReceiver(this);
+		unregisterReceiver();
 	}
 
 	@Override
@@ -67,7 +72,10 @@ public class BreadListActivity extends BaseActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case Menu.FIRST:
+			if(productsList!=null && !productsList.isEmpty())
+			{
 			filterItems();
+			}
 			break;
 		case android.R.id.home:
 			finish();
@@ -170,5 +178,22 @@ public class BreadListActivity extends BaseActivity implements
 			break;
 		}
 
+	}
+	
+
+	public void registerReceiver()
+	{
+		IntentFilter filter=new IntentFilter(Constants.CUSTOM_ACTION_INTENT);
+		activityReceiver=new FinishActivityReceiver(this);
+		registerReceiver(activityReceiver, filter);
+	}
+
+	public  void unregisterReceiver()
+	{
+		if(activityReceiver!=null)
+		{
+			unregisterReceiver(activityReceiver);
+			activityReceiver=null;
+		}
 	}
 }

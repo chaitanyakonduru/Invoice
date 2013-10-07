@@ -5,6 +5,7 @@ import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -17,7 +18,8 @@ import com.example.invoiceapp.fragments.InvoiceFragment;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.fragments.RemindersFragment;
 import com.example.invoiceapp.models.Customer;
-import com.example.invoiceapp.utils.Utilities;
+import com.example.invoiceapp.utils.Constants;
+import com.example.invoiceapp.utils.FinishActivityReceiver;
 
 public class CustomerActivity extends FragmentActivity implements TabListener {
 
@@ -28,13 +30,14 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	private RemindersFragment reminderFragment;
 	private Customer customer;
 	public String mCustomerId = null;
+	private FinishActivityReceiver activityReceiver;
 	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customer);
-		Utilities.registerReceiver(this);
+		registerReceiver();
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_CUSTOMER)) {
 			customer = (Customer) bundle.get(EXTRA_CUSTOMER);
@@ -71,7 +74,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Utilities.unregisterReceiver(this);
+		unregisterReceiver();
 	}
 
 	@Override
@@ -127,6 +130,20 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		return mCustomerId;
 	}
 	
+	public void registerReceiver()
+	{
+		IntentFilter filter=new IntentFilter(Constants.CUSTOM_ACTION_INTENT);
+		activityReceiver=new FinishActivityReceiver(this);
+		registerReceiver(activityReceiver, filter);
+	}
 
+	public  void unregisterReceiver()
+	{
+		if(activityReceiver!=null)
+		{
+			unregisterReceiver(activityReceiver);
+			activityReceiver=null;
+		}
+	}
 
 }

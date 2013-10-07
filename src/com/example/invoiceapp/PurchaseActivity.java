@@ -20,6 +20,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.example.invoiceapp.adapters.PurchasedProductsCustomdapter;
+import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.PurchasedProduct;
@@ -36,26 +37,36 @@ public class PurchaseActivity extends BaseActivity implements
 	private TextView totalView;
 	private int totalPrice;
 	public static final String EXTRA_PURCHASE_ITEMS = "purchaseitems";
+	public static final String EXTRA__IS_FROM_INVOICE_PAGE= "isfrom_invoice";
 	public DatabaseThread databaseThread;
 	public InvoiceApplication application;
 	private String customer_name;
+	private boolean isFromInvoice=false;
+	private DatabaseQueryManager databaseQueryManager;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customes);
-	
+		databaseQueryManager=DatabaseQueryManager.getInstance(this);
+		
 		application = (InvoiceApplication) getApplication();
 		databaseThread = new DatabaseThread(this, this);
 		listView = (ListView) findViewById(R.id.listview);
-		totalView = (TextView) findViewById(R.id.total_price_view);
-		;
+		totalView = (TextView) findViewById(R.id.total_price_view);;
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_PURCHASE_ITEMS)
 				&& bundle.containsKey(OrdersFragment.CUSTOMER_NAME)) {
 			purchasedProducts = ((List<PurchasedProduct>) bundle
 					.get(EXTRA_PURCHASE_ITEMS));
+			isFromInvoice=bundle.containsKey(EXTRA__IS_FROM_INVOICE_PAGE)?bundle.getBoolean(EXTRA__IS_FROM_INVOICE_PAGE):false;
+			if(isFromInvoice)
+			{
+
+				findViewById(R.id.purchased_details).setVisibility(View.VISIBLE);
+			}
+			
 			customer_name = bundle.getString(OrdersFragment.CUSTOMER_NAME);
 			if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
 				listView.setVisibility(View.VISIBLE);
@@ -112,6 +123,8 @@ public class PurchaseActivity extends BaseActivity implements
 				.findViewById(R.id.payment_mode_radio_group);
 		final EditText duesEditView = (EditText) v
 				.findViewById(R.id.due_payments);
+		invoice.setPaid(true);
+		invoice.setPaymentMode("Cash");
 		paymentStatus.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -155,8 +168,14 @@ public class PurchaseActivity extends BaseActivity implements
 				if (!databaseThread.isAlive()) {
 					databaseThread.start();
 				}
-
+				if(!isFromInvoice)
+				{
 				invoice.setInvoiceId(customer_name + "_" + new Date().getTime());
+				}
+				else
+				{
+					invoice.setInvoiceId(purchasedProducts.get(0).getInvoiceId());
+				}
 				invoice.setCustomerId(customer_name);
 				invoice.setDues(duesEditView.getText().toString());
 				invoice.setTotalAmount(String.valueOf(totalPrice));

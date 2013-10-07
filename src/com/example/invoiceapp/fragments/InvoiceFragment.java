@@ -37,7 +37,7 @@ public class InvoiceFragment extends Fragment implements
 	private ListView listView;
 	private TextView emptyView;
 	private ProgressBar progressBar;
-	private Future future;
+	private Future<Object> future;
 	private List<Invoice> invoiceList;
 	private static Customer customer;
 	public InvoiceFragment() {
@@ -75,6 +75,7 @@ public class InvoiceFragment extends Fragment implements
 		return view;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -114,6 +115,7 @@ public class InvoiceFragment extends Fragment implements
 				Intent intent=new Intent(getActivity(),PurchaseActivity.class);
 				intent.putParcelableArrayListExtra(PurchaseActivity.EXTRA_PURCHASE_ITEMS, (ArrayList)purchasedProducts);
 				intent.putExtra(OrdersFragment.CUSTOMER_NAME, customer.getmCustomerId());
+				intent.putExtra(PurchaseActivity.EXTRA__IS_FROM_INVOICE_PAGE, true);
 				startActivity(intent);
 			}
 			break;

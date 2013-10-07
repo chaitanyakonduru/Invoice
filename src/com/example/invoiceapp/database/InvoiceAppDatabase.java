@@ -705,6 +705,7 @@ public class InvoiceAppDatabase {
 				product.setProductQuantity(cursor.getString(cursor
 						.getColumnIndex(PurchasedProductColumns.QUANTITY_PURCHASED)));
 				purchasedProducts.add(product);
+				
 				Log.v(TAG, ""+purchasedProducts.size());
 			}
 

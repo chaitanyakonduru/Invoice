@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class Utilities {
 
 	private static ProgressDialog progressDialog;
-	private static FinishActivityReceiver activityReceiver;
+	private  FinishActivityReceiver activityReceiver;
 	public static void showToastMessage(Context context,String message)
 	{
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
@@ -55,18 +55,4 @@ public class Utilities {
 	}
 
 	
-	public static void registerReceiver(Context context)
-	{
-		IntentFilter filter=new IntentFilter(Constants.CUSTOM_ACTION_INTENT);
-		activityReceiver=new FinishActivityReceiver(context);
-		context.registerReceiver(activityReceiver, filter);
-	}
-
-	public static void unregisterReceiver(Context context)
-	{
-		if(activityReceiver!=null)
-		{
-			context.unregisterReceiver(activityReceiver);
-		}
-	}
 }
