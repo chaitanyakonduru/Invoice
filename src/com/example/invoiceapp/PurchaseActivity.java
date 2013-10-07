@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.invoiceapp.adapters.PurchasedProductsCustomdapter;
 import com.example.invoiceapp.database.DatabaseQueryManager;
+import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.PurchasedProduct;
@@ -30,43 +31,49 @@ import com.example.invoiceapp.utils.Constants;
 import com.example.invoiceapp.utils.Utilities;
 
 public class PurchaseActivity extends BaseActivity implements
-		onDatabaseUpdateCompletion {
+		onDatabaseUpdateCompletion, DbQueryCallback<Object> {
 
 	private ListView listView;
 	private List<PurchasedProduct> purchasedProducts;
 	private TextView totalView;
 	private int totalPrice;
 	public static final String EXTRA_PURCHASE_ITEMS = "purchaseitems";
-	public static final String EXTRA__IS_FROM_INVOICE_PAGE= "isfrom_invoice";
+	public static final String EXTRA__IS_FROM_INVOICE_PAGE = "isfrom_invoice";
 	public DatabaseThread databaseThread;
 	public InvoiceApplication application;
 	private String customer_name;
-	private boolean isFromInvoice=false;
+	private boolean isFromInvoice = false;
 	private DatabaseQueryManager databaseQueryManager;
+	private Invoice invoice;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customes);
-		databaseQueryManager=DatabaseQueryManager.getInstance(this);
-		
+		databaseQueryManager = DatabaseQueryManager.getInstance(this);
+
 		application = (InvoiceApplication) getApplication();
 		databaseThread = new DatabaseThread(this, this);
 		listView = (ListView) findViewById(R.id.listview);
-		totalView = (TextView) findViewById(R.id.total_price_view);;
+		totalView = (TextView) findViewById(R.id.total_price_view);
+		;
 		Bundle bundle = getIntent().getExtras();
 		if (bundle != null && bundle.containsKey(EXTRA_PURCHASE_ITEMS)
 				&& bundle.containsKey(OrdersFragment.CUSTOMER_NAME)) {
 			purchasedProducts = ((List<PurchasedProduct>) bundle
 					.get(EXTRA_PURCHASE_ITEMS));
-			isFromInvoice=bundle.containsKey(EXTRA__IS_FROM_INVOICE_PAGE)?bundle.getBoolean(EXTRA__IS_FROM_INVOICE_PAGE):false;
-			if(isFromInvoice)
-			{
-
-				findViewById(R.id.purchased_details).setVisibility(View.VISIBLE);
+			isFromInvoice = bundle.containsKey(EXTRA__IS_FROM_INVOICE_PAGE) ? bundle
+					.getBoolean(EXTRA__IS_FROM_INVOICE_PAGE) : false;
+			if (isFromInvoice) {
+				databaseQueryManager = DatabaseQueryManager.getInstance(this);
+				databaseQueryManager.getPurchaseItemsDetails(
+						Constants.DB_REQ_FETCH_PURCHASED_DETAILS,
+						purchasedProducts.get(0).getInvoiceId(), this);
+				findViewById(R.id.purchased_details)
+						.setVisibility(View.VISIBLE);
 			}
-			
+
 			customer_name = bundle.getString(OrdersFragment.CUSTOMER_NAME);
 			if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
 				listView.setVisibility(View.VISIBLE);
@@ -168,13 +175,12 @@ public class PurchaseActivity extends BaseActivity implements
 				if (!databaseThread.isAlive()) {
 					databaseThread.start();
 				}
-				if(!isFromInvoice)
-				{
-				invoice.setInvoiceId(customer_name + "_" + new Date().getTime());
-				}
-				else
-				{
-					invoice.setInvoiceId(purchasedProducts.get(0).getInvoiceId());
+				if (!isFromInvoice) {
+					invoice.setInvoiceId(customer_name + "_"
+							+ new Date().getTime());
+				} else {
+					invoice.setInvoiceId(purchasedProducts.get(0)
+							.getInvoiceId());
 				}
 				invoice.setCustomerId(customer_name);
 				invoice.setDues(duesEditView.getText().toString());
@@ -190,7 +196,6 @@ public class PurchaseActivity extends BaseActivity implements
 			}
 		});
 
-		
 		builder.setNegativeButton("Print n Save", new OnClickListener() {
 
 			@Override
@@ -202,12 +207,63 @@ public class PurchaseActivity extends BaseActivity implements
 
 	@Override
 	public void databaseCompleted() {
-		Utilities.showToastMessage(PurchaseActivity.this,
-				"Saved Successfully");
-		Intent intent=new Intent(Constants.CUSTOM_ACTION_INTENT);
+		Utilities.showToastMessage(PurchaseActivity.this, "Saved Successfully");
+		Intent intent = new Intent(Constants.CUSTOM_ACTION_INTENT);
 		sendBroadcast(intent);
 		finish();
 	}
 
+	@Override
+	public void onQueryCompleted(int requestCode, Object object) {
+
+		switch (requestCode) {
+		case Constants.DB_REQ_FETCH_PURCHASED_DETAILS:
+			if (object != null && object instanceof Invoice) {
+				invoice = (Invoice) object;
+				bindInvoiceDetailsToViews(invoice);
+
+			}
+
+			break;
+
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem menuItem=menu.getItem(0);
+		if(invoice!=null && invoice.isPaid())
+		{
+			menuItem.setVisible(false);
+		}
+		else
+		{
+			menuItem.setVisible(true);
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	private void bindInvoiceDetailsToViews(Invoice invoice) {
+
+		TextView textView = (TextView) findViewById(R.id.purchased_purchase_date);
+		textView.setText(invoice.getPurchased_date());
+
+		textView = (TextView) findViewById(R.id.purchased_payment_dues);
+		textView.setText(invoice.getDues());
+
+		textView = (TextView) findViewById(R.id.purchased_payment_mode);
+		textView.setText(invoice.getPaymentMode());
+
+		textView = (TextView) findViewById(R.id.purchased_payment_status);
+		textView.setText(invoice.isPaid() ? "Yes" : "No");
+		
+		if(invoice.isPaid())
+		{
+			
+		}
+
+	}
 
 }

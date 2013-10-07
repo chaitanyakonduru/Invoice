@@ -716,5 +716,31 @@ public class InvoiceAppDatabase {
 		}
 		Message.obtain(databaseHandler, Constants.SUCCESS, purchasedProducts).sendToTarget();
 	}
+	
+	public void getPurchasedItemsDetails(String invoiceId,
+			DatabaseHandler databaseHandler) {
+		Invoice invoice=null;
+		final SQLiteDatabase sqLiteDatabase = databaseHelper
+				.getReadableDatabase();
+		Cursor cursor = sqLiteDatabase.query(InvoiceColumns.TABLE_NAME, null, InvoiceColumns.invoice_id+"=?", new String[]{invoiceId}, null,null,null);
+		if (cursor != null && cursor.getCount() > 0) {
+			Log.v(TAG, "Cursor Not Null");
+			invoice=new Invoice();
+			while (cursor.moveToNext()) {
+				invoice.setInvoiceId(cursor.getString(cursor.getColumnIndex(InvoiceColumns.invoice_id)));
+				invoice.setDues(String.valueOf(cursor.getInt(cursor.getColumnIndex(InvoiceColumns.dues))));
+				invoice.setPaid(cursor.getInt(cursor.getColumnIndex(InvoiceColumns.paid))>0?true:false);
+				invoice.setPaymentMode(cursor.getString(cursor.getColumnIndex(InvoiceColumns.payment_mode)));
+				invoice.setPurchased_date(cursor.getString(cursor.getColumnIndex(InvoiceColumns.purchased_date)));
+				
+			}
 
+		}
+		else
+		{
+			Log.v(TAG, "Cursor is Null");
+		}
+		Message.obtain(databaseHandler, Constants.SUCCESS,invoice).sendToTarget();
+	}
+	
 }

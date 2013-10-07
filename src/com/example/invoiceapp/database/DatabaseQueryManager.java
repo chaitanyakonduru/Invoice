@@ -125,5 +125,22 @@ public class DatabaseQueryManager {
 		});
 
 	}
+	
+	public void getPurchaseItemsDetails(final int reqCode, final String invoiceId,
+			final DbQueryCallback<Object> callback) {
+		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,
+				callback);
+
+		 executorService.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				database.getPurchasedItemsDetails(invoiceId, databaseHandler);
+
+			}
+		});
+
+	}
+
 
 }
