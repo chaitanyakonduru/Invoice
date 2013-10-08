@@ -121,7 +121,7 @@ public class GoogleMapFragment extends Fragment implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onQueryCompleted(int requestCode, Object object) {
+	public void onQueryExecuted(int requestCode, Object object) {
 		if (requestCode == Constants.DB_REQ_FETCH_CUSTOMERS) {
 			if (object != null && object instanceof List) {
 				customers = ((List<Customer>) object);

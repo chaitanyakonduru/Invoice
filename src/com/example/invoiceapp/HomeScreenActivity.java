@@ -24,6 +24,7 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 		findViewById(R.id.home_btn_route).setOnClickListener(this);
 		findViewById(R.id.home_btn_invoice).setOnClickListener(this);
 		findViewById(R.id.home_btn_balancesheet).setOnClickListener(this);
+		findViewById(R.id.home_btn_settings).setOnClickListener(this);
 	}
 
 	@Override
@@ -35,6 +36,12 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 			break;
 		case R.id.home_btn_route:
 			startActivity(new Intent(this,RoutesActivity.class));
+			break;
+		case R.id.home_btn_settings:
+			startActivity(new Intent(this,SettingsActivity.class));
+			break;
+		case R.id.home_btn_invoice:
+			startActivity(new Intent(this,PendingInvoiceActivity.class));
 			break;
 		default:
 			break;

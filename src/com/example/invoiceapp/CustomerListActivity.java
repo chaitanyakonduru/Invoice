@@ -141,7 +141,7 @@ public class CustomerListActivity extends BaseActivity implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onQueryCompleted(int requestCode, Object object) {
+	public void onQueryExecuted(int requestCode, Object object) {
 		switch (requestCode) {
 		case Constants.DB_REQ_FETCH_CUSTOMERS:
 			if (object != null && object instanceof List)

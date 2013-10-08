@@ -115,7 +115,7 @@ public class DatabaseQueryManager {
 		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,
 				callback);
 
-		 executorService.execute(new Runnable() {
+		executorService.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -125,13 +125,13 @@ public class DatabaseQueryManager {
 		});
 
 	}
-	
-	public void getPurchaseItemsDetails(final int reqCode, final String invoiceId,
-			final DbQueryCallback<Object> callback) {
+
+	public void getPurchaseItemsDetails(final int reqCode,
+			final String invoiceId, final DbQueryCallback<Object> callback) {
 		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,
 				callback);
 
-		 executorService.execute(new Runnable() {
+		executorService.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -141,6 +141,20 @@ public class DatabaseQueryManager {
 		});
 
 	}
-
+	public void getPendingInvoiceDetails(final int reqCode,
+			final String driverId, final DbQueryCallback<Object> callback) {
+		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,
+				callback);
+		
+		executorService.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				database.getPendingInvoices(driverId, databaseHandler);
+				
+			}
+		});
+		
+	}
 
 }

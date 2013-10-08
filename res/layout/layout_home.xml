@@ -4,25 +4,30 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical" >
-    
-<Button 
-    style="@style/button_style"
-    android:id="@+id/home_btn_customers"
-    android:text="@string/customers"
-    />
-<Button 
-    style="@style/button_style"
-    android:id="@+id/home_btn_route"
-    android:text="@string/route"
-    />
-<Button 
-    style="@style/button_style"
-    android:id="@+id/home_btn_invoice"
-    android:text="@string/pending_invoices"
-    />
-<Button 
-    style="@style/button_style"
-    android:id="@+id/home_btn_balancesheet"
-    android:text="@string/balance_sheet"
-    />
+
+    <Button
+        android:id="@+id/home_btn_customers"
+        style="@style/button_style"
+        android:text="@string/customers" />
+
+    <Button
+        android:id="@+id/home_btn_route"
+        style="@style/button_style"
+        android:text="@string/route" />
+
+    <Button
+        android:id="@+id/home_btn_invoice"
+        style="@style/button_style"
+        android:text="@string/pending_invoices" />
+
+    <Button
+        android:id="@+id/home_btn_balancesheet"
+        style="@style/button_style"
+        android:text="@string/balance_sheet" />
+
+    <Button
+        android:id="@+id/home_btn_settings"
+        style="@style/button_style"
+        android:text="@string/settings" />
+
 </LinearLayout>

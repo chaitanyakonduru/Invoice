@@ -116,7 +116,13 @@ public class PurchaseActivity extends BaseActivity implements
 	}
 
 	private void displayPaymentDialog() {
-		final Invoice invoice = new Invoice();
+
+		if (invoice == null) {
+			invoice = new Invoice();
+			invoice.setInvoiceId(customer_name + "_" + new Date().getTime());
+		} else {
+			invoice.setInvoiceId(purchasedProducts.get(0).getInvoiceId());
+		}
 		Builder builder = new Builder(this);
 		builder.setTitle("Total:" + totalPrice);
 		View v = LayoutInflater.from(this).inflate(
@@ -171,16 +177,13 @@ public class PurchaseActivity extends BaseActivity implements
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
+
 				if (!databaseThread.isAlive()) {
 					databaseThread.start();
 				}
-				if (!isFromInvoice) {
-					invoice.setInvoiceId(customer_name + "_"
-							+ new Date().getTime());
-				} else {
-					invoice.setInvoiceId(purchasedProducts.get(0)
-							.getInvoiceId());
+				if(!invoice.isPaid())
+				{
+					invoice.setPaymentMode("N/A");
 				}
 				invoice.setCustomerId(customer_name);
 				invoice.setDues(duesEditView.getText().toString());
@@ -214,7 +217,7 @@ public class PurchaseActivity extends BaseActivity implements
 	}
 
 	@Override
-	public void onQueryCompleted(int requestCode, Object object) {
+	public void onQueryExecuted(int requestCode, Object object) {
 
 		switch (requestCode) {
 		case Constants.DB_REQ_FETCH_PURCHASED_DETAILS:
@@ -230,16 +233,13 @@ public class PurchaseActivity extends BaseActivity implements
 			break;
 		}
 	}
-	
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem menuItem=menu.getItem(0);
-		if(invoice!=null && invoice.isPaid())
-		{
+		MenuItem menuItem = menu.getItem(0);
+		if (invoice != null && invoice.isPaid()) {
 			menuItem.setVisible(false);
-		}
-		else
-		{
+		} else {
 			menuItem.setVisible(true);
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -258,10 +258,9 @@ public class PurchaseActivity extends BaseActivity implements
 
 		textView = (TextView) findViewById(R.id.purchased_payment_status);
 		textView.setText(invoice.isPaid() ? "Yes" : "No");
-		
-		if(invoice.isPaid())
-		{
-			
+
+		if (invoice.isPaid()) {
+			invalidateOptionsMenu();
 		}
 
 	}

@@ -22,7 +22,7 @@ public class DatabaseHandler extends Handler{
 		if(msg.what==Constants.SUCCESS)
 		{
 			Object object=msg.obj;
-			callback.onQueryCompleted(requestCode, object);
+			callback.onQueryExecuted(requestCode, object);
 		}
 		
 	}

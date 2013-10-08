@@ -152,7 +152,7 @@ public class LoginScreenActivity extends BaseActivity implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void onQueryCompleted(int requestCode, Object object) {
+	public void onQueryExecuted(int requestCode, Object object) {
 		switch (requestCode) {
 		case Constants.DB_REQ_CHECK_TABLE_NULL_NOT:
 

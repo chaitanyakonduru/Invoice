@@ -687,8 +687,9 @@ public class InvoiceAppDatabase {
 		final SQLiteDatabase sqLiteDatabase = databaseHelper
 				.getReadableDatabase();
 		String query = "Select  pp.purchase_productid,i.invoice_id,p.product_name,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id=?"
-				 + " group by PP._id";
-		Cursor cursor = sqLiteDatabase.rawQuery(query, new String[]{invoiceId});
+				+ " group by PP._id";
+		Cursor cursor = sqLiteDatabase.rawQuery(query,
+				new String[] { invoiceId });
 		if (cursor != null && cursor.getCount() > 0) {
 			Log.v(TAG, "Cursor Not Null");
 			purchasedProducts = new ArrayList<PurchasedProduct>();
@@ -705,42 +706,86 @@ public class InvoiceAppDatabase {
 				product.setProductQuantity(cursor.getString(cursor
 						.getColumnIndex(PurchasedProductColumns.QUANTITY_PURCHASED)));
 				purchasedProducts.add(product);
-				
-				Log.v(TAG, ""+purchasedProducts.size());
+
+				Log.v(TAG, "" + purchasedProducts.size());
 			}
 
-		}
-		else
-		{
+		} else {
 			Log.v(TAG, "Cursor is Null");
 		}
-		Message.obtain(databaseHandler, Constants.SUCCESS, purchasedProducts).sendToTarget();
+		Message.obtain(databaseHandler, Constants.SUCCESS, purchasedProducts)
+				.sendToTarget();
 	}
-	
+
 	public void getPurchasedItemsDetails(String invoiceId,
 			DatabaseHandler databaseHandler) {
-		Invoice invoice=null;
+		Invoice invoice = null;
 		final SQLiteDatabase sqLiteDatabase = databaseHelper
 				.getReadableDatabase();
-		Cursor cursor = sqLiteDatabase.query(InvoiceColumns.TABLE_NAME, null, InvoiceColumns.invoice_id+"=?", new String[]{invoiceId}, null,null,null);
+		Cursor cursor = sqLiteDatabase.query(InvoiceColumns.TABLE_NAME, null,
+				InvoiceColumns.invoice_id + "=?", new String[] { invoiceId },
+				null, null, null);
 		if (cursor != null && cursor.getCount() > 0) {
 			Log.v(TAG, "Cursor Not Null");
-			invoice=new Invoice();
+			invoice = new Invoice();
 			while (cursor.moveToNext()) {
-				invoice.setInvoiceId(cursor.getString(cursor.getColumnIndex(InvoiceColumns.invoice_id)));
-				invoice.setDues(String.valueOf(cursor.getInt(cursor.getColumnIndex(InvoiceColumns.dues))));
-				invoice.setPaid(cursor.getInt(cursor.getColumnIndex(InvoiceColumns.paid))>0?true:false);
-				invoice.setPaymentMode(cursor.getString(cursor.getColumnIndex(InvoiceColumns.payment_mode)));
-				invoice.setPurchased_date(cursor.getString(cursor.getColumnIndex(InvoiceColumns.purchased_date)));
-				
+				invoice.setInvoiceId(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.invoice_id)));
+				invoice.setDues(String.valueOf(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.dues))));
+				invoice.setPaid(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.paid)) > 0 ? true
+						: false);
+				invoice.setPaymentMode(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.payment_mode)));
+				invoice.setPurchased_date(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.purchased_date)));
+
 			}
 
-		}
-		else
-		{
+		} else {
 			Log.v(TAG, "Cursor is Null");
 		}
-		Message.obtain(databaseHandler, Constants.SUCCESS,invoice).sendToTarget();
+		Message.obtain(databaseHandler, Constants.SUCCESS, invoice)
+				.sendToTarget();
 	}
-	
+
+	public void getPendingInvoices(String driverId,
+			DatabaseHandler databaseHandler) {
+		List<Invoice> invoices = null;
+		Invoice invoice = null;
+		final SQLiteDatabase sqLiteDatabase = databaseHelper
+				.getReadableDatabase();
+		String rawQuery = "select * from Invoices where customer_id in (select customer_id from Customers where driver_id=?)";
+		Cursor cursor = sqLiteDatabase.rawQuery(rawQuery,
+				new String[] { driverId });
+		if (cursor != null && cursor.getCount() > 0) {
+			invoices = new ArrayList<Invoice>();
+			while (cursor.moveToNext()) {
+				invoice = new Invoice();
+				invoice.setInvoiceId(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.invoice_id)));
+				invoice.setDues(String.valueOf(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.dues))));
+				invoice.setPaid(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.paid)) > 0 ? true
+						: false);
+				invoice.setPaymentMode(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.payment_mode)));
+				invoice.setPurchased_date(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.purchased_date)));
+				invoice.setTotalAmount(cursor.getString(cursor
+						.getColumnIndex(InvoiceColumns.total_amt)));
+				invoices.add(invoice);
+				Log.v(TAG, "INVOICE LIST SIZE:" + invoices.size());
+			}
+
+		} else {
+			Log.v(TAG, "Cursor is Nullll");
+		}
+
+		Message.obtain(databaseHandler, Constants.SUCCESS, invoices)
+				.sendToTarget();
+	}
+
 }
