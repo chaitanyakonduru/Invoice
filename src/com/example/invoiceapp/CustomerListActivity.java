@@ -90,6 +90,7 @@ public class CustomerListActivity extends BaseActivity implements
 						}
 						for (Customer customer : customersList) {
 							customer.setmDriverId(mDriverId);
+							notifyUserWithAlarmService();
 							databaseThread.addJob(customer);
 
 							if (customer.getOrder() != null) {
@@ -115,6 +116,11 @@ public class CustomerListActivity extends BaseActivity implements
 
 			}
 		}
+	}
+
+	private void notifyUserWithAlarmService() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

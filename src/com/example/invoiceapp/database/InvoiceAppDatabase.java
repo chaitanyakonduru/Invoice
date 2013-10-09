@@ -776,6 +776,7 @@ public class InvoiceAppDatabase {
 						.getColumnIndex(InvoiceColumns.purchased_date)));
 				invoice.setTotalAmount(cursor.getString(cursor
 						.getColumnIndex(InvoiceColumns.total_amt)));
+				invoice.setCustomerId(cursor.getString(cursor.getColumnIndex(InvoiceColumns.customer_id)));
 				invoices.add(invoice);
 				Log.v(TAG, "INVOICE LIST SIZE:" + invoices.size());
 			}
