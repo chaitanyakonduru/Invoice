@@ -39,6 +39,11 @@ public class PendingInvoiceActivity extends BaseActivity implements DbQueryCallb
 		emptyView=(TextView)findViewById(R.id.empty_view);
 		listView.setOnItemClickListener(this);
 		databaseQueryManager=DatabaseQueryManager.getInstance(this);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		databaseQueryManager.getPendingInvoiceDetails(Constants.DB_REQ_FETCH_PENDING_INVOICE_DETAILS, application.getmDriverId(), this);
 	}
 	

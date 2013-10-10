@@ -1,5 +1,6 @@
 package com.example.invoiceapp;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -188,7 +189,9 @@ public class PurchaseActivity extends BaseActivity implements
 				invoice.setCustomerId(customer_name);
 				invoice.setDues(duesEditView.getText().toString());
 				invoice.setTotalAmount(String.valueOf(totalPrice));
-				invoice.setPurchased_date(new Date().toString());
+				SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy, hh:mm aa");
+				String date=dateFormat.format(new Date());
+				invoice.setPurchased_date(date);
 				databaseThread.addJob(invoice);
 				for (PurchasedProduct purchasedProduct : purchasedProducts) {
 					purchasedProduct.setInvoiceId(invoice.getInvoiceId());

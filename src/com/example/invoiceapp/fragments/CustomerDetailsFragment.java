@@ -78,8 +78,6 @@ public class CustomerDetailsFragment extends Fragment {
 				}
 			}
 		});
-		googleMap=mapView.getMap();
-		googleMap.setMyLocationEnabled(true);
 		
 		return v;
 	}
