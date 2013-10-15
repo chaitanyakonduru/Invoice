@@ -3,7 +3,9 @@ package com.example.invoiceapp;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -102,7 +104,14 @@ public class LoginScreenActivity extends BaseActivity implements
 					respMessage = "Login Success";
 					loginStatus = false;
 					application.setmDriverId(driver.getmDriverId());
+					if(isPickedProducts())
+					{
 					startActivity(new Intent(this, HomeScreenActivity.class));
+					}
+					else
+					{
+						startActivity(new Intent(this,BreadListActivity.class));
+					}
 					finish();
 				} else {
 					respMessage = "Login Failure";
@@ -119,6 +128,12 @@ public class LoginScreenActivity extends BaseActivity implements
 				.getInstance(this);
 		askZiggyNetworkServiceManager.fetchDriversRequest(
 				Constants.REQ_FETCH_DRIVERS, this);
+	}
+	private boolean isPickedProducts()
+	{
+		 SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		  return appPreferences.getBoolean(getString(R.string.is_pickup_products), false);
+	       
 	}
 
 	@Override

@@ -50,22 +50,10 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 
 	private void loadCustomers() {
 		Intent intent=null;
-		 if(isPickedProducts())
-		 {
-			 intent=new Intent(this,CustomerListActivity.class);
-		 }
-		 else
-		 {
-			 intent=new Intent(this,BreadListActivity.class);
-		 }
+		 intent=new Intent(this,CustomerListActivity.class);
 		 startActivity(intent);
 	}
 	
-	private boolean isPickedProducts()
-	{
-		 SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		  return appPreferences.getBoolean(getString(R.string.is_pickup_products), false);
-	       
-	}
+	
 
 }

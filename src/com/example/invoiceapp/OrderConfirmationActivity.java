@@ -34,7 +34,7 @@ public class OrderConfirmationActivity  extends BaseActivity{
 		String respMessage;
 		if(!Utilities.checkIfNull(confirmationPassword.getText().toString().trim()))
 		{
-			Intent intent=new Intent(this,CustomerListActivity.class);
+			Intent intent=new Intent(this,HomeScreenActivity.class);
 			startActivity(intent);
 			respMessage="Ordered Success";
 			saveAuthentication();

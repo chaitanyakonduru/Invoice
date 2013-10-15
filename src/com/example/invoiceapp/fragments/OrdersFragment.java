@@ -89,7 +89,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 		PurchasedProduct purchasedProduct=null;
 		for (SelectedProducts selectedProduct : orderedProductsList) {
 			if (selectedProduct != null
-					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")) {
+					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")&& isGreaterThanZero(selectedProduct.getQtyPurchased())) {
 				purchasedProduct=new PurchasedProduct();
 				purchasedProduct.setProduct_id(selectedProduct.getProductId());
 				purchasedProduct.setProductCost(String.valueOf(Integer.parseInt(selectedProduct.getQtyPurchased())*Integer.parseInt(selectedProduct.getProductPrice())));
@@ -127,6 +127,27 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 					Constants.DB_REQ_FETCH_ORDERED_PRODUCTS,
 					customer.getmCustomerId(), this);
 		}
+	}
+	
+	private boolean isGreaterThanZero(String value)
+	{
+		try
+		{
+			int val=Integer.parseInt(value.trim());
+			if(val>0)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
