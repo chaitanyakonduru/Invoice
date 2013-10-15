@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.invoiceapp.CustomerActivity;
+import com.example.invoiceapp.InvoiceApplication;
 import com.example.invoiceapp.PurchaseActivity;
 import com.example.invoiceapp.R;
 import com.example.invoiceapp.adapters.InvoiceCustomAdapter;
@@ -40,6 +41,7 @@ public class InvoiceFragment extends Fragment implements
 	private Future<Object> future;
 	private List<Invoice> invoiceList;
 	private static Customer customer;
+	private InvoiceApplication invoiceApplication;
 	public InvoiceFragment() {
 
 	}
@@ -55,13 +57,13 @@ public class InvoiceFragment extends Fragment implements
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = (CustomerActivity) activity;
+		invoiceApplication=(InvoiceApplication) activity.getApplication();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		databaseQueryManager = DatabaseQueryManager.getInstance(getActivity());
-
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class InvoiceFragment extends Fragment implements
 		progressBar.setVisibility(View.VISIBLE);
 		emptyView.setVisibility(View.GONE);
 		future=databaseQueryManager.getInvoices(Constants.DB_REQ_FETCH_INVOICES,
-				this.activity.getCustomerId(), this);
+				invoiceApplication.getmCustomerId(), this);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,7 +114,7 @@ public class InvoiceFragment extends Fragment implements
 			if(object!=null && object instanceof List)
 			{
 				List<PurchasedProduct> purchasedProducts=(List<PurchasedProduct>) object;
-				Intent intent=new Intent(getActivity(),PurchaseActivity.class);
+				Intent intent=new Intent(activity,PurchaseActivity.class);
 				intent.putParcelableArrayListExtra(PurchaseActivity.EXTRA_PURCHASE_ITEMS, (ArrayList)purchasedProducts);
 				intent.putExtra(OrdersFragment.CUSTOMER_NAME, customer.getmCustomerId());
 				intent.putExtra(PurchaseActivity.EXTRA__IS_FROM_INVOICE_PAGE, true);

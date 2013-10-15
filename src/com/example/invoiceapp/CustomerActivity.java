@@ -5,10 +5,12 @@ import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	private Customer customer;
 	public String mCustomerId = null;
 	private FinishActivityReceiver activityReceiver;
+	private ActionBar actionBar;
 	
 
 	@Override
@@ -42,7 +45,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		if (bundle != null && bundle.containsKey(EXTRA_CUSTOMER)) {
 			customer = (Customer) bundle.get(EXTRA_CUSTOMER);
 			mCustomerId = customer.getmCustomerId();
-			ActionBar actionBar = getActionBar();
+			actionBar = getActionBar();
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 					| ActionBar.DISPLAY_HOME_AS_UP
 					| ActionBar.DISPLAY_SHOW_HOME);
@@ -65,6 +68,19 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		}
 
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 1, 0, "HOME").setIcon(R.drawable.ic_home).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
 
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
@@ -121,6 +137,11 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
+			finish();
+		}
+		else if(item.getItemId()==1)
+		{
+			startActivity(new Intent(this,HomeScreenActivity.class));
 			finish();
 		}
 		return super.onOptionsItemSelected(item);

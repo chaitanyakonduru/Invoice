@@ -62,20 +62,20 @@
         </activity>
         <activity
             android:name="CustomerListActivity"
-            android:theme="@style/Theme.Example" >
+            android:theme="@style/Theme.Example" android:configChanges="orientation|screenLayout">
         </activity>
         <activity
             android:name="CustomerActivity"
-            android:theme="@style/Theme.Example" android:windowSoftInputMode="adjustResize|adjustPan">
+            android:theme="@style/Theme.Example" android:windowSoftInputMode="adjustResize|adjustPan" android:configChanges="orientation|screenLayout">
         </activity>
         <activity
             android:name="HomeScreenActivity"
-            android:theme="@style/Theme.Example" >
+            android:theme="@style/Theme.Example" android:launchMode="singleTask">
         </activity>
-        <activity android:name="RoutesActivity" android:theme="@style/Theme.Example"></activity>
-        <activity android:name="PurchaseActivity" android:theme="@style/Theme.Example"></activity>
-        <activity android:name="SettingsActivity"></activity>
-        <activity android:name="PendingInvoiceActivity" android:theme="@style/Theme.Example" android:screenOrientation="portrait"></activity>
+        <activity android:name="RoutesActivity" android:theme="@style/Theme.Example" android:configChanges="orientation|screenLayout"></activity>
+        <activity android:name="PurchaseActivity" android:theme="@style/Theme.Example" android:configChanges="orientation|screenLayout"></activity>
+        <activity android:name="SettingsActivity" android:configChanges="orientation|screenLayout"></activity>
+        <activity android:name="PendingInvoiceActivity" android:theme="@style/Theme.Example" android:screenOrientation="portrait" android:configChanges="orientation|screenLayout"></activity>
     </application>
 
 </manifest>

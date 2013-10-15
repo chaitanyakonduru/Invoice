@@ -55,11 +55,19 @@ public class InvoiceCustomAdapter extends
 		}
 
 		final Invoice product = getItem(position);
-		holder.breadItemNameTV.setText(product.getInvoiceId());
+		
 		holder.purchasedQtyTV.setText(product.isPaid()?"Yes":"No");
 		holder.priceTV.setText(product.getTotalAmount());
 
-		return convertView;
+		if(product.isPaid())
+		{
+			holder.breadItemNameTV.setText(product.getInvoiceId());
+		}
+		else
+		{
+			holder.breadItemNameTV.setText(String.valueOf(product.getId()));
+		}
+			return convertView;
 	}
 
 	public class ViewHolder {

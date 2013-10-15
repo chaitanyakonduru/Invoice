@@ -1,19 +1,17 @@
 package com.example.invoiceapp.utils;
 
-import com.example.invoiceapp.R;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.invoiceapp.R;
+
 public class Utilities {
 
 	private static ProgressDialog progressDialog;
-	private  FinishActivityReceiver activityReceiver;
 	public static void showToastMessage(Context context,String message)
 	{
 		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

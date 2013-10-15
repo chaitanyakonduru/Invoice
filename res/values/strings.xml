@@ -22,6 +22,7 @@
     <string name="customers">Customers</string>
     <string name="route">Route</string>
     <string name="pending_invoices">Pending Invoices</string>
+    <string name="invoices">Invoices</string>
     <string name="balance_sheet">Balance Sheet</string>
     <string name="settings">Settings</string>
     
@@ -29,6 +30,7 @@
     <string name="sync">Sync</string>
 	<string name="sync_frequency">Sync Interval</string>
       <string-array name="pref_sync_frequency_titles">
+        <item>Immediately</item>
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -37,6 +39,7 @@
         <item>Never</item>
     </string-array>
     <string-array name="pref_sync_frequency_values">
+        <item>0</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>

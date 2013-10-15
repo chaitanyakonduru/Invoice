@@ -10,6 +10,7 @@ public class InvoiceApplication extends Application {
 	private InvoiceAppDatabase invoiceAppDatabase;
 	private DatabaseThread databaseThread;
 	private String mDriverId;
+	private String mCustomerId;
 
 	public InvoiceAppDatabase shareDatabaseInstance() {
 		return invoiceAppDatabase == null ? InvoiceAppDatabase
@@ -27,6 +28,15 @@ public class InvoiceApplication extends Application {
 
 	public void setmDriverId(String mDriverId) {
 		this.mDriverId = mDriverId;
+	}
+	
+	public void setCustomerId(String mCustomerId)
+	{
+		this.mCustomerId=mCustomerId;
+	}
+	
+	public String getmCustomerId() {
+		return mCustomerId;
 	}
 
 }

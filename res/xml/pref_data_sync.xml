@@ -18,4 +18,5 @@
         android:positiveButtonText="@null"
         android:title="@string/sync_frequency" />
     </PreferenceCategory>
+    
 </PreferenceScreen>

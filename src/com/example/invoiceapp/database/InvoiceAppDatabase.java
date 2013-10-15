@@ -618,7 +618,7 @@ public class InvoiceAppDatabase {
 		SelectedProducts purchaseProducts;
 		SQLiteDatabase database = databaseHelper.getReadableDatabase();
 		String query = null;
-		query = "select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
+		query = "select p.product_id,p.ordered_qty,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
 				+ customerId + ") group by o.order_product_id";
 		// query="select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p LEFT OUTER JOIN  OrderProducts o on p.product_id=o.order_product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="+customerId+") group by o.order_product_id";
 		Cursor cursor = database.rawQuery(query, null);
@@ -632,17 +632,12 @@ public class InvoiceAppDatabase {
 						.getColumnIndex(ProductColumns.PRODUCT_ID)));
 				purchaseProducts.setProductName(cursor.getString(cursor
 						.getColumnIndex(ProductColumns.PRODUCT_NAME)));
+				purchaseProducts.setQtyPickedUp(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.ORDERED_QUANTITY)));
 				purchaseProducts.setProductPrice(cursor.getString(cursor
 						.getColumnIndex(OrderProductColumns.PRODUCT_PRICE)));
 				purchaseProductsList.add(purchaseProducts);
-				Log.v(TAG,
-						"Result:"
-								+ cursor.getString(cursor
-										.getColumnIndex(ProductColumns.PRODUCT_NAME)));
-				Log.v(TAG,
-						"Result:"
-								+ cursor.getString(cursor
-										.getColumnIndex(OrderProductColumns.QUANTITY_ORDERED)));
+				
 			}
 		} else {
 			Log.v(TAG, "Cursor NUll");
@@ -663,6 +658,8 @@ public class InvoiceAppDatabase {
 			invoicesList = new ArrayList<Invoice>();
 			while (cursor.moveToNext()) {
 				Invoice invoice = new Invoice();
+				invoice.setId(cursor.getInt(cursor
+						.getColumnIndex(InvoiceColumns.invoice_id)));
 				invoice.setInvoiceId(cursor.getString(cursor
 						.getColumnIndex(InvoiceColumns.invoice_id)));
 				invoice.setPaid(cursor.getInt(cursor

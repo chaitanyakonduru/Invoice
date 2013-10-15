@@ -3,6 +3,7 @@ package com.example.invoiceapp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.models.Invoice;
+import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.models.PurchasedProduct;
 import com.example.invoiceapp.network.DatabaseThread;
 import com.example.invoiceapp.network.DatabaseThread.onDatabaseUpdateCompletion;
@@ -91,6 +93,8 @@ public class PurchaseActivity extends BaseActivity implements
 		}
 
 	}
+	
+	
 
 	private void setTotaltoView() {
 
@@ -103,15 +107,21 @@ public class PurchaseActivity extends BaseActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem menuItem = menu.add(0, 1, 0, "Pay");
+		MenuItem menuItem = menu.add(0, 2, 0, "Pay");
 		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		menu.add(0, 1, 0, "HOME").setIcon(R.drawable.ic_home).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == 1) {
+		if (item.getItemId() == 2) {
 			displayPaymentDialog();
+		}
+		else if(item.getItemId()==1)
+		{
+			startActivity(new Intent(this,HomeScreenActivity.class));
+			finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -189,7 +199,7 @@ public class PurchaseActivity extends BaseActivity implements
 				invoice.setCustomerId(customer_name);
 				invoice.setDues(duesEditView.getText().toString());
 				invoice.setTotalAmount(String.valueOf(totalPrice));
-				SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy, hh:mm aa");
+				SimpleDateFormat dateFormat=new SimpleDateFormat("dd/MM/yyyy, hh:mm aa",Locale.US);
 				String date=dateFormat.format(new Date());
 				invoice.setPurchased_date(date);
 				databaseThread.addJob(invoice);
@@ -197,6 +207,12 @@ public class PurchaseActivity extends BaseActivity implements
 					purchasedProduct.setInvoiceId(invoice.getInvoiceId());
 					purchasedProduct.setInvoice_prodcutid(invoice
 							.getInvoiceId());
+					
+					Product product=new Product();
+					product.setProductId(purchasedProduct.getProduct_id());
+					product.setProductName(purchasedProduct.getmProductName());
+					product.setmQuantityOrdered(String.valueOf(Integer.parseInt(purchasedProduct.getQtyPickedUp())-Integer.parseInt(purchasedProduct.getProductQuantity())));
+					databaseThread.addJob(product);
 					databaseThread.addJob(purchasedProduct);
 				}
 			}

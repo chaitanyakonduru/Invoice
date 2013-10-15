@@ -14,7 +14,13 @@ public class PurchasedProduct extends Priority implements Parcelable{
 	private String mProductName;
 	private String productCost;
 	private String productQuantity;
-	
+	private String qtyPickedUp;
+	public String getQtyPickedUp() {
+		return qtyPickedUp;
+	}
+	public void setQtyPickedUp(String qtyPickedUp) {
+		this.qtyPickedUp = qtyPickedUp;
+	}
 	public String getmProductName() {
 		return mProductName;
 	}
@@ -74,6 +80,7 @@ public class PurchasedProduct extends Priority implements Parcelable{
 		arrayList.add(String.valueOf(this.productCost));
 		arrayList.add(String.valueOf(this.productQuantity));
 		arrayList.add(this.mProductName);
+		arrayList.add(this.qtyPickedUp);
 		arg0.writeStringList(arrayList);
 	}
 	
@@ -91,6 +98,7 @@ public class PurchasedProduct extends Priority implements Parcelable{
 		this.productCost=list.get(4);
 		this.productQuantity=list.get(5);
 		this.mProductName=list.get(6);
+		this.qtyPickedUp=list.get(7);
 	}
 	
 	public static final Creator<PurchasedProduct> CREATOR=new Creator<PurchasedProduct>() {

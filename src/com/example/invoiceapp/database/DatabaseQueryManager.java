@@ -94,6 +94,7 @@ public class DatabaseQueryManager {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Future getInvoices(final int reqCode, final String mCustomerId,
 			final DbQueryCallback<Object> callback) {
 		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,

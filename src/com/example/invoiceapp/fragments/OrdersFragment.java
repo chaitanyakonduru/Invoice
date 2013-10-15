@@ -26,6 +26,7 @@ import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.PurchasedProduct;
 import com.example.invoiceapp.models.SelectedProducts;
 import com.example.invoiceapp.utils.Constants;
+import com.example.invoiceapp.utils.Utilities;
 
 public class OrdersFragment extends Fragment implements DbQueryCallback<Object> {
 
@@ -35,6 +36,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 	private ListView listview;
 	private DatabaseQueryManager databaseQueryManager;
 	private List<SelectedProducts> orderedProductsList;
+	private Activity activity;
 
 	public OrdersFragment() {
 
@@ -50,6 +52,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		this.activity=activity;
 	}
 
 	@Override
@@ -62,7 +65,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		MenuItem menuItem = menu.add(0, 1, 0, "NEXT");
+		MenuItem menuItem = menu.add(0, 2, 0, "NEXT");
 		menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 	}
 
@@ -76,7 +79,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == 1) {
+		if (item.getItemId() == 2) {
 			dismissKeyBoard(getView());
 			purchaseItems();
 		}
@@ -89,14 +92,16 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 		PurchasedProduct purchasedProduct=null;
 		for (SelectedProducts selectedProduct : orderedProductsList) {
 			if (selectedProduct != null
-					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")&& isGreaterThanZero(selectedProduct.getQtyPurchased())) {
+					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")&& isGreaterThanZero(selectedProduct.getQtyPurchased()) && isStockAvailable(selectedProduct.getQtyPickedUp(), selectedProduct.getQtyPurchased(),selectedProduct.getProductName())) {
 				purchasedProduct=new PurchasedProduct();
 				purchasedProduct.setProduct_id(selectedProduct.getProductId());
 				purchasedProduct.setProductCost(String.valueOf(Integer.parseInt(selectedProduct.getQtyPurchased())*Integer.parseInt(selectedProduct.getProductPrice())));
 				purchasedProduct.setProductQuantity(selectedProduct.getQtyPurchased());
 				purchasedProduct.setmProductName(selectedProduct.getProductName());
+				purchasedProduct.setQtyPickedUp(selectedProduct.getQtyPickedUp());
 				purchasedProducts.add(purchasedProduct);
 			}
+			
 		}
 
 		if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
@@ -116,6 +121,27 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 		View v = inflater.inflate(R.layout.layout_orders, null);
 		listview = (ListView) v.findViewById(R.id.listview);
 		return v;
+	}
+	
+	private boolean isStockAvailable(String qtyInHand,String purchasingQty,String productName)
+	{
+		boolean status=false;
+		if(qtyInHand!=null && purchasingQty!=null && !qtyInHand.equalsIgnoreCase("null") && !purchasingQty.equalsIgnoreCase("null"))
+		{
+			int a=Integer.parseInt(qtyInHand);
+			int b=Integer.parseInt(purchasingQty);
+			if(a>=b)
+			{
+				status=true;
+				return status;
+			}
+			else
+			{
+				Utilities.showToastMessage(activity, "We don't have enough stock in hand for "+productName+" Currently we have "+qtyInHand+" Only");
+			}
+			
+		}
+		return status;
 	}
 
 	@Override
@@ -160,7 +186,7 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 				if (orderedProductsList != null
 						&& !orderedProductsList.isEmpty()) {
 					listview.setAdapter(new OrderedProductsCustomdapter(
-							getActivity(), -1, orderedProductsList));
+							activity, -1, orderedProductsList));
 				}
 			}
 			break;
