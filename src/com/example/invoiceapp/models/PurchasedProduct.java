@@ -15,6 +15,24 @@ public class PurchasedProduct extends Priority implements Parcelable{
 	private String productCost;
 	private String productQuantity;
 	private String qtyPickedUp;
+	private String qtyStockInHand;
+	private String qtyDelivered;
+	
+
+	
+	
+	public String getQtyDelivered() {
+		return qtyDelivered;
+	}
+	public void setQtyDelivered(String qtyDelivered) {
+		this.qtyDelivered = qtyDelivered;
+	}
+	public String getQtyStockInHand() {
+		return qtyStockInHand;
+	}
+	public void setQtyStockInHand(String qtyStockInHand) {
+		this.qtyStockInHand = qtyStockInHand;
+	}
 	public String getQtyPickedUp() {
 		return qtyPickedUp;
 	}
@@ -67,7 +85,6 @@ public class PurchasedProduct extends Priority implements Parcelable{
 	}
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
@@ -81,6 +98,8 @@ public class PurchasedProduct extends Priority implements Parcelable{
 		arrayList.add(String.valueOf(this.productQuantity));
 		arrayList.add(this.mProductName);
 		arrayList.add(this.qtyPickedUp);
+		arrayList.add(this.qtyStockInHand);
+		arrayList.add(this.qtyDelivered);
 		arg0.writeStringList(arrayList);
 	}
 	
@@ -99,6 +118,8 @@ public class PurchasedProduct extends Priority implements Parcelable{
 		this.productQuantity=list.get(5);
 		this.mProductName=list.get(6);
 		this.qtyPickedUp=list.get(7);
+		this.qtyStockInHand=list.get(8);
+		this.qtyDelivered=list.get(9);
 	}
 	
 	public static final Creator<PurchasedProduct> CREATOR=new Creator<PurchasedProduct>() {
@@ -110,7 +131,6 @@ public class PurchasedProduct extends Priority implements Parcelable{
 		
 		@Override
 		public PurchasedProduct createFromParcel(Parcel arg0) {
-			// TODO Auto-generated method stub
 			return new PurchasedProduct(arg0);
 		}
 	};

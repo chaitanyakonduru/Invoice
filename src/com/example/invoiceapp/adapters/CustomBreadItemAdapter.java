@@ -66,8 +66,8 @@ public class CustomBreadItemAdapter extends ArrayAdapter<Product> {
 		}
 		final Product product = getItem(position);
 		holder.breadItemNameTV.setText(product.getProductName());
-		holder.quantityET.setText(product.getmQuantityOrdered());
-		holder.quantityTV.setText(product.getmQuantityOrdered());
+		holder.quantityET.setText(product.getmQuantityPickup());
+		holder.quantityTV.setText(product.getmQuantityPickup());
 		holder.quantityET.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
@@ -75,7 +75,7 @@ public class CustomBreadItemAdapter extends ArrayAdapter<Product> {
 
 				if (!arg1) {
 					EditText editText = (EditText) arg0;
-					product.setmQuantityOrdered(editText.getText().toString());
+					product.setmQuantityPickup(editText.getText().toString());
 				}
 			}
 		});

@@ -116,13 +116,20 @@ public class InvoiceAppDatabase {
 		public static final String TABLE_NAME = "Products";
 		public static final String PRODUCT_ID = "product_id";
 		public static final String PRODUCT_NAME = "product_name";
-		public static final String ORDERED_QUANTITY = "ordered_qty";
+		public static final String QTY_PICKUP = "qty_pickup";
 		public static final String PRODUCT_PRICE = "product_price";
+		public static final String QTY_DELIVERED = "qty_delivered";
+		public static final String QTY_RETURNED="qty_returned";
+		public static final String QTY_STOCK_IN_HAND="qty_stock_in_hand";
 
 		private static final String DATABASE_CREATE = "create table Products(_id integer primary key autoincrement,"
 				+ "product_id integer,"
 				+ "product_price text,"
-				+ "product_name text,ordered_qty text);";
+				+ "product_name text," +
+				 "qty_pickup text," +
+				 "qty_stock_in_hand text," +
+				 "qty_returned text," +
+				"qty_delivered text);";
 	}
 
 	public static class DriverColumns implements BaseColumns {
@@ -370,8 +377,14 @@ public class InvoiceAppDatabase {
 		contentValues
 				.put(ProductColumns.PRODUCT_NAME, product.getProductName());
 		contentValues.put(ProductColumns.PRODUCT_PRICE, product.getmPrice());
-		contentValues.put(ProductColumns.ORDERED_QUANTITY,
-				product.getmQuantityOrdered());
+		contentValues.put(ProductColumns.QTY_PICKUP,
+				product.getmQuantityPickup());
+		contentValues.put(ProductColumns.QTY_DELIVERED,
+				product.getmQtyDelivered());
+		contentValues.put(ProductColumns.QTY_RETURNED,
+				product.getmQtyReturned());
+		contentValues.put(ProductColumns.QTY_STOCK_IN_HAND,
+				product.getmQtyStockInHand());
 
 		if (isUpdate) {
 			return sqLiteDatabase.update(ProductColumns.TABLE_NAME,
@@ -569,6 +582,14 @@ public class InvoiceAppDatabase {
 						.getColumnIndex(ProductColumns.PRODUCT_ID)));
 				product.setProductName(cursor.getString(cursor
 						.getColumnIndex(ProductColumns.PRODUCT_NAME)));
+				product.setmQtyDelivered(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_DELIVERED)));
+				product.setmQtyReturned(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_RETURNED)));
+				product.setmQtyStockInHand(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_STOCK_IN_HAND)));
+				product.setmQuantityPickup(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_PICKUP)));
 				productsList.add(product);
 			}
 		}
@@ -618,7 +639,7 @@ public class InvoiceAppDatabase {
 		SelectedProducts purchaseProducts;
 		SQLiteDatabase database = databaseHelper.getReadableDatabase();
 		String query = null;
-		query = "select p.product_id,p.ordered_qty,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
+		query = "select p.product_id,p.qty_delivered,p.qty_stock_in_hand,p.qty_pickup,p.product_name,o.price,o.quantity_ordered from Products p Join OrderProducts o on p.product_id=o.product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="
 				+ customerId + ") group by o.order_product_id";
 		// query="select p.product_id,p.product_name,o.price,o.quantity_ordered from Products p LEFT OUTER JOIN  OrderProducts o on p.product_id=o.order_product_id where o.order_id=(select Orders.order_id from Orders where Orders.customer_id="+customerId+") group by o.order_product_id";
 		Cursor cursor = database.rawQuery(query, null);
@@ -633,9 +654,13 @@ public class InvoiceAppDatabase {
 				purchaseProducts.setProductName(cursor.getString(cursor
 						.getColumnIndex(ProductColumns.PRODUCT_NAME)));
 				purchaseProducts.setQtyPickedUp(cursor.getString(cursor
-						.getColumnIndex(ProductColumns.ORDERED_QUANTITY)));
+						.getColumnIndex(ProductColumns.QTY_PICKUP)));
 				purchaseProducts.setProductPrice(cursor.getString(cursor
 						.getColumnIndex(OrderProductColumns.PRODUCT_PRICE)));
+				purchaseProducts.setQtyStockInHand(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_STOCK_IN_HAND)));
+				purchaseProducts.setQtyDelivered(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_DELIVERED)));
 				purchaseProductsList.add(purchaseProducts);
 				
 			}

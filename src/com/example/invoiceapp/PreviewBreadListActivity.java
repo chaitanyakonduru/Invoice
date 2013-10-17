@@ -82,6 +82,7 @@ public class PreviewBreadListActivity extends BaseActivity {
 			databaseThread.start();
 		}
 		for (Product product : breadList) {
+			product.setmQtyStockInHand(product.getmQuantityPickup());
 			databaseThread.addJob(product);
 		}
 	}

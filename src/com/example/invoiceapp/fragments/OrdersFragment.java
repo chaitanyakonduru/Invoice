@@ -92,14 +92,23 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 		PurchasedProduct purchasedProduct=null;
 		for (SelectedProducts selectedProduct : orderedProductsList) {
 			if (selectedProduct != null
-					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")&& isGreaterThanZero(selectedProduct.getQtyPurchased()) && isStockAvailable(selectedProduct.getQtyPickedUp(), selectedProduct.getQtyPurchased(),selectedProduct.getProductName())) {
+					&& selectedProduct.getQtyPurchased() != null && !selectedProduct.getQtyPurchased().equalsIgnoreCase("null")&& isGreaterThanZero(selectedProduct.getQtyPurchased())) {
+				if(isStockAvailable(selectedProduct.getQtyStockInHand(), selectedProduct.getQtyPurchased(),selectedProduct.getProductName()))
+				{
 				purchasedProduct=new PurchasedProduct();
 				purchasedProduct.setProduct_id(selectedProduct.getProductId());
 				purchasedProduct.setProductCost(String.valueOf(Integer.parseInt(selectedProduct.getQtyPurchased())*Integer.parseInt(selectedProduct.getProductPrice())));
 				purchasedProduct.setProductQuantity(selectedProduct.getQtyPurchased());
 				purchasedProduct.setmProductName(selectedProduct.getProductName());
 				purchasedProduct.setQtyPickedUp(selectedProduct.getQtyPickedUp());
+				purchasedProduct.setQtyStockInHand(selectedProduct.getQtyStockInHand());
+				purchasedProduct.setQtyDelivered(selectedProduct.getQtyDelivered());
 				purchasedProducts.add(purchasedProduct);
+				}
+				else
+				{
+					return;
+				}
 			}
 			
 		}
@@ -140,6 +149,11 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 				Utilities.showToastMessage(activity, "We don't have enough stock in hand for "+productName+" Currently we have "+qtyInHand+" Only");
 			}
 			
+			
+		}
+		else
+		{
+			Utilities.showToastMessage(activity, "We don't have enough stock in hand for "+productName+" Currently we have "+qtyInHand+" Only");
 		}
 		return status;
 	}

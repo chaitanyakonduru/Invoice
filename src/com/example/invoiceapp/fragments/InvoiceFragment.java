@@ -88,7 +88,7 @@ public class InvoiceFragment extends Fragment implements
 				invoiceApplication.getmCustomerId(), this);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void onQueryExecuted(int requestCode, Object object) {
 

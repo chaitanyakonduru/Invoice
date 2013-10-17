@@ -80,7 +80,18 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 		menu.add(0, 1, 0, "HOME").setIcon(R.drawable.ic_home).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+		}
+		else if(item.getItemId()==1)
+		{
+			startActivity(new Intent(this,HomeScreenActivity.class));
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
@@ -134,18 +145,7 @@ public class CustomerActivity extends FragmentActivity implements TabListener {
 
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			finish();
-		}
-		else if(item.getItemId()==1)
-		{
-			startActivity(new Intent(this,HomeScreenActivity.class));
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	
 
 	public String getCustomerId() {
 		return mCustomerId;

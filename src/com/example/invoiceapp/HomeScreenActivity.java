@@ -41,6 +41,9 @@ public class HomeScreenActivity extends BaseActivity implements OnClickListener{
 		case R.id.home_btn_invoice:
 			startActivity(new Intent(this,PendingInvoiceActivity.class));
 			break;
+		case R.id.home_btn_balancesheet:
+			startActivity(new Intent(this,BalanceSheetActivity.class));
+			break;
 		default:
 			break;
 		}

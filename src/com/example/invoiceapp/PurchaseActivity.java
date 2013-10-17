@@ -211,7 +211,9 @@ public class PurchaseActivity extends BaseActivity implements
 					Product product=new Product();
 					product.setProductId(purchasedProduct.getProduct_id());
 					product.setProductName(purchasedProduct.getmProductName());
-					product.setmQuantityOrdered(String.valueOf(Integer.parseInt(purchasedProduct.getQtyPickedUp())-Integer.parseInt(purchasedProduct.getProductQuantity())));
+					product.setmQtyDelivered(updateDelivery(purchasedProduct.getQtyDelivered(), purchasedProduct.getProductQuantity()));
+					product.setmQuantityPickup(purchasedProduct.getQtyPickedUp());
+					product.setmQtyStockInHand(String.valueOf(Integer.parseInt(purchasedProduct.getQtyStockInHand())-Integer.parseInt(purchasedProduct.getProductQuantity())));
 					databaseThread.addJob(product);
 					databaseThread.addJob(purchasedProduct);
 				}
@@ -235,6 +237,17 @@ public class PurchaseActivity extends BaseActivity implements
 		finish();
 	}
 
+	private String updateDelivery(String prev,String current)
+	{
+		if(prev==null || prev.equalsIgnoreCase("null") || prev.equalsIgnoreCase(""))
+		{
+			prev="0";
+		}
+		int pre=Integer.parseInt(prev);
+		int curr=Integer.parseInt(current);
+		return String.valueOf(pre+curr);
+		
+	}
 	@Override
 	public void onQueryExecuted(int requestCode, Object object) {
 
