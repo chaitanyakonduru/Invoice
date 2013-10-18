@@ -152,5 +152,7 @@ public class GoogleMapFragment extends Fragment implements
 			Log.v(TAG, "Restauants Are Empty");
 		}
 	}
+	
+	
 
 }

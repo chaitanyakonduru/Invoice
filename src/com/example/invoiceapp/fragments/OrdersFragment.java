@@ -199,8 +199,13 @@ public class OrdersFragment extends Fragment implements DbQueryCallback<Object> 
 				orderedProductsList = ((List<SelectedProducts>) object);
 				if (orderedProductsList != null
 						&& !orderedProductsList.isEmpty()) {
+					Utilities.showToastMessage(getActivity(), "Ordered Products Size:"+orderedProductsList.size());
 					listview.setAdapter(new OrderedProductsCustomdapter(
 							activity, -1, orderedProductsList));
+				}
+				else
+				{
+					Utilities.showToastMessage(getActivity(), "No New Orders");
 				}
 			}
 			break;

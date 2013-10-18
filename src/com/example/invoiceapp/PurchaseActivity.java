@@ -208,6 +208,7 @@ public class PurchaseActivity extends BaseActivity implements
 					purchasedProduct.setInvoice_prodcutid(invoice
 							.getInvoiceId());
 					
+					
 					Product product=new Product();
 					product.setProductId(purchasedProduct.getProduct_id());
 					product.setProductName(purchasedProduct.getmProductName());

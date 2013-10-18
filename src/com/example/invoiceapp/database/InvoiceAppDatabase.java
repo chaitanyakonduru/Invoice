@@ -704,11 +704,17 @@ public class InvoiceAppDatabase {
 
 	public void getInvoiceDetails(String invoiceId,
 			DatabaseHandler databaseHandler) {
+		
+//		public static final String QTY_PICKUP = "qty_pickup";
+//		public static final String PRODUCT_PRICE = "product_price";
+//		public static final String QTY_DELIVERED = "qty_delivered";
+//		public static final String QTY_RETURNED="qty_returned";
+//		public static final String QTY_STOCK_IN_HAND="qty_stock_in_hand";
 		List<PurchasedProduct> purchasedProducts = null;
 		PurchasedProduct product;
 		final SQLiteDatabase sqLiteDatabase = databaseHelper
 				.getReadableDatabase();
-		String query = "Select  pp.purchase_productid,i.invoice_id,p.product_name,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id=?"
+		String query = "Select  pp.purchase_productid,i.invoice_id,p.product_id,p.qty_stock_in_hand,p.qty_pickup,p.product_name,p.qty_delivered,i.totalAmount,i.payment_mode,PP.product_cost,PP.quantity_purchased from Invoices i  inner join PurchasedProducts PP on pp.invoice_id=i.invoice_id inner join products p on p.product_id = pp.product_id where i.invoice_id=?"
 				+ " group by PP._id";
 		Cursor cursor = sqLiteDatabase.rawQuery(query,
 				new String[] { invoiceId });
@@ -727,6 +733,14 @@ public class InvoiceAppDatabase {
 						.getColumnIndex(PurchasedProductColumns.PRODUCT_COST)));
 				product.setProductQuantity(cursor.getString(cursor
 						.getColumnIndex(PurchasedProductColumns.QUANTITY_PURCHASED)));
+				product.setProduct_id(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.PRODUCT_ID)));
+				product.setQtyDelivered(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_DELIVERED)));
+				product.setQtyStockInHand(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_STOCK_IN_HAND)));
+				product.setQtyPickedUp(cursor.getString(cursor
+						.getColumnIndex(ProductColumns.QTY_PICKUP)));
 				purchasedProducts.add(product);
 
 				Log.v(TAG, "" + purchasedProducts.size());

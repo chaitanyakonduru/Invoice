@@ -90,7 +90,7 @@ public class PendingInvoiceActivity extends BaseActivity implements DbQueryCallb
 			else
 			{
 				listView.setVisibility(View.GONE);
-				emptyView.setText("No Pending Invoices");
+				emptyView.setText("No Invoices");
 				emptyView.setVisibility(View.VISIBLE);
 			}
 			

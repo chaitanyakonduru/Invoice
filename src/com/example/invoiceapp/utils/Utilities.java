@@ -48,7 +48,14 @@ public class Utilities {
 	{
 		if(progressDialog!=null && progressDialog.isShowing())
 		{
+			try
+			{
 			progressDialog.dismiss();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
