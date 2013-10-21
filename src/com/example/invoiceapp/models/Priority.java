@@ -1,6 +1,6 @@
 package com.example.invoiceapp.models;
 
-public class Priority implements Comparable<Priority> {
+public class Priority  {
 
 	private int priority;
 	

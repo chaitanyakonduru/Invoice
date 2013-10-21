@@ -4,6 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp" >
+
+        <TextView
+            android:id="@+id/total_amt_cash"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Cash"
+            android:textColor="@color/actionbar_bg_brick_color"
+            android:textStyle="bold" />
+
+        <TextView
+             android:text="Cash"
+            android:id="@+id/total_amt_cheque"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/actionbar_bg_brick_color"
+            android:textStyle="bold" />
+
+        <TextView
+             android:text="Cash"
+            android:id="@+id/total_dues"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/actionbar_bg_brick_color"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <include layout="@layout/balance_sheet_custom_list_item" />
 
     <LinearLayout
@@ -14,7 +51,7 @@
         android:orientation="vertical" >
 
         <ListView
-            android:id="@+id/listview"
+            android:id="@+id/balance_sheet_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@android:color/transparent"

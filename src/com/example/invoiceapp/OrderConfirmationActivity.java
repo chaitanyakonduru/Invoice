@@ -13,6 +13,8 @@ import com.example.invoiceapp.utils.Utilities;
 public class OrderConfirmationActivity  extends BaseActivity{
 	
 	private EditText confirmationPassword;
+	private boolean status;
+	public static final String KEY_PICK_UP_STATUS="pick_up_status";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +22,11 @@ public class OrderConfirmationActivity  extends BaseActivity{
 		setContentView(R.layout.layout_confirmation_order);
 		Utilities.setActionBarTitle(this, "Confirmation Page");
 		confirmationPassword=(EditText) findViewById(R.id.et_password);
-			
+			Bundle bundle=getIntent().getExtras();
+			if(bundle!=null && bundle.containsKey(KEY_PICK_UP_STATUS))
+			{
+				status=bundle.getBoolean(KEY_PICK_UP_STATUS);
+			}
 	}
 	
 	@Override
@@ -31,30 +37,27 @@ public class OrderConfirmationActivity  extends BaseActivity{
 	
 	public void onAuthenticating(View v)
 	{
-		String respMessage;
 		if(!Utilities.checkIfNull(confirmationPassword.getText().toString().trim()))
 		{
+			if(status)
+			{
 			Intent intent=new Intent(this,HomeScreenActivity.class);
 			startActivity(intent);
-			respMessage="Ordered Success";
-			saveAuthentication();
+			}
+			saveAuthentication(status);
 			Intent inten=new Intent(Constants.CUSTOM_ACTION_INTENT);
 			sendBroadcast(inten);
 			finish();
 		}
-		else
-		{
-			respMessage="Please enter your password";
-		}
-		Utilities.showToastMessage(this,respMessage);
+		
 		
 	}
 
-	private void saveAuthentication() {
+	private void saveAuthentication(boolean status) {
 		 
 		        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		        SharedPreferences.Editor editor = appPreferences.edit();
-		        editor.putBoolean(getString(R.string.is_pickup_products), true);
+		        editor.putBoolean(getString(R.string.is_pickup_products), status);
 		        editor.commit();
 	}
 

@@ -34,7 +34,6 @@ public class SettingsActivity extends PreferenceActivity {
 			return;
 		}
 		addPreferencesFromResource(R.xml.pref_data_sync);
-		bindPreferenceSummaryToValue(findPreference("sync"));
 		bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 	}
 

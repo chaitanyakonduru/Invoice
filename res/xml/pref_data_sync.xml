@@ -1,22 +1,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory 
-        android:title="Sync Settings"
-        >
-        <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="sync"
-        android:title="@string/sync" />
+    <PreferenceCategory android:title="Sync Settings" >
+        <Preference
+            android:key="Sync Now"
+            android:title="Sync Now" />
 
-    <ListPreference
-        android:dependency="sync"
-        android:defaultValue="60"
-        android:entries="@array/pref_sync_frequency_titles"
-        android:entryValues="@array/pref_sync_frequency_values"
-        android:key="sync_frequency"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/sync_frequency" />
+       
+
+        <ListPreference
+            android:defaultValue="60"
+            android:entries="@array/pref_sync_frequency_titles"
+            android:entryValues="@array/pref_sync_frequency_values"
+            android:key="sync_frequency"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/sync_frequency" />
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

@@ -67,7 +67,9 @@ public class PreviewBreadListActivity extends BaseActivity {
 			break;
 		case Menu.FIRST + 1:
 			updateQuantityInfoIntoDatabase();
-			startActivity(new Intent(this, OrderConfirmationActivity.class));
+		Intent intent=new Intent(this, OrderConfirmationActivity.class);
+		intent.putExtra(OrderConfirmationActivity.KEY_PICK_UP_STATUS, true);
+			startActivity(intent);
 			break;
 		case android.R.id.home:
 			finish();

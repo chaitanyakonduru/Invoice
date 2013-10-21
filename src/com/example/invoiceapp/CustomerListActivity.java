@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
+import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
@@ -53,8 +54,10 @@ public class CustomerListActivity extends BaseActivity implements
 		databaseQueryManager = DatabaseQueryManager.getInstance(this);
 		databaseThread = new DatabaseThread(this, this);
 		mDriverId = invoiceApplication.getmDriverId();
-		fetchRoutesInfoCallback(mDriverId);
-
+		
+		databaseQueryManager.checkTableNullOrNot(
+				Constants.DB_REQ_CHECK_TABLE_NULL_NOT,
+				InvoiceAppDatabase.CustomerColumns.TABLE_NAME, this);
 	}
 
 	private void fetchRoutesInfoCallback(String DriverId) {
@@ -165,7 +168,6 @@ public class CustomerListActivity extends BaseActivity implements
 	protected void loadCustomers() {
 		databaseQueryManager.getCustomers(mDriverId,
 				Constants.DB_REQ_FETCH_CUSTOMERS, this);
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -174,13 +176,25 @@ public class CustomerListActivity extends BaseActivity implements
 		switch (requestCode) {
 		case Constants.DB_REQ_FETCH_CUSTOMERS:
 			if (object != null && object instanceof List)
+				progressBar.setVisibility(View.GONE);
 				customersList = ((List<Customer>) object);
 			if (customersList != null && !customersList.isEmpty()) {
+				listView.setVisibility(View.VISIBLE);
 				listView.setAdapter(new ArrayAdapter<Customer>(this,
 						android.R.layout.simple_list_item_1, customersList));
 			}
 			break;
-
+		case Constants.DB_REQ_CHECK_TABLE_NULL_NOT:
+			if (object != null && object instanceof Boolean) {
+				boolean status = (Boolean) object;
+				if (status) {
+				loadCustomers();
+				} else {
+					Utilities.showProgressDialog(this);
+					fetchRoutesInfoCallback(mDriverId);
+				}
+			}
+			break;
 		default:
 			break;
 		}

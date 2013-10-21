@@ -71,7 +71,7 @@ public class InvoiceCustomAdapter extends
 	}
 
 	public class ViewHolder {
-		TextView breadItemNameTV, purchasedQtyTV, priceTV;
+		TextView breadItemNameTV, purchasedQtyTV, priceTV,payMode;
 	}
 
 }

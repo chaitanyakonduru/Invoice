@@ -212,6 +212,7 @@ public class PurchaseActivity extends BaseActivity implements
 					Product product=new Product();
 					product.setProductId(purchasedProduct.getProduct_id());
 					product.setProductName(purchasedProduct.getmProductName());
+					
 					product.setmQtyDelivered(updateDelivery(purchasedProduct.getQtyDelivered(), purchasedProduct.getProductQuantity()));
 					product.setmQuantityPickup(purchasedProduct.getQtyPickedUp());
 					product.setmQtyStockInHand(String.valueOf(Integer.parseInt(purchasedProduct.getQtyStockInHand())-Integer.parseInt(purchasedProduct.getProductQuantity())));

@@ -9,6 +9,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 /**
@@ -103,7 +105,7 @@ public class FetchCurrentLocation {
 
 		public void onLocationChanged(Location location) {
 			timerTask.cancel();
-			locationResult.gotLocation(location);
+			Message.obtain(handler, 100, location).sendToTarget();
 			locationManager.removeUpdates(this);
 			locationManager.removeUpdates(networkLocationListener);
 			locationManager.removeUpdates(passiveLocationListener);
@@ -125,7 +127,7 @@ public class FetchCurrentLocation {
 
 		public void onLocationChanged(Location location) {
 			timerTask.cancel();
-			locationResult.gotLocation(location);
+			Message.obtain(handler, 100, location).sendToTarget();
 			locationManager.removeUpdates(this);
 			locationManager.removeUpdates(gpsLocationListener);
 			locationManager.removeUpdates(passiveLocationListener);
@@ -148,7 +150,7 @@ public class FetchCurrentLocation {
 
 		public void onLocationChanged(Location location) {
 			timerTask.cancel();
-			locationResult.gotLocation(location);
+			Message.obtain(handler, 100, location).sendToTarget();
 			locationManager.removeUpdates(this);
 			locationManager.removeUpdates(networkLocationListener);
 			locationManager.removeUpdates(gpsLocationListener);
@@ -209,26 +211,26 @@ public class FetchCurrentLocation {
 					&& passive_Location != null) {
 				Location recentlyKnownLocation = getRecentlyKnownLocation(
 						gps_Location, network_Location, passive_Location);
-				locationResult.gotLocation(recentlyKnownLocation);
+				Message.obtain(handler, 100, recentlyKnownLocation).sendToTarget();
 				return;
 			}
 			
 			if(gps_Location!=null)
 			{
-				locationResult.gotLocation(gps_Location);
+				Message.obtain(handler, 100, gps_Location).sendToTarget();
 				return;
 			}
 			if(network_Location!=null)
 			{
-				locationResult.gotLocation(network_Location);
+				Message.obtain(handler, 100, network_Location).sendToTarget();
 				return;
 			}
 			if(passive_Location!=null)
 			{
-				locationResult.gotLocation(passive_Location);
+				Message.obtain(handler, 100, passive_Location).sendToTarget();
 				return;
 			}
-			locationResult.gotLocation(null);
+			Message.obtain(handler, 100, null).sendToTarget();
 		}
 
 	}
@@ -247,5 +249,18 @@ public class FetchCurrentLocation {
 		}
 		return location;
 	}
+	
+	Handler handler=new Handler()
+	{
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			Location location=(Location) msg.obj;
+			locationResult.gotLocation(location);
+		}
+		
+		
+	};
 
 }

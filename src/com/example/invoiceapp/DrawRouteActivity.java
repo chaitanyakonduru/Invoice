@@ -63,33 +63,7 @@ public class DrawRouteActivity extends Activity implements
 
 	}
 
-	@SuppressWarnings("deprecation")
-	private String getDirectionsUrl(LatLng origin, LatLng destination,
-			List<LatLng> wayPoints) {
-
-		String str_origin = "origin=" + origin.latitude + ","
-				+ origin.longitude;
-		String str_dest = "destination=" + destination.latitude + ","
-				+ destination.longitude;
-
-		String sensor = "sensor=false";
-		String waypoints = "";
-		if (wayPoints != null && !wayPoints.isEmpty()) {
-			waypoints = "waypoints=";
-			for (LatLng latLng : wayPoints) {
-				waypoints += latLng.latitude + "," + latLng.longitude
-						+ URLEncoder.encode("|");
-			}
-
-		}
-		String parameters = str_origin + "&" + str_dest + "&" + sensor + "&"
-				+ waypoints;
-		String output = "json";
-		String url = "https://maps.googleapis.com/maps/api/directions/"
-				+ output + "?" + parameters;
-
-		return url;
-	}
+	
 
 	@Override
 	public void onSuccess(int requestCode, Object object) {
@@ -182,7 +156,7 @@ public class DrawRouteActivity extends Activity implements
 						.get(i).getmLatitude()), Double.parseDouble(customers
 						.get(i).getmLongitude())));
 			}
-			String url = getDirectionsUrl(origin, destination, wayPointsList);
+			String url = Utilities.getDirectionsUrl(origin, destination, wayPointsList);
 			
 			for(Customer customer2:customers)
 			{

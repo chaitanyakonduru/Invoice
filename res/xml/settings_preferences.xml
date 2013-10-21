@@ -6,6 +6,6 @@
         android:key="example_checkbox"
         android:title="@string/sync" />
  
- 
+
     
 </PreferenceScreen>

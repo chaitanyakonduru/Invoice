@@ -1,6 +1,8 @@
 package com.example.invoiceapp.network;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import android.content.Context;
 import android.os.Handler;
@@ -20,21 +22,21 @@ public class DatabaseThread extends Thread {
 	private InvoiceApplication app;
 
 	private static final String TAG = DatabaseThread.class.getSimpleName();
-	private PriorityQueue<Object> jobQueue1;
+	private Queue<Object> jobQueue1;
 
 	private boolean pause;
 	private onDatabaseUpdateCompletion databaseUpdateCompletion;
 
 	public DatabaseThread(Context context) {
 		Log.v(TAG, "tag");
-		jobQueue1 = new PriorityQueue<Object>();
+		jobQueue1 = new LinkedList<Object>();
 		app = (InvoiceApplication) context.getApplicationContext();
 	}
 
 	public DatabaseThread(Context context,
 			onDatabaseUpdateCompletion databaseUpdateCompletion) {
 		Log.v(TAG, "tag");
-		jobQueue1 = new PriorityQueue<Object>();
+		jobQueue1 = new LinkedList<Object>();
 		app = (InvoiceApplication) context.getApplicationContext();
 		this.databaseUpdateCompletion = databaseUpdateCompletion;
 	}

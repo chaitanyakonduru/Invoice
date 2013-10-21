@@ -78,7 +78,7 @@ public class InvoiceAppDatabase {
 
 	}
 
-	private static class CustomerColumns implements BaseColumns {
+	public static class CustomerColumns implements BaseColumns {
 		public static final String TABLE_NAME = "Customers";
 		public static final String CUSTOMER_ID = "customer_id";
 		public static final String DRIVER_ID = "driver_id";
@@ -105,10 +105,12 @@ public class InvoiceAppDatabase {
 		public static final String ORDER_ID = "order_id";
 		public static final String ORDER_DATE = "order_date";
 		public static final String ORDER_TOTAL_AMOUNT = "order_amount";
+		public static final String ORDER_STATUS= "order_status";
 
 		private static final String DATABASE_CREATE = "create table Orders(_id integer primary key autoincrement,"
 				+ "order_id integer,"
 				+ "customer_id integer,"
+				+ "order_status integer,"
 				+ "order_date text,order_amount text);";
 	}
 
@@ -342,6 +344,7 @@ public class InvoiceAppDatabase {
 		contentValues.put(OrderColumns.ORDER_ID, order.getmOrderId());
 		contentValues.put(OrderColumns.CUSTOMER_ID, order.getmCustomerId());
 		contentValues.put(OrderColumns.ORDER_DATE, order.getmOrderDate());
+		contentValues.put(OrderColumns.ORDER_STATUS, order.isOrderDelivered());
 		contentValues.put(OrderColumns.ORDER_TOTAL_AMOUNT,
 				order.getmOrderTotalAmt());
 
@@ -354,6 +357,15 @@ public class InvoiceAppDatabase {
 					contentValues) > 0 ? true : false;
 		}
 
+	}
+	
+	public boolean updateOrderStatus(String customerId,boolean orderStatus)
+	{
+		boolean isUpdate = false;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(OrderColumns.ORDER_STATUS,
+				orderStatus);
+		return isUpdate;
 	}
 
 	public boolean insertProduct(Product product) {
@@ -705,11 +717,6 @@ public class InvoiceAppDatabase {
 	public void getInvoiceDetails(String invoiceId,
 			DatabaseHandler databaseHandler) {
 		
-//		public static final String QTY_PICKUP = "qty_pickup";
-//		public static final String PRODUCT_PRICE = "product_price";
-//		public static final String QTY_DELIVERED = "qty_delivered";
-//		public static final String QTY_RETURNED="qty_returned";
-//		public static final String QTY_STOCK_IN_HAND="qty_stock_in_hand";
 		List<PurchasedProduct> purchasedProducts = null;
 		PurchasedProduct product;
 		final SQLiteDatabase sqLiteDatabase = databaseHelper
@@ -824,5 +831,43 @@ public class InvoiceAppDatabase {
 		Message.obtain(databaseHandler, Constants.SUCCESS, invoices)
 				.sendToTarget();
 	}
+	
+	public String getTotalAmountByCash()
+	{
+		final SQLiteDatabase sqLiteDatabase = databaseHelper
+				.getReadableDatabase();
+		String rawQuery = "select total(totalAmount) from Invoices where payment_mode=?";
+		Cursor cursor = sqLiteDatabase.rawQuery(rawQuery,
+				new String[] {"Cash" });
+		if (null != cursor && cursor.moveToNext()) {
+				return cursor.getString(0);
+		}
+		return "0.0";
+	}
+	public String getTotalAmountByCheque()
+	{
+		final SQLiteDatabase sqLiteDatabase = databaseHelper
+				.getReadableDatabase();
+		String rawQuery = "select total(totalAmount) from Invoices where payment_mode=?";
+		Cursor cursor = sqLiteDatabase.rawQuery(rawQuery,
+				new String[] {"Cheque" });
+		if (null != cursor && cursor.moveToNext()) {
+				return cursor.getString(0);
+		}
+		return "0.0";
+	}
+	public String getDues()
+	{
+		final SQLiteDatabase sqLiteDatabase = databaseHelper
+				.getReadableDatabase();
+		String rawQuery = "select total(dues) from Invoices";
+		Cursor cursor = sqLiteDatabase.rawQuery(rawQuery,
+				null);
+		if (null != cursor && cursor.moveToNext()) {
+				return cursor.getString(0);
+		}
+		return "0.0";
+	}
+
 
 }

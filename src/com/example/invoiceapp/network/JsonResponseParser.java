@@ -9,9 +9,12 @@ import org.json.JSONObject;
 
 import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Driver;
+import com.example.invoiceapp.models.DriverReminders;
+import com.example.invoiceapp.models.InvoiceReminders;
 import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
+import com.example.invoiceapp.models.Reminder;
 import com.example.invoiceapp.models.RouteInfo;
 
 public class JsonResponseParser {
@@ -226,5 +229,15 @@ public class JsonResponseParser {
 		}
 		return routeInfo;
 	}
+	
+	/*public static InvoiceReminders parseRemindersResponse(String string)
+	{
+		InvoiceReminders invoiceReminders=null;
+		List<DriverReminders> mDriverReminders=null;
+		List<Reminder> mReminders=null;
+		
+		
+		
+	}*/
 
 }

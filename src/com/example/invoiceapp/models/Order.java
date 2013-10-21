@@ -9,10 +9,19 @@ public class Order extends Priority {
 	private String mOrderId;
 	private String mOrderDate;
 	private String mOrderTotalAmt;
+	private boolean isOrderDelivered;
 	private List<OrderProduct> mOrderedProductsList;
 
 	public String getmCustomerId() {
 		return mCustomerId;
+	}
+	
+	public boolean isOrderDelivered() {
+		return isOrderDelivered;
+	}
+
+	public void setOrderDelivered(boolean isOrderDelivered) {
+		this.isOrderDelivered = isOrderDelivered;
 	}
 
 	public void setmCustomerId(String mCustomerId) {

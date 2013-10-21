@@ -97,8 +97,9 @@ public class BreadListActivity extends BaseActivity implements
 
 			EditText quantityEText = (EditText) v
 					.findViewById(R.id.et_qunatity);
-			if (!Utilities.checkIfNull(quantityEText.getText().toString()
-					.trim())) {
+			String string=quantityEText.getText().toString()
+					.trim();
+			if (!Utilities.checkIfNull(string) && Utilities.checkZero(string)) {
 				bread.setOrdered(true);
 				filteredList.add(bread);
 			}
