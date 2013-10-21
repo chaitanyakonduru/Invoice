@@ -123,7 +123,7 @@ public class BalanceSheetActivity extends BaseActivity implements DbQueryCallbac
 	}
 	
 	public void registerReceiver() {
-		IntentFilter filter = new IntentFilter(Constants.CUSTOM_ACTION_INTENT);
+		IntentFilter filter = new IntentFilter(Constants.CUSTOM_HOME_ACTION_INTENT);
 		activityReceiver = new FinishActivityReceiver(this);
 		registerReceiver(activityReceiver, filter);
 	}

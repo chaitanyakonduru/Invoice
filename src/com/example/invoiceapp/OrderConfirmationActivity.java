@@ -47,6 +47,8 @@ public class OrderConfirmationActivity  extends BaseActivity{
 			saveAuthentication(status);
 			Intent inten=new Intent(Constants.CUSTOM_ACTION_INTENT);
 			sendBroadcast(inten);
+			inten=new Intent(Constants.CUSTOM_HOME_ACTION_INTENT);
+			sendBroadcast(inten);
 			finish();
 		}
 		

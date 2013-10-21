@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import com.example.invoiceapp.models.Customer;
 import com.example.invoiceapp.models.Driver;
-import com.example.invoiceapp.models.DriverReminders;
+import com.example.invoiceapp.models.DriverReminder;
 import com.example.invoiceapp.models.InvoiceReminders;
 import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
@@ -210,11 +210,9 @@ public class JsonResponseParser {
 											}
 										}
 										order.setmOrderedProductsList(orderProductsList);
-
 										customer.setOrder(order);
 									}
 								}
-
 								customersList.add(customer);
 							}
 						}
@@ -229,15 +227,62 @@ public class JsonResponseParser {
 		}
 		return routeInfo;
 	}
-	
-	/*public static InvoiceReminders parseRemindersResponse(String string)
-	{
-		InvoiceReminders invoiceReminders=null;
-		List<DriverReminders> mDriverReminders=null;
-		List<Reminder> mReminders=null;
-		
-		
-		
-	}*/
+
+	public static InvoiceReminders parseRemindersResponse(String string) {
+		InvoiceReminders invoiceReminders = null;
+		List<DriverReminder> mDriverReminders = null;
+		List<Reminder> mReminders = null;
+
+		try {
+			JSONObject jsonObject = new JSONObject(string);
+			if (jsonObject.has("reminders")) {
+				invoiceReminders = new InvoiceReminders();
+				JSONArray remindersArray = jsonObject.getJSONArray("reminders");
+				if (remindersArray != null && remindersArray.length() > 0) {
+					mDriverReminders = new ArrayList<DriverReminder>();
+					for (int i = 0; i < remindersArray.length(); i++) {
+						JSONObject reminderObject = (JSONObject) remindersArray
+								.get(i);
+						DriverReminder driverReminder = new DriverReminder();
+						driverReminder.setmDriverId(reminderObject
+								.has("driver_id") ? reminderObject
+								.getString("driver_id") : "");
+						if (reminderObject.has("notifications")) {
+							JSONArray notificationsArrayObject = reminderObject
+									.getJSONArray("notifications");
+							if (notificationsArrayObject != null
+									&& notificationsArrayObject.length() > 0) {
+								mReminders = new ArrayList<Reminder>();
+								for (int j = 0; j < notificationsArrayObject
+										.length(); j++) {
+									Reminder reminder = new Reminder();
+									JSONObject notificationsObject = notificationsArrayObject
+											.getJSONObject(j);
+									reminder.setmReminderId(notificationsObject
+											.has("reminder_id") ? notificationsObject
+											.getString("reminder_id") : null);
+									reminder.setmReminderTime(notificationsObject
+											.has("reminder_date") ? notificationsObject
+											.getString("reminder_date") : null);
+									reminder.setmReminderNotes(notificationsObject
+											.has("notes") ? notificationsObject
+											.getString("notes") : null);
+									reminder.setmIsNotified(false);
+									mReminders.add(reminder);
+								}
+								driverReminder.setRemindersList(mReminders);
+							}
+						}
+						mDriverReminders.add(driverReminder);
+					}
+				}
+				invoiceReminders.setDriverRemindersList(mDriverReminders);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return invoiceReminders;
+
+	}
 
 }

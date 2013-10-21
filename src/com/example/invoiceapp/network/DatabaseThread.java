@@ -17,6 +17,7 @@ import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.models.PurchasedProduct;
+import com.example.invoiceapp.models.Reminder;
 
 public class DatabaseThread extends Thread {
 	private InvoiceApplication app;
@@ -92,6 +93,11 @@ public class DatabaseThread extends Thread {
 				} else if (object instanceof PurchasedProduct) {
 					PurchasedProduct product = (PurchasedProduct) object;
 					app.shareDatabaseInstance().insertPurchasedProduct(product);
+				}
+				else if(object instanceof Reminder)
+				{
+					Reminder reminder=(Reminder) object;
+					app.shareDatabaseInstance().insertReminder(reminder);
 				}
 
 			}

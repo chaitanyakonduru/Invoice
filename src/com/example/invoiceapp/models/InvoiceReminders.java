@@ -4,13 +4,13 @@ import java.util.List;
 
 public class InvoiceReminders {
 
-	private List<DriverReminders> driverRemindersList;
+	private List<DriverReminder> driverRemindersList;
 
-	public List<DriverReminders> getDriverRemindersList() {
+	public List<DriverReminder> getDriverRemindersList() {
 		return driverRemindersList;
 	}
 
-	public void setDriverRemindersList(List<DriverReminders> driverRemindersList) {
+	public void setDriverRemindersList(List<DriverReminder> driverRemindersList) {
 		this.driverRemindersList = driverRemindersList;
 	}
 	

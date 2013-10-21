@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.invoiceapp.adapters.PurchasedProductsCustomdapter;
 import com.example.invoiceapp.database.DatabaseQueryManager;
 import com.example.invoiceapp.database.DbQueryCallback;
+import com.example.invoiceapp.database.InvoiceAppDatabase;
 import com.example.invoiceapp.fragments.OrdersFragment;
 import com.example.invoiceapp.models.Invoice;
 import com.example.invoiceapp.models.Product;
@@ -48,6 +49,7 @@ public class PurchaseActivity extends BaseActivity implements
 	private boolean isFromInvoice = false;
 	private DatabaseQueryManager databaseQueryManager;
 	private Invoice invoice;
+	private InvoiceAppDatabase invoiceAppDatabase;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -55,7 +57,7 @@ public class PurchaseActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_customes);
 		databaseQueryManager = DatabaseQueryManager.getInstance(this);
-
+		invoiceAppDatabase=InvoiceAppDatabase.getInstance(this);
 		application = (InvoiceApplication) getApplication();
 		databaseThread = new DatabaseThread(this, this);
 		listView = (ListView) findViewById(R.id.listview);
@@ -149,6 +151,7 @@ public class PurchaseActivity extends BaseActivity implements
 				.findViewById(R.id.due_payments);
 		invoice.setPaid(true);
 		invoice.setPaymentMode("Cash");
+		
 		paymentStatus.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -212,13 +215,20 @@ public class PurchaseActivity extends BaseActivity implements
 					Product product=new Product();
 					product.setProductId(purchasedProduct.getProduct_id());
 					product.setProductName(purchasedProduct.getmProductName());
-					
 					product.setmQtyDelivered(updateDelivery(purchasedProduct.getQtyDelivered(), purchasedProduct.getProductQuantity()));
 					product.setmQuantityPickup(purchasedProduct.getQtyPickedUp());
 					product.setmQtyStockInHand(String.valueOf(Integer.parseInt(purchasedProduct.getQtyStockInHand())-Integer.parseInt(purchasedProduct.getProductQuantity())));
+					if(!invoiceAppDatabase.getOrderStatus(customer_name))
+					{
 					databaseThread.addJob(product);
 					databaseThread.addJob(purchasedProduct);
+					}
+					else
+					{
+						
+					}
 				}
+				invoiceAppDatabase.updateOrderStatus(customer_name, true);
 			}
 		});
 

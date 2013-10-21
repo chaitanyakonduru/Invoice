@@ -78,6 +78,8 @@
         <activity android:name="PendingInvoiceActivity" android:theme="@style/Theme.Example" android:screenOrientation="portrait" android:configChanges="orientation|screenLayout"></activity>
         <activity android:name="BalanceSheetActivity" android:theme="@style/Theme.Example" android:configChanges="orientation|screenLayout" android:screenOrientation="portrait"></activity>
         <activity android:name="DrawRouteActivity" android:screenOrientation="portrait"></activity>
+        <receiver android:name=".utils.SyncBroadcast"></receiver>
+        <activity android:name="TransaperantActivity" android:theme="@style/Theme.Transparent"></activity>
     </application>
 
 </manifest>

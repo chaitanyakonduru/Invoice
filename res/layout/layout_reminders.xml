@@ -5,67 +5,19 @@
     android:gravity="center"
     android:orientation="vertical" >
 
-    <TableRow
+    <ListView
+        android:id="@+id/reminders_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
+    </ListView>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Date:" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Time:"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:text="Notes:"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minLines="3" />
-    </TableRow>
-<TableRow 
-    android:layout_width="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_marginTop="20dp"
-    android:layout_height="wrap_content"
-    >
-    
-    <Button 
+    <TextView
+        android:id="@+id/emptyview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
-        
-        />
-</TableRow>
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="No Reminders"
+        android:visibility="gone" />
+
 </TableLayout>

@@ -2,7 +2,7 @@ package com.example.invoiceapp.models;
 
 import java.util.List;
 
-public class DriverReminders {
+public class DriverReminder {
 
 	private String mDriverId;
 	private List<Reminder> remindersList;

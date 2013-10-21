@@ -20,6 +20,7 @@ import com.example.invoiceapp.models.Order;
 import com.example.invoiceapp.models.OrderProduct;
 import com.example.invoiceapp.models.Product;
 import com.example.invoiceapp.models.PurchasedProduct;
+import com.example.invoiceapp.models.Reminder;
 import com.example.invoiceapp.models.SelectedProducts;
 import com.example.invoiceapp.models.RouteInfo;
 import com.example.invoiceapp.utils.Constants;
@@ -61,6 +62,7 @@ public class InvoiceAppDatabase {
 			db.execSQL(OrderProductColumns.DATABASE_CREATE);
 			db.execSQL(InvoiceColumns.DATABASE_CREATE);
 			db.execSQL(PurchasedProductColumns.DATABASE_CREATE);
+			db.execSQL(RemindersColumns.DATABASE_CREATE);
 		}
 
 		@Override
@@ -74,6 +76,8 @@ public class InvoiceAppDatabase {
 			db.execSQL("Drop table if exists " + InvoiceColumns.TABLE_NAME);
 			db.execSQL("Drop table if exists "
 					+ PurchasedProductColumns.TABLE_NAME);
+			db.execSQL("Drop table if exists "
+					+ RemindersColumns.TABLE_NAME);
 		}
 
 	}
@@ -146,6 +150,23 @@ public class InvoiceAppDatabase {
 				+ "driver_name text,"
 				+ "driver_password text," + "driver_code text);";
 	}
+	
+	public static class RemindersColumns implements BaseColumns {
+		public static final String TABLE_NAME = "Reminders";
+		public static final String DRIVER_ID = "driver_id";
+		public static final String REMINDER_ID = "reminder_id";
+		public static final String REMINDER_DATE = "reminder_date";
+		public static final String REMINDER_NOTES = "reminder_notes";
+		public static final String REMINDER_IS_NOTIFIED="is_notified";
+
+		private static final String DATABASE_CREATE = "create table Reminders(_id integer primary key autoincrement,"
+				+ "driver_id integer,"
+				+ "reminder_id text,"
+				+ "is_notified int,"
+				+ "reminder_date text," + "reminder_notes text);";
+	}
+	
+	
 
 	public static class InvoiceColumns implements BaseColumns {
 		public static final String TABLE_NAME = "Invoices";
@@ -239,6 +260,40 @@ public class InvoiceAppDatabase {
 					new String[] { driver.getmDriverId() }) > 0 ? true : false;
 		} else {
 			return sqLiteDatabase.insert(DriverColumns.TABLE_NAME, null,
+					contentValues) > 0 ? true : false;
+		}
+
+	}
+	
+	public boolean insertReminder(Reminder reminder) {
+		boolean isUpdate = false;
+		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+		Cursor cursor = sqLiteDatabase.rawQuery(
+				"SELECT count(*) FROM Reminders WHERE reminder_id= ?",
+				new String[] { reminder.getmReminderId() });
+
+		if (null != cursor && cursor.moveToNext()) {
+			int count = cursor.getInt(0);
+			if (count >= 1) {
+				isUpdate = true;
+			}
+			cursor.close();
+			cursor = null;
+		}
+
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(RemindersColumns.DRIVER_ID,reminder.getmDriverId());
+		contentValues.put(RemindersColumns.REMINDER_DATE, reminder.getmReminderTime());
+		contentValues.put(RemindersColumns.REMINDER_ID,
+				reminder.getmReminderId());
+		contentValues.put(RemindersColumns.REMINDER_NOTES, reminder.getmReminderNotes());
+		contentValues.put(RemindersColumns.REMINDER_IS_NOTIFIED, reminder.ismIsNotified());
+		if (isUpdate) {
+			return sqLiteDatabase.update(RemindersColumns.TABLE_NAME,
+					contentValues, RemindersColumns.REMINDER_ID+ "=?",
+					new String[] { reminder.getmReminderId() }) > 0 ? true : false;
+		} else {
+			return sqLiteDatabase.insert(RemindersColumns.TABLE_NAME, null,
 					contentValues) > 0 ? true : false;
 		}
 
@@ -361,12 +416,24 @@ public class InvoiceAppDatabase {
 	
 	public boolean updateOrderStatus(String customerId,boolean orderStatus)
 	{
-		boolean isUpdate = false;
+		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(OrderColumns.ORDER_STATUS,
 				orderStatus);
-		return isUpdate;
+		return sqLiteDatabase.update(OrderColumns.TABLE_NAME, contentValues, OrderColumns.CUSTOMER_ID+"=?", new String[]{customerId})>0?true:false;
 	}
+
+	public boolean getOrderStatus(String customerId)
+	{
+		SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+		Cursor cursor=sqLiteDatabase.query(OrderColumns.TABLE_NAME, new String[]{OrderColumns.ORDER_STATUS}, OrderColumns.CUSTOMER_ID+"=?", new String[]{customerId}, null, null, null);
+		if(cursor!=null && cursor.moveToNext())
+		{
+			return cursor.getInt(0)>0?true:false;
+		}
+		return false;
+	}
+	
 
 	public boolean insertProduct(Product product) {
 		boolean isUpdate = false;
@@ -389,14 +456,16 @@ public class InvoiceAppDatabase {
 		contentValues
 				.put(ProductColumns.PRODUCT_NAME, product.getProductName());
 		contentValues.put(ProductColumns.PRODUCT_PRICE, product.getmPrice());
+		
 		contentValues.put(ProductColumns.QTY_PICKUP,
 				product.getmQuantityPickup());
 		contentValues.put(ProductColumns.QTY_DELIVERED,
 				product.getmQtyDelivered());
-		contentValues.put(ProductColumns.QTY_RETURNED,
-				product.getmQtyReturned());
 		contentValues.put(ProductColumns.QTY_STOCK_IN_HAND,
 				product.getmQtyStockInHand());
+
+		contentValues.put(ProductColumns.QTY_RETURNED,
+				product.getmQtyReturned());
 
 		if (isUpdate) {
 			return sqLiteDatabase.update(ProductColumns.TABLE_NAME,
@@ -578,6 +647,32 @@ public class InvoiceAppDatabase {
 			}
 		}
 		Message.obtain(handler, Constants.SUCCESS, driverList).sendToTarget();
+	}
+	
+	public void getAllReminders(DatabaseHandler handler) {
+		List<Reminder> remindersList = null;
+		Reminder reminder= null;
+		SQLiteDatabase database = databaseHelper.getReadableDatabase();
+		Cursor cursor = database.query(RemindersColumns.TABLE_NAME, null, RemindersColumns.REMINDER_IS_NOTIFIED+"=?",
+				new String[]{"0"}, null, null, null);
+		if (cursor != null && cursor.getCount() > 0) {
+			remindersList = new ArrayList<Reminder>();
+			while (cursor.moveToNext()) {
+				reminder = new Reminder();
+				reminder.setmDriverId(cursor.getString(cursor
+						.getColumnIndex(DriverColumns.DRIVER_ID)));
+				reminder.setmReminderId(cursor.getString(cursor
+						.getColumnIndex(RemindersColumns.REMINDER_ID)));
+				
+				reminder.setmReminderNotes(cursor.getString(cursor
+						.getColumnIndex(RemindersColumns.REMINDER_NOTES)));
+				
+				reminder.setmReminderTime(cursor.getString(cursor
+						.getColumnIndex(RemindersColumns.REMINDER_DATE)));
+				remindersList.add(reminder);
+			}
+		}
+		Message.obtain(handler, Constants.SUCCESS, remindersList).sendToTarget();
 	}
 
 	public void getAllProducts(DatabaseHandler databaseHandler) {

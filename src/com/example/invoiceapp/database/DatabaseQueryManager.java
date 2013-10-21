@@ -52,6 +52,20 @@ public class DatabaseQueryManager {
 		});
 
 	}
+	
+	public void getAllReminders(final int reqCode,
+			final DbQueryCallback<Object> callback) {
+		final DatabaseHandler databaseHandler = new DatabaseHandler(reqCode,
+				callback);
+		executorService.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				database.getAllReminders(databaseHandler);
+			}
+		});
+
+	}
 
 	public void checkTableNullOrNot(int reqCode, final String tableName,
 			DbQueryCallback<Object> callback) {

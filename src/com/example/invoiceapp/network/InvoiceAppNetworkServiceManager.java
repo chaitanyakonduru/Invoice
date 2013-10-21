@@ -57,12 +57,21 @@ public class InvoiceAppNetworkServiceManager {
 		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
 				callback);
 		return executorService.submit(new HttpRestConn(UrlString, handler));
-
 	}
 	
 	public Future getWayPoints(int requestCode,String url,NetworkCallback<Object> callback)
 	{
 		final String UrlString = url;
+		Log.v(TAG, "Request Url:" + UrlString);
+		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
+				callback);
+		return executorService.submit(new HttpRestConn(UrlString, handler));
+	}
+	
+	public Future fetchReminderRequest(int requestCode,
+			NetworkCallback<Object> callback) {
+		String driversUrl = "ravi/reminders_list.json";
+		final String UrlString = String.format(BASE_URL) + driversUrl;
 		Log.v(TAG, "Request Url:" + UrlString);
 		final InvoiceAppHandler handler = new InvoiceAppHandler(requestCode,
 				callback);
